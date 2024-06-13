@@ -3,35 +3,39 @@
   "view": {
     "kind": "Form",
     "properties": {
-      "title": "Create Virtual Network",
+      "title": "FSI Landing Zones on Microsoft Azure",
       "isWizard": false,
       "steps": [
         {
-          "name": "vnetConfig",
-          "label": "Virtual Network Configuration",
+          "name": "networkConfiguration",
+          "label": "Network Configuration",
           "elements": [
             {
               "name": "location",
               "type": "Microsoft.Common.Location",
               "label": "Location",
-              "toolTip": "The location for all resources."
+              "toolTip": "The location for all resources.",
+              "defaultValue": "eastus"
             },
             {
               "name": "virtualNetworkName",
               "type": "Microsoft.Common.TextBox",
               "label": "Virtual Network Name",
+              "defaultValue": "myVnet",
               "toolTip": "Name of the virtual network."
             },
             {
               "name": "addressPrefix",
               "type": "Microsoft.Common.TextBox",
               "label": "Address Prefix",
+              "defaultValue": "10.0.0.0/16",
               "toolTip": "Address space for the virtual network."
             },
             {
               "name": "subnetPrefix",
               "type": "Microsoft.Common.TextBox",
               "label": "Subnet Prefix",
+              "defaultValue": "10.0.0.0/24",
               "toolTip": "Address prefix for the subnet."
             }
           ]
