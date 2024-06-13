@@ -1,215 +1,70 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "view": {
-    "kind": "Form",
-    "properties": {
-      "title": "FSI Landing Zones on Microsoft Azure",
-      "isWizard": true,
-      "steps": [
-        {
-          "name": "networking",
-          "label": "Network Connectivity and Topology",
-          "elements": [
-            {
-              "name": "networkTopology",
-              "type": "Microsoft.Common.OptionsGroup",
-              "label": "Deploy networking topology for Azure and on-premises",
-              "defaultValue": "vhub",
-              "constraints": {
-                "allowedValues": [
-                  {
-                    "label": "Hub and spoke (customer managed)",
-                    "value": "vhub"
-                  },
-                  {
-                    "label": "Virtual WAN (Microsoft managed)",
-                    "value": "vwan"
-                  },
-                  {
-                    "label": "No",
-                    "value": "No"
-                  }
-                ]
-              }
-            },
-            {
-              "name": "connectivitySubscription",
-              "type": "Microsoft.Common.SubscriptionSelector",
-              "label": "Connectivity subscription"
-            },
-            {
-              "name": "addressSpace",
-              "type": "Microsoft.Common.TextBox",
-              "label": "Address space (required for hub virtual network)",
-              "defaultValue": "10.100.0.0/16",
-              "constraints": {
-                "required": true
-              }
-            },
-            {
-              "name": "region",
-              "type": "Microsoft.Common.DropDown",
-              "label": "Region for the first networking hub",
-              "constraints": {
-                "allowedValues": "[map(steps('networking').locationsApi.value,(item) => parse(concat('{\"label\":\"',item.displayName,'\",\"value\":\"',item.name,'\"}')))]",
-                "required": true
-              }
-            },
-            {
-              "name": "privateDnsZones",
-              "type": "Microsoft.Common.OptionsGroup",
-              "label": "Create Private DNS Zones for Azure PaaS services",
-              "defaultValue": "Yes",
-              "constraints": {
-                "allowedValues": [
-                  {
-                    "label": "Yes (recommended)",
-                    "value": "Yes"
-                  },
-                  {
-                    "label": "No",
-                    "value": "No"
-                  }
-                ]
-              }
-            },
-            {
-              "name": "privateDnsResolver",
-              "type": "Microsoft.Common.OptionsGroup",
-              "label": "Enable Private DNS resolver",
-              "defaultValue": "Yes",
-              "constraints": {
-                "allowedValues": [
-                  {
-                    "label": "Yes (Recommended)",
-                    "value": "Yes"
-                  },
-                  {
-                    "label": "Yes (Inbound only)",
-                    "value": "Inbound"
-                  },
-                  {
-                    "label": "Yes (Outbound only)",
-                    "value": "Outbound"
-                  },
-                  {
-                    "label": "No",
-                    "value": "No"
-                  }
-                ]
-              }
-            },
-            {
-              "name": "subnetDnsResolverInbound",
-              "type": "Microsoft.Common.TextBox",
-              "label": "Subnet for DNS Resolver (inbound)",
-              "defaultValue": "10.100.2.0/24",
-              "constraints": {
-                "required": true
-              }
-            },
-            {
-              "name": "subnetDnsResolverOutbound",
-              "type": "Microsoft.Common.TextBox",
-              "label": "Subnet for DNS Resolver (outbound)",
-              "defaultValue": "10.100.3.0/24",
-              "constraints": {
-                "required": true
-              }
-            },
-            {
-              "name": "deployVpnGateway",
-              "type": "Microsoft.Common.OptionsGroup",
-              "label": "Deploy VPN Gateway",
-              "defaultValue": "No",
-              "constraints": {
-                "allowedValues": [
-                  {
-                    "label": "Yes",
-                    "value": "Yes"
-                  },
-                  {
-                    "label": "No",
-                    "value": "No"
-                  }
-                ]
-              }
-            },
-            {
-              "name": "deployExpressRouteGateway",
-              "type": "Microsoft.Common.OptionsGroup",
-              "label": "Deploy ExpressRoute Gateway",
-              "defaultValue": "No",
-              "constraints": {
-                "allowedValues": [
-                  {
-                    "label": "Yes",
-                    "value": "Yes"
-                  },
-                  {
-                    "label": "No",
-                    "value": "No"
-                  }
-                ]
-              }
-            },
-            {
-              "name": "deployAzureFirewall",
-              "type": "Microsoft.Common.OptionsGroup",
-              "label": "Deploy Azure Firewall",
-              "defaultValue": "Yes",
-              "constraints": {
-                "allowedValues": [
-                  {
-                    "label": "Yes (recommended)",
-                    "value": "Yes"
-                  },
-                  {
-                    "label": "No",
-                    "value": "No"
-                  }
-                ]
-              }
-            },
-            {
-              "name": "azureFirewallTier",
-              "type": "Microsoft.Common.DropDown",
-              "label": "Select Azure Firewall tier",
-              "constraints": {
-                "allowedValues": [
-                  {
-                    "label": "Standard",
-                    "value": "Standard"
-                  },
-                  {
-                    "label": "Premium",
-                    "value": "Premium"
-                  }
-                ],
-                "required": true
-              }
-            },
-            {
-              "name": "subnetFirewall",
-              "type": "Microsoft.Common.TextBox",
-              "label": "Subnet for Azure Firewall",
-              "defaultValue": "10.100.4.0/24",
-              "constraints": {
-                "required": true
-              }
-            },
-            {
-              "name": "subnetVpnExpressRoute",
-              "type": "Microsoft.Common.TextBox",
-              "label": "Subnet for VPN/ExpressRoute Gateways",
-              "defaultValue": "10.100.1.0/24",
-              "constraints": {
-                "required": true
-              }
-            }
-          ]
-        }
-      ]
+  "contentVersion": "1.0.0.0",
+  "resources": [],
+  "parameters": {
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the virtual network."
+      }
+    },
+    "addressPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Address space for the virtual network."
+      }
+    },
+    "subnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Address prefix for the subnet."
+      }
+    }
+  },
+  "outputs": {
+    "formDefinition": {
+      "type": "object",
+      "value": {
+        "title": "Create Virtual Network",
+        "description": "This template allows you to create a virtual network with specified address space and subnet.",
+        "fields": [
+          {
+            "name": "location",
+            "type": "string",
+            "label": "Location",
+            "defaultValue": "eastus",
+            "toolTip": "The location for all resources."
+          },
+          {
+            "name": "virtualNetworkName",
+            "type": "string",
+            "label": "Virtual Network Name",
+            "defaultValue": "myVnet",
+            "toolTip": "Name of the virtual network."
+          },
+          {
+            "name": "addressPrefix",
+            "type": "string",
+            "label": "Address Prefix",
+            "defaultValue": "10.0.0.0/16",
+            "toolTip": "Address space for the virtual network."
+          },
+          {
+            "name": "subnetPrefix",
+            "type": "string",
+            "label": "Subnet Prefix",
+            "defaultValue": "10.0.0.0/24",
+            "toolTip": "Address prefix for the subnet."
+          }
+        ]
+      }
     }
   }
 }
