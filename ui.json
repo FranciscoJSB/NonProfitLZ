@@ -55,6 +55,13 @@
                     ]
                 }
             ]
+        },
+        "outputs": {
+            "location": "[location]",
+            "virtualNetworkName": "[virtualNetworkName]",
+            "addressSpace": "[addressSpace]",
+            "subnetName": "[subnetName]",
+            "subnetPrefix": "[subnetPrefix]"
         }
     }
 }
