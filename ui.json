@@ -58,25 +58,25 @@
     }
   },
   "outputs": {
-    "virtualNetworkName": {
-      "type": "string",
-      "value": "[steps('basics').virtualNetworkName]"
-    },
     "location": {
       "type": "string",
-      "value": "[steps('basics').location]"
+      "value": "[location]"
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "value": "[virtualNetworkName]"
     },
     "addressSpace": {
       "type": "string",
-      "value": "[steps('basics').addressSpace]"
+      "value": "[addressSpace]"
     },
     "subnetName": {
       "type": "string",
-      "value": "[steps('basics').subnetName]"
+      "value": "[subnetName]"
     },
     "subnetPrefix": {
       "type": "string",
-      "value": "[steps('basics').subnetPrefix]"
+      "value": "[subnetPrefix]"
     }
   }
 }
