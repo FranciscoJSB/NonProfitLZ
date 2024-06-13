@@ -1,82 +1,82 @@
 {
-    "$schema": "<relative path to createFormUI.schema.json>",
-    "view": {
-        "kind": "Form",
-        "properties": {
-            "title": "Deploy a Virtual Network",
-            "isWizard": false,
-            "steps": [
-                {
-                    "name": "basics",
-                    "label": "Basics",
-                    "elements": [
-                        {
-                            "name": "location",
-                            "type": "Microsoft.Common.Location",
-                            "label": "Location",
-                            "defaultValue": "West US"
-                        },
-                        {
-                            "name": "virtualNetworkName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Virtual Network Name",
-                            "defaultValue": "myVNet",
-                            "constraints": {
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "addressSpace",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Address Space",
-                            "defaultValue": "10.0.0.0/16",
-                            "constraints": {
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "subnetName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Subnet Name",
-                            "defaultValue": "default",
-                            "constraints": {
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "subnetPrefix",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Subnet Prefix",
-                            "defaultValue": "10.0.0.0/24",
-                            "constraints": {
-                                "required": true
-                            }
-                        }
-                    ]
-                }
-            ]
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/createUIDefinition.json#",
+  "view": {
+    "kind": "Form",
+    "properties": {
+      "title": "Deploy a Virtual Network",
+      "isWizard": false,
+      "steps": [
+        {
+          "name": "basics",
+          "label": "Basics",
+          "elements": [
+            {
+              "name": "location",
+              "type": "Microsoft.Common.Location",
+              "label": "Location",
+              "defaultValue": "West US"
+            },
+            {
+              "name": "virtualNetworkName",
+              "type": "Microsoft.Common.TextBox",
+              "label": "Virtual Network Name",
+              "defaultValue": "myVNet",
+              "constraints": {
+                "required": true
+              }
+            },
+            {
+              "name": "addressSpace",
+              "type": "Microsoft.Common.TextBox",
+              "label": "Address Space",
+              "defaultValue": "10.0.0.0/16",
+              "constraints": {
+                "required": true
+              }
+            },
+            {
+              "name": "subnetName",
+              "type": "Microsoft.Common.TextBox",
+              "label": "Subnet Name",
+              "defaultValue": "default",
+              "constraints": {
+                "required": true
+              }
+            },
+            {
+              "name": "subnetPrefix",
+              "type": "Microsoft.Common.TextBox",
+              "label": "Subnet Prefix",
+              "defaultValue": "10.0.0.0/24",
+              "constraints": {
+                "required": true
+              }
+            }
+          ]
         }
-    },
-    "outputs": {
-        "location": {
-            "type": "string",
-            "value": "[location]"
-        },
-        "virtualNetworkName": {
-            "type": "string",
-            "value": "[virtualNetworkName]"
-        },
-        "addressSpace": {
-            "type": "string",
-            "value": "[addressSpace]"
-        },
-        "subnetName": {
-            "type": "string",
-            "value": "[subnetName]"
-        },
-        "subnetPrefix": {
-            "type": "string",
-            "value": "[subnetPrefix]"
-        }
+      ]
     }
+  },
+  "outputs": {
+    "location": {
+      "type": "string",
+      "value": "[location]"
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "value": "[virtualNetworkName]"
+    },
+    "addressSpace": {
+      "type": "string",
+      "value": "[addressSpace]"
+    },
+    "subnetName": {
+      "type": "string",
+      "value": "[subnetName]"
+    },
+    "subnetPrefix": {
+      "type": "string",
+      "value": "[subnetPrefix]"
+    }
+  }
 }
