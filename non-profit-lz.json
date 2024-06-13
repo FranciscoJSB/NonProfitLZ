@@ -4,7 +4,7 @@
   "resources": [
     {
       "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2020-11-01",
+      "apiVersion": "2021-02-01",
       "name": "[parameters('virtualNetworkName')]",
       "location": "[parameters('location')]",
       "properties": {
@@ -15,21 +15,9 @@
         },
         "subnets": [
           {
-            "name": "AzureFirewallSubnet",
+            "name": "default",
             "properties": {
-              "addressPrefix": "[parameters('firewallSubnetPrefix')]"
-            }
-          },
-          {
-            "name": "GatewaySubnet",
-            "properties": {
-              "addressPrefix": "[parameters('gatewaySubnetPrefix')]"
-            }
-          },
-          {
-            "name": "AdditionalSubnet",
-            "properties": {
-              "addressPrefix": "[parameters('additionalSubnetPrefix')]"
+              "addressPrefix": "[parameters('subnetPrefix')]"
             }
           }
         ]
@@ -37,40 +25,32 @@
     }
   ],
   "parameters": {
-    "virtualNetworkName": {
-      "type": "string",
-      "metadata": {
-        "description": "Name of the virtual network."
-      }
-    },
     "location": {
       "type": "string",
+      "defaultValue": "eastus",
       "metadata": {
         "description": "Location for the virtual network."
       }
     },
+    "virtualNetworkName": {
+      "type": "string",
+      "defaultValue": "myVnet",
+      "metadata": {
+        "description": "Name of the virtual network."
+      }
+    },
     "addressPrefix": {
       "type": "string",
+      "defaultValue": "10.0.0.0/16",
       "metadata": {
-        "description": "Address prefix for the virtual network."
+        "description": "Address space for the virtual network."
       }
     },
-    "firewallSubnetPrefix": {
+    "subnetPrefix": {
       "type": "string",
+      "defaultValue": "10.0.0.0/24",
       "metadata": {
-        "description": "Address prefix for the Azure Firewall subnet."
-      }
-    },
-    "gatewaySubnetPrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "Address prefix for the Gateway subnet."
-      }
-    },
-    "additionalSubnetPrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "Address prefix for the additional subnet."
+        "description": "Address prefix for the subnet."
       }
     }
   }
