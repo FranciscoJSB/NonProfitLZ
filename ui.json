@@ -1,43 +1,36 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/uiFormDefinition.json#",
-  "view": {
-    "kind": "Form",
-    "properties": {
-      "title": "Create Virtual Network",
-      "isWizard": true,
-      "steps": [
-        {
-          "name": "networkConfiguration",
-          "label": "Network Configuration",
-          "elements": [
-            {
-              "name": "location",
-              "type": "Microsoft.Common.Location",
-              "label": "Location",
-              "toolTip": "The location for all resources.",
-              "defaultValue": "eastus"
-            },
-            {
-              "name": "virtualNetworkName",
-              "type": "Microsoft.Common.TextBox",
-              "label": "Virtual Network Name",
-              "toolTip": "Name of the virtual network."
-            },
-            {
-              "name": "addressPrefix",
-              "type": "Microsoft.Common.TextBox",
-              "label": "Address Prefix",
-              "toolTip": "Address space for the virtual network."
-            },
-            {
-              "name": "subnetPrefix",
-              "type": "Microsoft.Common.TextBox",
-              "label": "Subnet Prefix",
-              "toolTip": "Address prefix for the subnet."
-            }
-          ]
-        }
-      ]
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the virtual network."
+      }
+    },
+    "addressSpace": {
+      "type": "string",
+      "metadata": {
+        "description": "Address space for the virtual network."
+      }
+    },
+    "subnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the subnet."
+      }
+    },
+    "subnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Address prefix for the subnet."
+      }
     }
   }
 }
