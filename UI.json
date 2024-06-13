@@ -7,25 +7,41 @@
       "isWizard": true,
       "steps": [
         {
-          "name": "basics",
-          "label": "Deployment location",
+          "name": "networking",
+          "label": "Network Connectivity and Topology",
           "elements": [
             {
-              "name": "resourceScope",
-              "type": "Microsoft.Common.ResourceScope"
-            }
-          ]
-        },
-        {
-          "name": "projectDetails",
-          "label": "Project details",
-          "elements": [
+              "name": "networkTopology",
+              "type": "Microsoft.Common.OptionsGroup",
+              "label": "Deploy networking topology for Azure and on-premises",
+              "defaultValue": "vhub",
+              "constraints": {
+                "allowedValues": [
+                  {
+                    "label": "Hub and spoke (customer managed)",
+                    "value": "vhub"
+                  },
+                  {
+                    "label": "Virtual WAN (Microsoft managed)",
+                    "value": "vwan"
+                  },
+                  {
+                    "label": "No",
+                    "value": "No"
+                  }
+                ]
+              }
+            },
             {
-              "name": "directory",
+              "name": "connectivitySubscription",
+              "type": "Microsoft.Common.SubscriptionSelector",
+              "label": "Connectivity subscription"
+            },
+            {
+              "name": "addressSpace",
               "type": "Microsoft.Common.TextBox",
-              "label": "Directory",
-              "defaultValue": "danjohnsonsoftwareone.onmicrosoft.com",
-              "toolTip": "Directory (tenant) scope for the deployment",
+              "label": "Address space (required for hub virtual network)",
+              "defaultValue": "10.100.0.0/16",
               "constraints": {
                 "required": true
               }
@@ -33,59 +49,167 @@
             {
               "name": "region",
               "type": "Microsoft.Common.DropDown",
-              "label": "Region",
-              "defaultValue": "Central US",
-              "toolTip": "Select the Azure region",
+              "label": "Region for the first networking hub",
+              "constraints": {
+                "allowedValues": "[map(steps('networking').locationsApi.value,(item) => parse(concat('{\"label\":\"',item.displayName,'\",\"value\":\"',item.name,'\"}')))]",
+                "required": true
+              }
+            },
+            {
+              "name": "privateDnsZones",
+              "type": "Microsoft.Common.OptionsGroup",
+              "label": "Create Private DNS Zones for Azure PaaS services",
+              "defaultValue": "Yes",
               "constraints": {
                 "allowedValues": [
                   {
-                    "label": "Central US",
-                    "value": "centralus"
+                    "label": "Yes (recommended)",
+                    "value": "Yes"
                   },
                   {
-                    "label": "East US",
-                    "value": "eastus"
+                    "label": "No",
+                    "value": "No"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "privateDnsResolver",
+              "type": "Microsoft.Common.OptionsGroup",
+              "label": "Enable Private DNS resolver",
+              "defaultValue": "Yes",
+              "constraints": {
+                "allowedValues": [
+                  {
+                    "label": "Yes (Recommended)",
+                    "value": "Yes"
                   },
                   {
-                    "label": "West US",
-                    "value": "westus"
+                    "label": "Yes (Inbound only)",
+                    "value": "Inbound"
+                  },
+                  {
+                    "label": "Yes (Outbound only)",
+                    "value": "Outbound"
+                  },
+                  {
+                    "label": "No",
+                    "value": "No"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "subnetDnsResolverInbound",
+              "type": "Microsoft.Common.TextBox",
+              "label": "Subnet for DNS Resolver (inbound)",
+              "defaultValue": "10.100.2.0/24",
+              "constraints": {
+                "required": true
+              }
+            },
+            {
+              "name": "subnetDnsResolverOutbound",
+              "type": "Microsoft.Common.TextBox",
+              "label": "Subnet for DNS Resolver (outbound)",
+              "defaultValue": "10.100.3.0/24",
+              "constraints": {
+                "required": true
+              }
+            },
+            {
+              "name": "deployVpnGateway",
+              "type": "Microsoft.Common.OptionsGroup",
+              "label": "Deploy VPN Gateway",
+              "defaultValue": "No",
+              "constraints": {
+                "allowedValues": [
+                  {
+                    "label": "Yes",
+                    "value": "Yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "No"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "deployExpressRouteGateway",
+              "type": "Microsoft.Common.OptionsGroup",
+              "label": "Deploy ExpressRoute Gateway",
+              "defaultValue": "No",
+              "constraints": {
+                "allowedValues": [
+                  {
+                    "label": "Yes",
+                    "value": "Yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "No"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "deployAzureFirewall",
+              "type": "Microsoft.Common.OptionsGroup",
+              "label": "Deploy Azure Firewall",
+              "defaultValue": "Yes",
+              "constraints": {
+                "allowedValues": [
+                  {
+                    "label": "Yes (recommended)",
+                    "value": "Yes"
+                  },
+                  {
+                    "label": "No",
+                    "value": "No"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "azureFirewallTier",
+              "type": "Microsoft.Common.DropDown",
+              "label": "Select Azure Firewall tier",
+              "constraints": {
+                "allowedValues": [
+                  {
+                    "label": "Standard",
+                    "value": "Standard"
+                  },
+                  {
+                    "label": "Premium",
+                    "value": "Premium"
                   }
                 ],
                 "required": true
               }
-            }
-          ]
-        },
-        {
-          "name": "templateDetails",
-          "label": "Template",
-          "elements": [
-            {
-              "name": "customTemplate",
-              "type": "Microsoft.Common.Link",
-              "label": "Customized template",
-              "link": "https://custom-template-link",
-              "toolTip": "Edit the deployment template"
             },
             {
-              "name": "editTemplate",
-              "type": "Microsoft.Common.Button",
-              "label": "Edit template",
-              "toolTip": "Edit the deployment template"
+              "name": "subnetFirewall",
+              "type": "Microsoft.Common.TextBox",
+              "label": "Subnet for Azure Firewall",
+              "defaultValue": "10.100.4.0/24",
+              "constraints": {
+                "required": true
+              }
             },
             {
-              "name": "editParameters",
-              "type": "Microsoft.Common.Button",
-              "label": "Edit parameters",
-              "toolTip": "Edit the deployment parameters"
+              "name": "subnetVpnExpressRoute",
+              "type": "Microsoft.Common.TextBox",
+              "label": "Subnet for VPN/ExpressRoute Gateways",
+              "defaultValue": "10.100.1.0/24",
+              "constraints": {
+                "required": true
+              }
             }
           ]
         }
       ]
     }
-  },
-  "outputs": {
-    "region": "[basics.projectDetails.region]",
-    "directory": "[basics.projectDetails.directory]"
   }
 }
