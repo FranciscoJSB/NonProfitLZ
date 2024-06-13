@@ -70,10 +70,8 @@
                         }
                     ]
                 }
-            ]
-        },
-        "outputs": {
-            "parameters": {
+            ],
+            "outputs": {
                 "workspaceId": {
                     "type": "string",
                     "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2020-08-01').customerId]"
@@ -82,62 +80,64 @@
                     "type": "string",
                     "value": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2020-08-01').primarySharedKey]"
                 },
-                "workspaceName": {
-                    "type": "string",
-                    "label": "Log Analytics Workspace Name",
-                    "defaultValue": "",
-                    "constraints": {
-                        "required": true
-                    }
-                },
-                "logRetention": {
-                    "type": "int",
-                    "label": "Log Retention (days)",
-                    "defaultValue": 30,
-                    "constraints": {
-                        "required": true,
-                        "range": {
-                            "min": 30,
-                            "max": 730
+                "parameters": {
+                    "workspaceName": {
+                        "type": "string",
+                        "label": "Log Analytics Workspace Name",
+                        "defaultValue": "",
+                        "constraints": {
+                            "required": true
                         }
-                    }
-                },
-                "region": {
-                    "type": "string",
-                    "label": "Region",
-                    "defaultValue": "",
-                    "constraints": {
-                        "required": true,
-                        "allowedValues": [
-                            {
-                                "label": "East US",
-                                "value": "eastus"
-                            },
-                            {
-                                "label": "East US 2",
-                                "value": "eastus2"
-                            },
-                            {
-                                "label": "Central US",
-                                "value": "centralus"
-                            },
-                            {
-                                "label": "North Central US",
-                                "value": "northcentralus"
-                            },
-                            {
-                                "label": "South Central US",
-                                "value": "southcentralus"
-                            },
-                            {
-                                "label": "West US",
-                                "value": "westus"
-                            },
-                            {
-                                "label": "West US 2",
-                                "value": "westus2"
+                    },
+                    "logRetention": {
+                        "type": "int",
+                        "label": "Log Retention (days)",
+                        "defaultValue": 30,
+                        "constraints": {
+                            "required": true,
+                            "range": {
+                                "min": 30,
+                                "max": 730
                             }
-                        ]
+                        }
+                    },
+                    "region": {
+                        "type": "string",
+                        "label": "Region",
+                        "defaultValue": "",
+                        "constraints": {
+                            "required": true,
+                            "allowedValues": [
+                                {
+                                    "label": "East US",
+                                    "value": "eastus"
+                                },
+                                {
+                                    "label": "East US 2",
+                                    "value": "eastus2"
+                                },
+                                {
+                                    "label": "Central US",
+                                    "value": "centralus"
+                                },
+                                {
+                                    "label": "North Central US",
+                                    "value": "northcentralus"
+                                },
+                                {
+                                    "label": "South Central US",
+                                    "value": "southcentralus"
+                                },
+                                {
+                                    "label": "West US",
+                                    "value": "westus"
+                                },
+                                {
+                                    "label": "West US 2",
+                                    "value": "westus2"
+                                }
+                            ]
+                        }
                     }
                 }
             }
