@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01-preview/uiDefinition.json#",
+  "handler": "Microsoft.Azure.CreateUIDef",
+  "version": "0.1.0-preview",
+  "parameters": {
+    "basics": [
+      {
+        "name": "keyVaultName",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Key Vault Name",
+        "toolTip": "Name of the Key Vault",
+        "constraints": {
+          "required": true,
+          "regex": "^[a-zA-Z0-9-]{3,24}$"
+        },
+        "defaultValue": "",
+        "visible": true
+      },
+      {
+        "name": "location",
+        "type": "Microsoft.Common.Location",
+        "label": "Location",
+        "toolTip": "Location of the Key Vault",
+        "defaultValue": "[resourceGroup().location]",
+        "visible": true
+      }
+    ]
+  },
+  "outputs": {
+    "keyVaultName": {
+      "type": "string",
+      "value": "[basics('keyVaultName')]"
+    },
+    "location": {
+      "type": "string",
+      "value": "[basics('location')]"
+    }
+  }
+}
