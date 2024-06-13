@@ -1,50 +1,302 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "location": {
-      "type": "string"
-    },
-    "virtualNetworkName": {
-      "type": "string"
-    },
-    "addressSpace": {
-      "type": "string"
-    },
-    "subnetName": {
-      "type": "string"
-    },
-    "subnetPrefix": {
-      "type": "string"
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"virtualNetworkName": {
+			"type": "string",
+			"defaultValue": "HubVNet",
+			"metadata": {
+				"description": "The name of the virtual network."
+			}
+		},
+		"hubSubnetName": {
+			"type": "string",
+			"defaultValue": "HubSubnet",
+			"metadata": {
+				"description": "The name of the Hub subnet."
+			}
+		},
+		"deployExpressRoute": {
+			"type": "bool",
+			"defaultValue": false,
+			"metadata": {
+				"description": "Set to true to deploy an ExpressRoute Gateway; otherwise, false."
+			}
+		},
+		"keyVaultName": {
+			"type": "string",
+			"metadata": {
+				"description": "The name of the Key Vault."
+			}
+		},
+		"logAnalyticsWorkspaceName": {
+			"type": "string",
+			"metadata": {
+				"description": "The name of the Log Analytics Workspace for Azure Monitor."
+			}
+		},
+		"securityContactEmail": {
+			"type": "string",
+			"metadata": {
+				"description": "The email address to receive security alerts."
+			}
+		},
+		"securityContactPhone": {
+			"type": "string",
+			"metadata": {
+				"description": "The phone number to receive security alerts."
+			}
+		},
+		"dnsZoneName": {
+			"type": "string",
+			"metadata": {
+				"description": "The name of the DNS zone to be created."
+			}
+		},
+		"virtualNetworkAddressSpace": {
+			"type": "string",
+			"defaultValue": "10.0.0.0/16",
+			"metadata": {
+				"description": "CIDR block for the virtual network address space."
+			}
+		},
+		"firewallSubnetAddressSpace": {
+			"type": "string",
+			"defaultValue": "10.0.1.0/24",
+			"metadata": {
+				"description": "CIDR block for the Firewall subnet address space."
+			}
+		},
+		"gatewaySubnetAddressSpace": {
+			"type": "string",
+			"defaultValue": "10.0.2.0/24",
+			"metadata": {
+				"description": "CIDR block for the Gateway subnet address space."
+			}
+		},
+		"hubSubnetAddressSpace": {
+			"type": "string",
+			"defaultValue": "10.0.3.0/24",
+			"metadata": {
+				"description": "CIDR block for the Hub subnet address space."
+			}
+		}
+	},
+	"variables": {
+		"location": "[resourceGroup().location]"
+	},
+	"resources": [
+		{
+			"type": "Microsoft.Network/virtualNetworks",
+			"apiVersion": "2020-06-01",
+			"name": "[parameters('virtualNetworkName')]",
+			"location": "[variables('location')]",
+			"properties": {
+				"addressSpace": {
+					"addressPrefixes": [
+						"[parameters('virtualNetworkAddressSpace')]"
+					]
+				},
+				"subnets": [
+					{
+						"name": "AzureFirewallSubnet",
+						"properties": {
+							"addressPrefix": "[parameters('firewallSubnetAddressSpace')]"
+						}
+					},
+					{
+						"name": "GatewaySubnet",
+						"properties": {
+							"addressPrefix": "[parameters('gatewaySubnetAddressSpace')]"
+						}
+					},
+					{
+						"name": "[parameters('hubSubnetName')]",
+						"properties": {
+							"addressPrefix": "[parameters('hubSubnetAddressSpace')]"
+						}
+					}
+				]
+			}
+		},
+		{
+			"type": "Microsoft.Network/publicIPAddresses",
+			"apiVersion": "2020-06-01",
+			"name": "FirewallPublicIp",
+			"location": "[variables('location')]",
+			"properties": {
+				"publicIPAllocationMethod": "Static",
+				"sku": {
+					"name": "Standard"
+				}
+			}
+		},
+		{
+			"type": "Microsoft.Network/publicIPAddresses",
+			"apiVersion": "2020-06-01",
+			"name": "VpnGatewayPublicIp",
+			"location": "[variables('location')]",
+			"properties": {
+				"publicIPAllocationMethod": "Dynamic",
+				"sku": {
+					"name": "Basic"
+				}
+			}
+		},
+		{
+			"type": "Microsoft.Network/azureFirewalls",
+			"apiVersion": "2020-06-01",
+			"name": "HubFirewall",
+			"location": "[variables('location')]",
+			"properties": {
+				"sku": {
+					"name": "AZFW_VNet",
+					"tier": "Standard"
+				},
+				"threatIntelMode": "Alert",
+				"ipConfigurations": [
+					{
+						"name": "azureFirewallIPConfig",
+						"properties": {
+							"subnet": {
+								"id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), 'AzureFirewallSubnet')]"
+							},
+							"publicIPAddress": {
+								"id": "[resourceId('Microsoft.Network/publicIPAddresses', 'FirewallPublicIp')]"
+							}
+						}
+					}
+				]
+			}
+		},
+		{
+			"type": "Microsoft.Network/virtualNetworkGateways",
+			"apiVersion": "2020-06-01",
+			"name": "HubVpnGateway",
+			"location": "[variables('location')]",
+			"properties": {
+				"gatewayType": "Vpn",
+				"vpnType": "PolicyBased",
+				"sku": {
+					"name": "Basic"
+				},
+				"ipConfigurations": [
+					{
+						"name": "vpnGatewayConfig",
+						"properties": {
+							"subnet": {
+								"id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), 'GatewaySubnet')]"
+							},
+							"publicIPAddress": {
+								"id": "[resourceId('Microsoft.Network/publicIPAddresses', 'VpnGatewayPublicIp')]"
+							}
+						}
+					}
+				]
+			}
+		},
+		{
+			"condition": "[parameters('deployExpressRoute')]",
+			"type": "Microsoft.Network/expressRouteCircuits",
+			"apiVersion": "2020-06-01",
+			"name": "HubExpressRoute",
+			"location": "[variables('location')]",
+			"properties": {
+				"sku": {
+					"name": "Standard_MeteredData",
+					"tier": "Standard",
+					"family": "MeteredData"
+				},
+				"serviceProviderProperties": {
+					"serviceProviderName": "Service Provider Name",
+					"peeringLocation": "Peering Location",
+					"bandwidthInMbps": 50
+				}
+			},
+			"dependsOn": [
+				"HubVNet"
+			]
+		},
+		{
+			"type": "Microsoft.KeyVault/vaults",
+			"apiVersion": "2019-09-01",
+			"name": "[parameters('keyVaultName')]",
+			"location": "[variables('location')]",
+			"properties": {
+				"sku": {
+					"family": "A",
+					"name": "standard"
+				},
+				"tenantId": "[subscription().tenantId]",
+				"accessPolicies": []
+			}
+		},
+		{
+			"type": "Microsoft.OperationalInsights/workspaces",
+			"apiVersion": "2020-08-01",
+			"name": "[parameters('logAnalyticsWorkspaceName')]",
+			"location": "[variables('location')]",
+			"properties": {
+				"sku": {
+					"name": "PerGB2018"
+				},
+				"retentionInDays": 30
+			}
+		},
+		{
+			"type": "Microsoft.Network/networkWatchers",
+			"apiVersion": "2020-11-01",
+			"name": "defaultNetworkWatcher",
+			"location": "[variables('location')]"
+		},
+		{
+			"type": "Microsoft.Security/autoProvisioningSettings",
+			"apiVersion": "2019-08-01",
+			"name": "default",
+			"properties": {
+				"autoProvision": "On"
+			}
+		},
+		{
+			"type": "Microsoft.Security/securityContacts",
+			"apiVersion": "2020-01-01",
+			"name": "default",
+			"properties": {
+				"email": "[parameters('securityContactEmail')]",
+				"phone": "[parameters('securityContactPhone')]",
+				"alertNotifications": "On",
+				"alertsToAdmins": "On"
+			}
+		},
+		{
+			"type": "Microsoft.Network/dnszones",
+			"apiVersion": "2018-05-01",
+			"name": "[parameters('dnsZoneName')]",
+			"location": "global"
+		},
+		{
+			"type": "Microsoft.Security/pricings",
+			"apiVersion": "2018-06-01",
+			"name": "StorageAccounts",
+			"properties": {
+				"pricingTier": "Standard"
+			}
+		},
+		{
+			"type": "Microsoft.Security/pricings",
+			"apiVersion": "2018-06-01",
+			"name": "Dns",
+			"properties": {
+				"pricingTier": "Standard"
+			}
+		},
+		{
+    "type": "Microsoft.Security/pricings",
+    "apiVersion": "2018-06-01",
+    "name": "VirtualMachines",
+    "properties": {
+        "pricingTier": "Standard"
     }
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2020-06-01",
-      "name": "[parameters('virtualNetworkName')]",
-      "location": "[parameters('location')]",
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "[parameters('addressSpace')]"
-          ]
-        },
-        "subnets": [
-          {
-            "name": "[parameters('subnetName')]",
-            "properties": {
-              "addressPrefix": "[parameters('subnetPrefix')]"
-            }
-          }
-        ]
-      }
-    }
-  ],
-  "outputs": {
-    "virtualNetworkId": {
-      "type": "string",
-      "value": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
-    }
-  }
+}
+	]
 }
