@@ -1,36 +1,50 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "location": {
-      "type": "string",
-      "metadata": {
-        "description": "Location for all resources."
-      }
+      "type": "string"
     },
     "virtualNetworkName": {
-      "type": "string",
-      "metadata": {
-        "description": "Name of the virtual network."
-      }
+      "type": "string"
     },
     "addressSpace": {
-      "type": "string",
-      "metadata": {
-        "description": "Address space for the virtual network."
-      }
+      "type": "string"
     },
     "subnetName": {
-      "type": "string",
-      "metadata": {
-        "description": "Name of the subnet."
-      }
+      "type": "string"
     },
     "subnetPrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "Address prefix for the subnet."
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2020-06-01",
+      "name": "[parameters('virtualNetworkName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('addressSpace')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[parameters('subnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('subnetPrefix')]"
+            }
+          }
+        ]
       }
+    }
+  ],
+  "outputs": {
+    "virtualNetworkId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
     }
   }
 }
