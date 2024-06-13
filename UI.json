@@ -1,87 +1,98 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/uiDefinition.json#",
-  "version": "1.0.0",
+  "schema": "https://schema.management.azure.com/schemas/2015-01-01/uiDefinition.json#",
+  "contentVersion": "1.0.0.0",
   "parameters": {
-    "basics": [
-      {
-        "name": "virtualNetworkName",
-        "type": "Microsoft.Common.TextBox",
-        "label": "Virtual Network Name",
-        "defaultValue": "HubVNet",
-        "toolTip": "The name of the virtual network."
-      },
-      {
-        "name": "hubSubnetName",
-        "type": "Microsoft.Common.TextBox",
-        "label": "Hub Subnet Name",
-        "defaultValue": "HubSubnet",
-        "toolTip": "The name of the Hub subnet."
-      },
-      {
-        "name": "deployExpressRoute",
-        "type": "Microsoft.Common.CheckBox",
-        "label": "Deploy ExpressRoute Gateway",
-        "defaultValue": false,
-        "toolTip": "Set to true to deploy an ExpressRoute Gateway; otherwise, false."
-      },
-      {
-        "name": "keyVaultName",
-        "type": "Microsoft.Common.TextBox",
-        "label": "Key Vault Name",
-        "toolTip": "The name of the Key Vault."
-      },
-      {
-        "name": "logAnalyticsWorkspaceName",
-        "type": "Microsoft.Common.TextBox",
-        "label": "Log Analytics Workspace Name",
-        "toolTip": "The name of the Log Analytics Workspace for Azure Monitor."
-      },
-      {
-        "name": "securityContactEmail",
-        "type": "Microsoft.Common.TextBox",
-        "label": "Security Contact Email",
-        "toolTip": "The email address to receive security alerts."
-      },
-      {
-        "name": "securityContactPhone",
-        "type": "Microsoft.Common.TextBox",
-        "label": "Security Contact Phone",
-        "toolTip": "The phone number to receive security alerts."
-      },
-      {
-        "name": "dnsZoneName",
-        "type": "Microsoft.Common.TextBox",
-        "label": "DNS Zone Name",
-        "toolTip": "The name of the DNS zone to be created."
-      },
-      {
-        "name": "virtualNetworkAddressSpace",
-        "type": "Microsoft.Common.TextBox",
-        "label": "Virtual Network Address Space",
-        "defaultValue": "10.0.0.0/16",
-        "toolTip": "CIDR block for the virtual network address space."
-      },
-      {
-        "name": "firewallSubnetAddressSpace",
-        "type": "Microsoft.Common.TextBox",
-        "label": "Firewall Subnet Address Space",
-        "defaultValue": "10.0.1.0/24",
-        "toolTip": "CIDR block for the Firewall subnet address space."
-      },
-      {
-        "name": "gatewaySubnetAddressSpace",
-        "type": "Microsoft.Common.TextBox",
-        "label": "Gateway Subnet Address Space",
-        "defaultValue": "10.0.2.0/24",
-        "toolTip": "CIDR block for the Gateway subnet address space."
-      },
-      {
-        "name": "hubSubnetAddressSpace",
-        "type": "Microsoft.Common.TextBox",
-        "label": "Hub Subnet Address Space",
-        "defaultValue": "10.0.3.0/24",
-        "toolTip": "CIDR block for the Hub subnet address space."
-      }
-    ]
+    "basics": {
+      "name": "Basics",
+      "sections": [
+        {
+          "name": "template",
+          "label": "Template",
+          "elements": [
+            {
+              "name": "customTemplate",
+              "type": "Microsoft.Common.Section",
+              "label": "Customized template",
+              "elements": [
+                {
+                  "name": "customTemplateLink",
+                  "type": "Microsoft.Common.Link",
+                  "label": "104 resources",
+                  "link": "https://custom-template-link"
+                },
+                {
+                  "name": "editTemplate",
+                  "type": "Microsoft.Common.Button",
+                  "label": "Edit template",
+                  "toolTip": "Edit the deployment template"
+                },
+                {
+                  "name": "editParameters",
+                  "type": "Microsoft.Common.Button",
+                  "label": "Edit parameters",
+                  "toolTip": "Edit the deployment parameters"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "projectDetails",
+          "label": "Project details",
+          "elements": [
+            {
+              "name": "directory",
+              "type": "Microsoft.Common.TextBox",
+              "label": "Directory",
+              "defaultValue": "danjohnsonsoftwareone.onmicrosoft.com",
+              "toolTip": "Directory (tenant) scope for the deployment",
+              "constraints": {
+                "required": true
+              }
+            },
+            {
+              "name": "switchingDirectories",
+              "type": "Microsoft.Common.Link",
+              "label": "Switching directories will result in the Azure portal being reloaded. Any progress will be lost.",
+              "link": "https://switch-directory-link"
+            }
+          ]
+        },
+        {
+          "name": "instanceDetails",
+          "label": "Instance details",
+          "elements": [
+            {
+              "name": "region",
+              "type": "Microsoft.Common.DropDown",
+              "label": "Region",
+              "toolTip": "Select the Azure region",
+              "defaultValue": "Central US",
+              "options": [
+                {
+                  "label": "Central US",
+                  "value": "centralus"
+                },
+                {
+                  "label": "East US",
+                  "value": "eastus"
+                },
+                {
+                  "label": "West US",
+                  "value": "westus"
+                }
+              ],
+              "constraints": {
+                "required": true
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "outputs": {
+    "region": "[basics.instanceDetails.region]",
+    "directory": "[basics.projectDetails.directory]"
   }
 }
