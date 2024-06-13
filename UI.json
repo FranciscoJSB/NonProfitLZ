@@ -1,82 +1,42 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "resources": [],
-  "parameters": {
-    "location": {
-      "type": "string",
-      "metadata": {
-        "description": "Location for all resources."
-      }
-    },
-    "virtualNetworkName": {
-      "type": "string",
-      "metadata": {
-        "description": "Name of the virtual network."
-      }
-    },
-    "addressPrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "Address space for the virtual network."
-      }
-    },
-    "subnetPrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "Address prefix for the subnet."
-      }
-    }
-  },
-  "outputs": {
-    "formDefinition": {
-      "type": "object",
-      "value": {
-        "$schema": "https://schema.management.azure.com/schemas/2019-04-01/uiFormDefinition.json#",
-        "view": {
-          "kind": "Form",
-          "properties": {
-            "title": "Create Virtual Network",
-            "isWizard": false,
-            "steps": [
-              {
-                "name": "vnetConfig",
-                "label": "Virtual Network Configuration",
-                "elements": [
-                  {
-                    "name": "location",
-                    "type": "Microsoft.Common.Location",
-                    "label": "Location",
-                    "defaultValue": "eastus",
-                    "toolTip": "The location for all resources."
-                  },
-                  {
-                    "name": "virtualNetworkName",
-                    "type": "Microsoft.Common.TextBox",
-                    "label": "Virtual Network Name",
-                    "defaultValue": "myVnet",
-                    "toolTip": "Name of the virtual network."
-                  },
-                  {
-                    "name": "addressPrefix",
-                    "type": "Microsoft.Common.TextBox",
-                    "label": "Address Prefix",
-                    "defaultValue": "10.0.0.0/16",
-                    "toolTip": "Address space for the virtual network."
-                  },
-                  {
-                    "name": "subnetPrefix",
-                    "type": "Microsoft.Common.TextBox",
-                    "label": "Subnet Prefix",
-                    "defaultValue": "10.0.0.0/24",
-                    "toolTip": "Address prefix for the subnet."
-                  }
-                ]
-              }
-            ]
-          }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/uiFormDefinition.json#",
+  "view": {
+    "kind": "Form",
+    "properties": {
+      "title": "Create Virtual Network",
+      "isWizard": false,
+      "steps": [
+        {
+          "name": "vnetConfig",
+          "label": "Virtual Network Configuration",
+          "elements": [
+            {
+              "name": "location",
+              "type": "Microsoft.Common.Location",
+              "label": "Location",
+              "toolTip": "The location for all resources."
+            },
+            {
+              "name": "virtualNetworkName",
+              "type": "Microsoft.Common.TextBox",
+              "label": "Virtual Network Name",
+              "toolTip": "Name of the virtual network."
+            },
+            {
+              "name": "addressPrefix",
+              "type": "Microsoft.Common.TextBox",
+              "label": "Address Prefix",
+              "toolTip": "Address space for the virtual network."
+            },
+            {
+              "name": "subnetPrefix",
+              "type": "Microsoft.Common.TextBox",
+              "label": "Subnet Prefix",
+              "toolTip": "Address prefix for the subnet."
+            }
+          ]
         }
-      }
+      ]
     }
   }
 }
