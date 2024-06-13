@@ -27,28 +27,24 @@
   "parameters": {
     "location": {
       "type": "string",
-      "defaultValue": "eastus",
       "metadata": {
         "description": "Location for the virtual network."
       }
     },
     "virtualNetworkName": {
       "type": "string",
-      "defaultValue": "myVnet",
       "metadata": {
         "description": "Name of the virtual network."
       }
     },
     "addressPrefix": {
       "type": "string",
-      "defaultValue": "10.0.0.0/16",
       "metadata": {
         "description": "Address space for the virtual network."
       }
     },
     "subnetPrefix": {
       "type": "string",
-      "defaultValue": "10.0.0.0/24",
       "metadata": {
         "description": "Address prefix for the subnet."
       }
