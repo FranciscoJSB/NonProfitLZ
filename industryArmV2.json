@@ -612,7 +612,6 @@
         }
     },
     "variables": {
-    // Logic to map selected location (or deployment().location) to map to geographical management group under LZ
         "geoMap": {
             "eastus": "North-America",
             "eastus2": "North-America",
@@ -691,7 +690,7 @@
             "connectivity": "[concat(parameters('industryPrefix'), '-', 'Connectivity')]",
             "industryRoot": "[parameters('industryPrefix')]"
         },
-        // Declaring scopes that will be used for ARM deployments
+
         "scopes": {
             "industryRootManagementGroup": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('mgmtGroups').industryRoot)]",
             "platformManagementGroup": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('mgmtGroups').platform)]",
@@ -704,7 +703,6 @@
             "corpManagementGroup": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('mgmtGroups').corp)]",
             "onlineManagementGroup": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('mgmtGroups').online)]"
         },
-        // Declaring all required deployment uri's used for deployments of composite ARM templates for FSI. As you can see, it's been quite an effort :-)
        "azPrivateDnsPolicyMapping": {
             "https://management.azure.com/": "core/managementGroupTemplates/policyDefinitions/DINE-PrivateDNSZonesPolicySetDefinition.json",
             "https://management.usgovcloudapi.net": "core/managementGroupTemplates/policyDefinitions/gov/fairfaxDINE-PrivateDNSZonesPolicySetDefinition.json"
@@ -814,11 +812,11 @@
             "sshFromInternetPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DENY-SSHFromInternetPolicyAssignment.json')]",
             "denyVnetPeeringPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DENY-VNetPeeringPolicyAssignment.json')]",
             "budgetPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DINE-BudgetPolicyAssignment.json')]",
-            // Telco industry
+
             "erHaPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'telco/managementGroupTemplates/policyAssignments/DENY-non-ha-expressRoutes-policyAssignment.json')]",
             "pipHaPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'telco/managementGroupTemplates/policyAssignments/DENY-non-ha-publicIps-policyAssignment.json')]"
         },
-        // Declaring deterministic deployment names
+
         "deploymentSuffix": "[concat('-', deployment().location, guid(parameters('industryPrefix')))]",
         "industry": "[parameters('industry')]",
         "deploymentNames": {
@@ -922,7 +920,7 @@
             "nsgFlowLogPolicyExemption": "[take(concat(variables('industry'), '-NSGExempt', variables('deploymentSuffix')), 64)]",
             "denyVnetPeeringDeploymentName": "[take(concat(variables('industry'), '-VNetPeering', variables('deploymentSuffix')), 64)]",
             "budgetDeploymentName": "[take(concat(variables('industry'), '-Budget', variables('deploymentSuffix')), 64)]",
-            // Compliant Azure Service Policy Assignment deployment names
+
             "centralizedPlaygroundLogsAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Logging-Playground', variables('deploymentSuffix')), 64)]",
             "centralizedPlatformLogsAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Logging-Platform', variables('deploymentSuffix')), 64)]",
             "compliantCorpLzAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-CorpLz', variables('deploymentSuffix')), 64)]",
@@ -952,12 +950,12 @@
             "compliantApimAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-Apim', variables('deploymentSuffix')), 64)]",
             "compliantAppServiceAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-AppService', variables('deploymentSuffix')), 64)]",
             "compliantVirtualDesktopAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-AVD', variables('deploymentSuffix')), 64)]",
-            // Telco specific policies assignment deployments
+
             "erHaPolicyAssignment": "[take(concat(variables('industry'), '-DenyNonHaEr', variables('deploymentSuffix')), 64)]",
             "pipHaPolicyAssignment": "[take(concat(variables('industry'), '-DenyNonHaPip', variables('deploymentSuffix')), 64)]",
             "privateDnsOperatorPolicyDeploymentName": "[take(concat(variables('industry'), '-PrivateDNSOperator',variables('deploymentSuffix')), 64)]"
         },
-        // Declaring deterministic names for Resource Groups that will be created for platform resources
+
         "platformRgNames": {
             "mgmtRg": "[concat(parameters('industryPrefix'), '-mgmt')]",
             "userAssignedIdentity": "[concat(parameters('industryPrefix'), '-policy-identity')]",
@@ -968,7 +966,7 @@
             "lzVnetRg": "[concat(parameters('industryPrefix'), '-vnet-', parameters('location'))]",
             "logNwRg": "[concat(parameters('industryPrefix'), '-nwlog-', parameters('location'))]"
         },
-        // Declaring deterministic names for platform resources that will be created
+
         "platformResourceNames": {
             "logAnalyticsWorkspace": "[concat(parameters('industryPrefix'), '-law')]",
             "eventHubNamespace": "[toLower(take(concat(replace(replace(parameters('industryPrefix'), '-', ''), '_', ''), parameters('location'), uniqueString(deployment().name)), 23))]",
@@ -988,7 +986,7 @@
             "identityVnet": "[concat(parameters('industryPrefix'), '-vnet-', parameters('location'))]",
             "lzVnet": "[concat(parameters('industryPrefix'), '-vnet-', parameters('location'))]"
         },
-        // Declaring deterministic resourceId's for platform resources that will be created
+
         "singleVsDedicatedMgmtSub": "[if(empty(parameters('managementSubscriptionId')), parameters('singlePlatformSubscriptionId'), parameters('managementSubscriptionId'))]",
         "singleVsDedicatedConnectivitySub": "[if(empty(parameters('connectivitySubscriptionId')), parameters('singlePlatformSubscriptionId'), parameters('connectivitySubscriptionId'))]",
         "singleVsDedicatedIdentitySub": "[if(empty(parameters('identitySubscriptionId')), parameters('singlePlatformSubscriptionId'), parameters('identitySubscriptionId'))]",                
@@ -1003,7 +1001,7 @@
             "privateDnsRgResourceId": "[concat('/subscriptions/', variables('singleVsDedicatedConnectivitySub'), '/resourceGroups/', variables('platformRgNames').privateDnsRg)]",
             "azFirewallResourceId": "[concat('/subscriptions/', variables('singleVsDedicatedConnectivitySub'), '/resourceGroups/', variables('platformRgNames').connectivityRg, '/providers/Microsoft.Network/azureFirewalls/', variables('platformResourceNames').azFwName)]"
         },
-        // Declaring deterministic resourceId's for FSILZ platform resources (as they will be consolidated into a single platform subscription)
+
         "deterministicRoleAssignmentGuids": {
             "ddosForConnectivity": "[take(guid(concat(parameters('industryPrefix'), 'ddos')), 10)]",
             "backupForIdentity": "[take(guid(concat(parameters('industryPrefix'), 'idbackup')), 10)]"
@@ -2757,11 +2755,9 @@
         "allowedResourcesMap": "[concat(if(contains(parameters('compliantAzureServices'), 'Apim'), variables('allowedResources').apiManagement, json('[]')), if(contains(parameters('compliantAzureServices'), 'Automation'), variables('allowedResources').automation, json('[]')),if(contains(parameters('compliantAzureServices'), 'Backup'), variables('allowedResources').backup, json('[]')),if(contains(parameters('compliantAzureServices'), 'CognitiveSearch'), variables('allowedResources').cognitiveSearch, json('[]')),if(contains(parameters('compliantAzureServices'), 'Compute'), variables('allowedResources').compute, json('[]')),if(contains(parameters('compliantAzureServices'), 'ContainerApps'), variables('allowedResources').containerApps, json('[]')), if(contains(parameters('compliantAzureServices'), 'ContainerInstance'), variables('allowedResources').containerInstance, json('[]')), if(contains(parameters('compliantAzureServices'), 'ContainerRegistry'), variables('allowedResources').containerRegistry, json('[]')), if(contains(parameters('compliantAzureServices'), 'CosmosDb'), variables('allowedResources').cosmosDb, json('[]')), if(contains(parameters('compliantAzureServices'), 'DataExplorer'), variables('allowedResources').dataExplorer, json('[]')), if(contains(parameters('compliantAzureServices'), 'DataFactory'), variables('allowedResources').dataFactory, json('[]')), if(contains(parameters('compliantAzureServices'), 'EventGrid'), variables('allowedResources').eventGrid, json('[]')), if(contains(parameters('compliantAzureServices'), 'EventHub'), variables('allowedResources').eventHub, json('[]')), if(contains(parameters('compliantAzureServices'), 'KeyVault'), variables('allowedResources').keyVault, json('[]')), if(contains(parameters('compliantAzureServices'), 'Kubernetes'), variables('allowedResources').kubernetes, json('[]')), if(contains(parameters('compliantAzureServices'), 'MachineLearning'), variables('allowedResources').machineLearning, json('[]')), if(contains(parameters('compliantAzureServices'), 'Networking'), variables('allowedResources').network, json('[]')), if(contains(parameters('compliantAzureServices'), 'OpenAi'), variables('allowedResources').openAi, json('[]')), if(contains(parameters('compliantAzureServices'), 'PostgreSql'), variables('allowedResources').postgreSql, json('[]')), if(contains(parameters('compliantAzureServices'), 'ServiceBus'), variables('allowedResources').serviceBus, json('[]')), if(contains(parameters('compliantAzureServices'), 'Sql'), variables('allowedResources').sql, json('[]')), if(contains(parameters('compliantAzureServices'), 'StorageAccount'), variables('allowedResources').storage, json('[]')), if(contains(parameters('compliantAzureServices'), 'Synapse'), variables('allowedResources').synapse, json('[]')), if(contains(parameters('compliantAzureServices'), 'DesktopVirtualization'), variables('allowedResources').vdi, json('[]')), variables('allowedResources').platform)]"
     },
     "resources": [
-        /*
-            The following deployment will create the management group structure and ensure the sustainable, scalable architecture
-        */
+
         {
-            // Creating the management group structure
+
             "condition": "[empty(parameters('singlePlatformSubscriptionId'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
@@ -2780,11 +2776,8 @@
                 }
             }
         },     
-        /*
-            The following deployments will deploy the required proactive and preventive Azure policies for policy driven governance
-        */
         {
-            // Deploying custom Role Definitions. Note: all roleDefinitions will eventually be moved to built-in policies and codebase will be reduced
+
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').customRbacDeploymentName]",
@@ -2807,7 +2800,7 @@
             }
         },
         {
-            // Deploying Compliant Corp Lz PolicySetDefinition
+
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantCorpLzDeploymentName]",
@@ -2830,7 +2823,7 @@
             }
         },       
         {
-            // Deploying Compliant APIM PolicySetDefinition
+
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantApimDeploymentName]",
@@ -2853,7 +2846,7 @@
             }
         },
         {
-            // Deploying Compliant App Service PolicySetDefinition
+
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantAppServiceDeploymentName]",
@@ -2876,7 +2869,7 @@
             }
         },
         {
-            // Deploying Compliant Automation PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantAutomationDeploymentName]",
@@ -2899,7 +2892,7 @@
             }
         },
         {
-            // Deploying Compliant Backup PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantBackupDeploymentName]",
@@ -2922,7 +2915,7 @@
             }
         },
         {
-            // Deploying Compliant Cognitive Search PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantCognitiveSearchDeploymentName]",
@@ -2945,7 +2938,7 @@
             }
         },
         {
-            // Deploying Compliant Compute PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantComputeDeploymentName]",
@@ -2968,7 +2961,7 @@
             }
         },
         {
-            // Deploying Compliant Container Apps PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantContainerAppsDeploymentName]",
@@ -2991,7 +2984,7 @@
             }
         },
         {
-            // Deploying Compliant Container Instance PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantContainerInstanceDeploymentName]",
@@ -3014,7 +3007,7 @@
             }
         },
         {
-            // Deploying Compliant Container Registry PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantContainerRegistryDeploymentName]",
@@ -3037,7 +3030,7 @@
             }
         },
         {
-            // Deploying Compliant Cosmos Db PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantCosmosDbDeploymentName]",
@@ -3060,7 +3053,7 @@
             }
         },
         {
-            // Deploying Compliant Data Explorer PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantDataExplorerDeploymentName]",
@@ -3083,7 +3076,7 @@
             }
         },
         {
-            // Deploying Compliant Data Factory PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantDataFactoryDeploymentName]",
@@ -3106,7 +3099,7 @@
             }
         },
         {
-            // Deploying Compliant Event Grid PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantEventGridDeploymentName]",
@@ -3129,7 +3122,7 @@
             }
         },
         {
-            // Deploying Compliant Event Hub PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantEventHubDeploymentName]",
@@ -3152,7 +3145,7 @@
             }
         },
         {
-            // Deploying Compliant Key Vault PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantKeyVaultDeploymentName]",
@@ -3175,7 +3168,7 @@
             }
         },
         {
-            // Deploying Compliant Kubernetes PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantKubernetesDeploymentName]",
@@ -3198,7 +3191,7 @@
             }
         },
         {
-            // Deploying Compliant Machine Learning PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantMachineLearningDeploymentName]",
@@ -3221,7 +3214,7 @@
             }
         },
         {
-            // Deploying Compliant Network PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantNetworkDeploymentName]",
@@ -3244,7 +3237,7 @@
             }
         },
         {
-            // Deploying Compliant Open Ai PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantOpenAiDeploymentName]",
@@ -3267,7 +3260,7 @@
             }
         },
         {
-            // Deploying Compliant Postgre SQL PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantPostgreDeploymentName]",
@@ -3290,7 +3283,7 @@
             }
         },
         {
-            // Deploying Compliant Service Bus PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantServiceBusDeploymentName]",
@@ -3313,7 +3306,7 @@
             }
         },
         {
-            // Deploying Compliant SQL PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantSqlDeploymentName]",
@@ -3336,7 +3329,7 @@
             }
         },
         {
-            // Deploying Compliant Storage PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantStorageDeploymentName]",
@@ -3359,7 +3352,7 @@
             }
         },
         {
-            // Deploying Compliant Synapse PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantSynapseDeploymentName]",
@@ -3382,7 +3375,7 @@
             }
         },
         {
-            // Deploying Compliant Virtual Desktop PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').compliantVirtualDesktopDeploymentName]",
@@ -3405,7 +3398,7 @@
             }
         },
         {
-            // Deploying Centralized Logging PolicySetDefinition
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').centralizedLoggingDeploymentName]",
@@ -3453,7 +3446,7 @@
             }
         },
         {
-            // Deploying custom policies. Note: all policies will eventually be moved to built-in policies and codebase will be reduced
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "[variables('deploymentNames').policyDeploymentName]",
@@ -3476,7 +3469,7 @@
             }
         },                      
         {
-            // One of Azure's untold stories.....
+            
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
             "name": "[concat('Hydrating-Compliance-Step-', copyIndex())]",
@@ -3502,12 +3495,9 @@
                     "outputs": {}
                 }
             }
-        },
-        /*
-            The following deployments will organize the dedicated platform subscriptions into their respective management groups
-        */       
+        },   
         {
-            // Placing management subscription into dedicated management group
+            
             "condition": "[not(empty(parameters('managementSubscriptionId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -3534,7 +3524,7 @@
             }
         },
         {
-            // Placing connectivity subscription into dedicated management group
+            
             "condition": "[not(empty(parameters('connectivitySubscriptionId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -3561,7 +3551,7 @@
             }
         },
         {
-            // Placing internet ingress subscription into dedicated management group
+            
             "condition": "[not(empty(parameters('ingressSubscriptionId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -3588,7 +3578,7 @@
             }
         }, 
         {
-            // Placing internet egress subscription into dedicated management group
+            
             "condition": "[not(empty(parameters('egressSubscriptionId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -3615,7 +3605,7 @@
             }
         },
         {
-            // Placing identity subscription into dedicated management group
+            
             "condition": "[not(empty(parameters('identitySubscriptionId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -3641,11 +3631,8 @@
                 }
             }
         },
-        /*
-            The following deployments will optionally configure the governance, security, and monitoring for the Azure platform and landing zones
-        */
         {
-            // Deploying Log Analytics workspace to management subscription if condition is true
+            
             "condition": "[and(equals(parameters('enableLogAnalytics'), 'Yes'), not(empty(parameters('managementSubscriptionId'))))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -3697,7 +3684,7 @@
             }
         },
         {
-            // Deploying User Assigned identity for Policy enforcement
+            
             "condition": "[not(empty(parameters('managementSubscriptionId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -3727,7 +3714,7 @@
             }
         },
         {
-            // Assigning RBAC for User Assigned identity for Azure Policy enforcement
+            
             "condition": "[not(empty(parameters('managementSubscriptionId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
@@ -3757,7 +3744,7 @@
             }
         },      
         {
-            // Deploying Log Analytics solutions to Log Analytics workspace if condition is true
+            
             "condition": "[and(and(not(empty(parameters('managementSubscriptionId'))), equals(parameters('enableLogAnalytics'), 'Yes')),  equals(parameters('enableLogAnalytics'), 'Yes'), or(or(or(or(or(equals(parameters('enableSecuritySolution'), 'Yes'), equals(parameters('enableAgentHealth'), 'Yes')), equals(parameters('enableChangeTracking'), 'Yes')), equals(parameters('enableUpdateMgmt'), 'Yes'), equals(parameters('enableActivityLog'), 'Yes')), equals(parameters('enableVmInsights'), 'Yes')), equals(parameters('enableServiceMap'), 'Yes'), equals(parameters('enableSqlAssessment'), 'Yes')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -3811,7 +3798,7 @@
             }
         },
         {
-            // Create storage account for NSG Flow Logs in the management subscription for networking observability
+            
             "condition": "[and(not(empty(parameters('managementSubscriptionId'))), equals(parameters('enableNsgFlowLogs'), 'Yes'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -3847,7 +3834,7 @@
             }
         },
         {
-            // Assigning Log Analytics workspace policy to management management group if condition is true
+            
             "condition": "[and(equals(parameters('enableLogAnalytics'), 'Yes'), not(empty(parameters('managementSubscriptionId'))))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -3891,7 +3878,7 @@
             }
         },
         {
-            // Assigning Azure Security Benchmark policy to intermediate root management group if condition is true
+            
             "condition": "[equals(parameters('enableMcsbPolicy'), 'Yes')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -3914,7 +3901,7 @@
             }
         },
         {
-            // Assigning Azure Monitor Resource Diagnostics policy to platform management group if condition is true
+            
             "condition": "[and(or(not(empty(parameters('singlePlatformSubscriptionId'))), not(empty(parameters('managementSubscriptionId')))), equals(parameters('enableLogAnalytics'), 'Yes'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -3946,7 +3933,7 @@
             }   
         },
         {
-            // Assigning Azure Monitor Resource Diagnostics policy to playground management group if condition is true
+            
             "condition": "[and(or(not(empty(parameters('singlePlatformSubscriptionId'))), not(empty(parameters('managementSubscriptionId')))), equals(parameters('enableLogAnalytics'), 'Yes'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -3978,7 +3965,7 @@
             }   
         },
         {
-            // Assigning Azure Activity Diagnostics Log policy to intermediate root management group if condition is true
+            
             "condition": "[and(or(not(empty(parameters('singlePlatformSubscriptionId'))), not(empty(parameters('managementSubscriptionId')))), equals(parameters('enableLogAnalytics'), 'Yes'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -4009,7 +3996,7 @@
             }   
         },
         {
-            // Registering PolicyInsights RP to intermediate root management group if condition is true
+            
             "condition": "[and(or(not(empty(parameters('singlePlatformSubscriptionId'))), not(empty(parameters('managementSubscriptionId')))), equals(parameters('enableLogAnalytics'), 'Yes'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -4038,7 +4025,7 @@
             }   
         },
         {
-            // Assigning Microsoft Defender for Cloud configuration policy initiative to intermediate root management group if condition is true
+            
             "condition": "[and(or(not(empty(parameters('managementSubscriptionId'))), not(empty(parameters('singlePlatformSubscriptionId')))), equals(parameters('enableAsc'), 'Yes'), equals(environment().resourceManager, 'https://management.azure.com/'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -4114,7 +4101,7 @@
             }   
         },
         {
-            // Assigning Defender Endpoint VMs policy initiative to intermediate root management group if condition is true
+            
             "condition": "[equals(parameters('enableDefenderEndpoint'), 'Yes')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -4141,7 +4128,7 @@
             }   
         },
         {
-            // Az Gov Only - Assigning Azure Security Center configuration policy initiative to intermediate root management group if condition is true
+            
             "condition": "[and(or(not(empty(parameters('managementSubscriptionId'))), not(empty(parameters('singlePlatformSubscriptionId')))), equals(parameters('enableAsc'), 'Yes'), equals(environment().resourceManager, 'https://management.usgovcloudapi.net'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -4188,11 +4175,8 @@
                 }
             }   
         },        
-        /*
-            The following optional deployment will configure virtual network hub into the connectivity subscription
-        */
         {
-            // Creating DDoS protection plan into the connectivity subscription
+            
             "condition": "[and(equals(parameters('enableDdoS'), 'Yes'), not(empty(parameters('connectivitySubscriptionId'))))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -4223,7 +4207,7 @@
             }
         },
         {
-            // Creating the virtual network hub (hub and spoke)
+            
             "condition": "[and(not(empty(parameters('connectivitySubscriptionId'))),equals(parameters('enableHub'), 'vhub'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -4331,7 +4315,7 @@
             }
         },
         {
-            // Creating the ingress subscription
+            
             "condition": "[and(not(empty(parameters('ingressSubscriptionId'))),equals(parameters('enableHub'), 'vhub'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -4402,7 +4386,7 @@
             }
         },
         {
-            // Creating the egress subscription
+            
             "condition": "[and(not(empty(parameters('egressSubscriptionId'))),equals(parameters('enableHub'), 'vhub'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -4473,7 +4457,7 @@
             }
         },
         {
-            // Creating the virtual network hub (with NVA)
+            
             "condition": "[and(not(empty(parameters('connectivitySubscriptionId'))),equals(parameters('enableHub'), 'nva'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -4548,7 +4532,7 @@
             }
         },        
         {
-            // Creating the VWAN network hub (Microsoft managed)
+            
             "condition": "[and(not(empty(parameters('connectivitySubscriptionId'))),equals(parameters('enableHub'), 'vwan'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -4608,7 +4592,7 @@
             }
         },
         {
-            // Creating Private DNS Zones into the connectivity subscription
+            
             "condition": "[and(equals(parameters('enablePrivateDnsZones'), 'Yes'), not(empty(parameters('connectivitySubscriptionId'))))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -4644,7 +4628,7 @@
                 }
             }
         },
-        {   // Creating Policy Assignment for NSG Flow Logs Policy on Platform scope
+        {   
             "condition": "[and(equals(parameters('enableNetworkWatcher'), 'Yes'), equals(parameters('enableNsgFlowLogs'), 'Yes'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -4695,7 +4679,7 @@
                 }
             }
         },
-        {   // Creating Policy Exemption for storage accounts for NSG in management management group scope
+        {   
             "condition": "[and(equals(parameters('enableMcsbPolicy'), 'Yes'), equals(parameters('enableNsgFlowLogs'), 'Yes'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -4722,7 +4706,7 @@
                 }
             }
         },               
-        {   // Creating Network Watcher on Connectivity subscription
+        {   
             "condition": "[and(not(empty(parameters('connectivitySubscriptionId'))), equals(parameters('enableNetworkWatcher'), 'Yes'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -4748,10 +4732,7 @@
                 }
             }
         },
-        /*
-            The following deployments will deploy and configure the Azure policy governance for the landing zones
-        */
-        {   // Creating Policy Assignment for allowed Azure Regions on the Landing Zone management group
+        {   
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
             "location": "[if(empty(parameters('location')), deployment().location, parameters('location'))]",
@@ -4779,11 +4760,11 @@
                             "[if(empty(parameters('location')), deployment().location, parameters('location'))]"
                         ]
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment for allowed Azure Regions for Rgs on the Landing Zone management group
+        {   
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
             "location": "[if(empty(parameters('location')), deployment().location, parameters('location'))]",
@@ -4807,11 +4788,11 @@
                             "[if(empty(parameters('location')), deployment().location, parameters('location'))]"
                         ]
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment for allowed Azure Resources on Landing Zone management group
+        {   
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
             "location": "[if(empty(parameters('location')), deployment().location, parameters('location'))]",
@@ -4833,11 +4814,11 @@
                     "listOfResourceTypesAllowed": {
                         "value": "[variables('allowedResourcesMap')]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },       
-        {   // Creating Policy Assignment for NSG Flow Logs Policy on Landing zone scope
+        {   
             "condition": "[and(equals(parameters('enableNetworkWatcher'), 'Yes'), equals(parameters('enableNsgFlowLogs'), 'Yes'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -4888,7 +4869,7 @@
                 }
             }
         },
-        {   // Creating Policy Assignment API management to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'Apim')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -4921,11 +4902,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         }, 
-        {   // Creating Policy Assignment App Service to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'AppService')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -4970,11 +4951,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Automation Account to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'Automation')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5007,11 +4988,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Backup to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'Backup')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5041,11 +5022,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Cognitive Search to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'CognitiveSearch')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5078,11 +5059,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Compute to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'Compute')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5109,11 +5090,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Container Apps to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'ContainerApps')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5140,11 +5121,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Container Instance to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'ContainerInstance')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5171,11 +5152,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Container Registry to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'ContainerRegistry')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5208,11 +5189,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Cosmos Db to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'CosmosDb')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5245,11 +5226,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Data Explorer to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'DataExplorer')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5282,11 +5263,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment Data Factory Vault to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'DataFactory')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5319,11 +5300,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },                      
-        {   // Creating Policy Assignment Compliant Key Vault to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'KeyVault')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5362,11 +5343,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Event Grid to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'EventGrid')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5411,11 +5392,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Event Hub to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'EventHub')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5448,11 +5429,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Kubernetes to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'Kubernetes')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5491,11 +5472,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Machine Learning to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'MachineLearning')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5528,11 +5509,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Network to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'Networking')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5649,11 +5630,11 @@
                     "modifyNsg": {
                         "value": "Modify"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Network to Platform Management group scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'Networking')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5758,11 +5739,11 @@
                     "modifyNsg": {
                         "value": "Disabled"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },           
-        {   // Creating Policy Assignment Compliant Open Ai to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'OpenAi')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5795,11 +5776,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Postgre SQL to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'PostgreSql')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5835,7 +5816,7 @@
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Service Bus to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'ServiceBus')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5871,7 +5852,7 @@
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Sql to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'Sql')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5922,7 +5903,7 @@
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Storage to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'StorageAccount')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -5979,11 +5960,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },
-        {   // Creating Policy Assignment Compliant Connected to Corp Landing Zone scope
+        {   
             "condition": "[equals(parameters('enablePrivateDnsZones'), 'Yes')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -6202,11 +6183,11 @@
                     "userAssignedIdentityResourceId": {
                         "value": "[variables('platformResourceIds').userAssignedIdentityResourceId]"
                     }
-                    // Add parameter to toggle DINE to 'disabled' of condition is not met so the policy does not show up as non-compliant
+                    
                 }
             }
         },        
-        {   // Creating Policy Assignment Compliant Synapse to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'Synapse')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -6245,7 +6226,7 @@
                 }
             }
         },
-        {   // Creating Policy Assignment Virtual Desktop to Landing Zone scope
+        {   
             "condition": "[contains(parameters('compliantAzureServices'), 'DesktopVirtualization')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
@@ -6293,11 +6274,8 @@
                 }
             }
         },                                      
-        /*
-            The following section will optionally configure the governance for the Identity management group for the platform
-        */
         {
-            // Assigning Azure Backup policy to identity management group if condition is true
+            
             "condition": "[and(equals(parameters('enableVmBackupForIdentity'), 'Yes'), not(empty(parameters('identitySubscriptionId'))))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -6324,7 +6302,7 @@
             }
         },
         {
-            // Assigning deny Public Ip policy to identity management group if condition is true
+            
             "condition": "[and(equals(parameters('denyPipForIdentity'), 'Yes'), not(empty(parameters('identitySubscriptionId'))))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -6352,7 +6330,7 @@
             }
         },
         {
-            // Assigning deny subnet without nsg policy to identity management group if condition is true
+            
             "condition": "[and(equals(parameters('denySubnetWithoutNsgForIdentity'), 'Yes'), not(empty(parameters('identitySubscriptionId'))))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -6380,7 +6358,7 @@
             }
         },
         {
-            // Assigning deny rpd from internet on identity management group if condition is true
+            
             "condition": "[and(equals(parameters('denyRdpForIdentity'), 'Yes'), not(empty(parameters('identitySubscriptionId'))))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -6408,7 +6386,7 @@
             }
         },
         {
-            // Peer vnet in identity subscription to connectivity hub if vhub or nva contidion is true
+            
             "condition": "[and(or(equals(parameters('enableHub'), 'nva'), equals(parameters('enableHub'), 'vhub')), not(empty(parameters('identityAddressPrefix'))))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
@@ -6454,7 +6432,7 @@
             }
         },
         {
-            // Peer vnet in identity subscription to connectivity hub if vwan contidion is true
+            
             "condition": "[and(equals(parameters('enableHub'), 'vwan'), not(empty(parameters('identityAddressPrefix'))))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
@@ -6500,7 +6478,7 @@
             }
         },
         {
-            // Placing subscription(s) into playground management group
+            
             "condition": "[not(empty(parameters('playgroundSubscriptionId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -6535,7 +6513,7 @@
             }
         },
         {
-            // Assigning VNet peering policy to playground management group if condition is true
+            
             "condition": "[equals(parameters('denyVnetPeering'), 'Yes')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -6559,7 +6537,7 @@
             }
         }, 
         {
-            // Assigning budget policy to playground management group if condition is true
+            
             "condition": "[and(not(empty(parameters('budgetAmount'))), equals(parameters('enableBudget'), 'Yes'))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -6591,11 +6569,8 @@
                 }
             }
         },                          
-        /*
-            The following deployments will place landing zone subscriptions into online/corp (connected, disconnected)
-        */
         {
-            // Placing subscription(s) into online landing zone management group
+            
             "condition": "[not(empty(parameters('onlineLzSubscriptionId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -6630,7 +6605,7 @@
             }
         },
         {
-            // Placing subscriptions into corp landing zone management group
+            
             "condition": "[not(empty(parameters('corpLzSubscriptionId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -6665,7 +6640,7 @@
             }
         },
         {
-            // Placing subscriptions into corp landing zone management group (and do subsequent peering)
+            
             "condition": "[not(empty(parameters('corpConnectedLzSubscriptionId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -6703,7 +6678,7 @@
             }
         },
         {
-            // Peering corp connected lz vnet to connectivity sub (when nva or vhub is selected)
+            
             "condition": "[and(or(equals(parameters('enableHub'), 'nva'), equals(parameters('enableHub'), 'vhub')), not(empty(parameters('corpConnectedLzSubscriptionId'))))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
