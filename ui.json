@@ -1,36 +1,58 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-  "contentVersion": "1.0.0.0",
+  "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+  "handler": "Microsoft.Azure.CreateUIDef",
+  "version": "1.0.0",
   "parameters": {
-    "location": {
-      "type": "string",
-      "metadata": {
-        "description": "Location for all resources."
+    "basics": [
+      {
+        "name": "location",
+        "type": "Microsoft.Common.Location",
+        "label": "Location",
+        "defaultValue": "West US"
+      },
+      {
+        "name": "virtualNetworkName",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Virtual Network Name",
+        "defaultValue": "myVNet",
+        "constraints": {
+          "required": true
+        }
+      },
+      {
+        "name": "addressSpace",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Address Space",
+        "defaultValue": "10.0.0.0/16",
+        "constraints": {
+          "required": true
+        }
+      },
+      {
+        "name": "subnetName",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Subnet Name",
+        "defaultValue": "default",
+        "constraints": {
+          "required": true
+        }
+      },
+      {
+        "name": "subnetPrefix",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Subnet Prefix",
+        "defaultValue": "10.0.0.0/24",
+        "constraints": {
+          "required": true
+        }
       }
-    },
-    "virtualNetworkName": {
-      "type": "string",
-      "metadata": {
-        "description": "Name of the virtual network."
-      }
-    },
-    "addressSpace": {
-      "type": "string",
-      "metadata": {
-        "description": "Address space for the virtual network."
-      }
-    },
-    "subnetName": {
-      "type": "string",
-      "metadata": {
-        "description": "Name of the subnet."
-      }
-    },
-    "subnetPrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "Address prefix for the subnet."
-      }
-    }
+    ]
+  },
+  "outputs": {
+    "location": "[location]",
+    "virtualNetworkName": "[virtualNetworkName]",
+    "addressSpace": "[addressSpace]",
+    "subnetName": "[subnetName]",
+    "subnetPrefix": "[subnetPrefix]"
   }
 }
