@@ -1,0 +1,66 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "virtualNetworkName": {
+        "type": "string"
+      },
+      "hubSubnetName": {
+        "type": "string"
+      },
+      "deployExpressRoute": {
+        "type": "bool"
+      },
+      "dnsZoneName": {
+        "type": "string"
+      },
+      "virtualNetworkAddressSpace": {
+        "type": "string"
+      },
+      "firewallSubnetAddressSpace": {
+        "type": "string"
+      },
+      "gatewaySubnetAddressSpace": {
+        "type": "string"
+      },
+      "hubSubnetAddressSpace": {
+        "type": "string"
+      }
+    },
+    "resources": [
+      {
+        "type": "Microsoft.Network/virtualNetworks",
+        "apiVersion": "2020-06-01",
+        "name": "[parameters('virtualNetworkName')]",
+        "location": "[resourceGroup().location]",
+        "properties": {
+          "addressSpace": {
+            "addressPrefixes": [
+              "[parameters('virtualNetworkAddressSpace')]"
+            ]
+          },
+          "subnets": [
+            {
+              "name": "AzureFirewallSubnet",
+              "properties": {
+                "addressPrefix": "[parameters('firewallSubnetAddressSpace')]"
+              }
+            },
+            {
+              "name": "GatewaySubnet",
+              "properties": {
+                "addressPrefix": "[parameters('gatewaySubnetAddressSpace')]"
+              }
+            },
+            {
+              "name": "[parameters('hubSubnetName')]",
+              "properties": {
+                "addressPrefix": "[parameters('hubSubnetAddressSpace')]"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+  
