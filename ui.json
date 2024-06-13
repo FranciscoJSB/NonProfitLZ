@@ -55,13 +55,28 @@
                     ]
                 }
             ]
+        }
+    },
+    "outputs": {
+        "location": {
+            "type": "string",
+            "value": "[location]"
         },
-        "outputs": {
-            "location": "[location]",
-            "virtualNetworkName": "[virtualNetworkName]",
-            "addressSpace": "[addressSpace]",
-            "subnetName": "[subnetName]",
-            "subnetPrefix": "[subnetPrefix]"
+        "virtualNetworkName": {
+            "type": "string",
+            "value": "[virtualNetworkName]"
+        },
+        "addressSpace": {
+            "type": "string",
+            "value": "[addressSpace]"
+        },
+        "subnetName": {
+            "type": "string",
+            "value": "[subnetName]"
+        },
+        "subnetPrefix": {
+            "type": "string",
+            "value": "[subnetPrefix]"
         }
     }
 }
