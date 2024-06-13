@@ -3,12 +3,22 @@
   "view": {
     "kind": "Form",
     "properties": {
-      "title": "Deploy a Virtual Network",
+      "title": "FSI Landing Zones on Microsoft Azure",
       "isWizard": false,
       "steps": [
         {
           "name": "basics",
-          "label": "Basics",
+          "label": "Deployment location",
+          "elements": [
+            {
+              "name": "resourceScope",
+              "type": "Microsoft.Common.ResourceScope"
+            }
+          ]
+        },
+        {
+          "name": "vnetSettings",
+          "label": "Virtual Network Settings",
           "elements": [
             {
               "name": "location",
@@ -60,23 +70,23 @@
   "outputs": {
     "location": {
       "type": "string",
-      "value": "[location]"
+      "value": "[steps('vnetSettings').location]"
     },
     "virtualNetworkName": {
       "type": "string",
-      "value": "[virtualNetworkName]"
+      "value": "[steps('vnetSettings').virtualNetworkName]"
     },
     "addressSpace": {
       "type": "string",
-      "value": "[addressSpace]"
+      "value": "[steps('vnetSettings').addressSpace]"
     },
     "subnetName": {
       "type": "string",
-      "value": "[subnetName]"
+      "value": "[steps('vnetSettings').subnetName]"
     },
     "subnetPrefix": {
       "type": "string",
-      "value": "[subnetPrefix]"
+      "value": "[steps('vnetSettings').subnetPrefix]"
     }
   }
 }
