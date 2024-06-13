@@ -1,38 +1,18 @@
 {
-  "schema": "https://schema.management.azure.com/schemas/2015-01-01/uiDefinition.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "basics": {
-      "name": "Basics",
-      "sections": [
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "view": {
+    "kind": "Form",
+    "properties": {
+      "title": "FSI Landing Zones on Microsoft Azure",
+      "isWizard": true,
+      "steps": [
         {
-          "name": "template",
-          "label": "Template",
+          "name": "basics",
+          "label": "Deployment location",
           "elements": [
             {
-              "name": "customTemplate",
-              "type": "Microsoft.Common.Section",
-              "label": "Customized template",
-              "elements": [
-                {
-                  "name": "customTemplateLink",
-                  "type": "Microsoft.Common.Link",
-                  "label": "104 resources",
-                  "link": "https://custom-template-link"
-                },
-                {
-                  "name": "editTemplate",
-                  "type": "Microsoft.Common.Button",
-                  "label": "Edit template",
-                  "toolTip": "Edit the deployment template"
-                },
-                {
-                  "name": "editParameters",
-                  "type": "Microsoft.Common.Button",
-                  "label": "Edit parameters",
-                  "toolTip": "Edit the deployment parameters"
-                }
-              ]
+              "name": "resourceScope",
+              "type": "Microsoft.Common.ResourceScope"
             }
           ]
         },
@@ -51,40 +31,53 @@
               }
             },
             {
-              "name": "switchingDirectories",
-              "type": "Microsoft.Common.Link",
-              "label": "Switching directories will result in the Azure portal being reloaded. Any progress will be lost.",
-              "link": "https://switch-directory-link"
+              "name": "region",
+              "type": "Microsoft.Common.DropDown",
+              "label": "Region",
+              "defaultValue": "Central US",
+              "toolTip": "Select the Azure region",
+              "constraints": {
+                "allowedValues": [
+                  {
+                    "label": "Central US",
+                    "value": "centralus"
+                  },
+                  {
+                    "label": "East US",
+                    "value": "eastus"
+                  },
+                  {
+                    "label": "West US",
+                    "value": "westus"
+                  }
+                ],
+                "required": true
+              }
             }
           ]
         },
         {
-          "name": "instanceDetails",
-          "label": "Instance details",
+          "name": "templateDetails",
+          "label": "Template",
           "elements": [
             {
-              "name": "region",
-              "type": "Microsoft.Common.DropDown",
-              "label": "Region",
-              "toolTip": "Select the Azure region",
-              "defaultValue": "Central US",
-              "options": [
-                {
-                  "label": "Central US",
-                  "value": "centralus"
-                },
-                {
-                  "label": "East US",
-                  "value": "eastus"
-                },
-                {
-                  "label": "West US",
-                  "value": "westus"
-                }
-              ],
-              "constraints": {
-                "required": true
-              }
+              "name": "customTemplate",
+              "type": "Microsoft.Common.Link",
+              "label": "Customized template",
+              "link": "https://custom-template-link",
+              "toolTip": "Edit the deployment template"
+            },
+            {
+              "name": "editTemplate",
+              "type": "Microsoft.Common.Button",
+              "label": "Edit template",
+              "toolTip": "Edit the deployment template"
+            },
+            {
+              "name": "editParameters",
+              "type": "Microsoft.Common.Button",
+              "label": "Edit parameters",
+              "toolTip": "Edit the deployment parameters"
             }
           ]
         }
@@ -92,7 +85,7 @@
     }
   },
   "outputs": {
-    "region": "[basics.instanceDetails.region]",
+    "region": "[basics.projectDetails.region]",
     "directory": "[basics.projectDetails.directory]"
   }
 }
