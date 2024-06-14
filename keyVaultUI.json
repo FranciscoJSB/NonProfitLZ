@@ -68,21 +68,6 @@
                     "label": "Networking",
                     "elements": [
                         {
-                            "name": "deployHubSpoke",
-                            "type": "Microsoft.Common.OptionsGroup",
-                            "label": "Deploy Hub and Spoke Topology",
-                            "defaultValue": "Yes",
-                            "constraints": {
-                                "allowedValues": [
-                                    {
-                                        "label": "Yes",
-                                        "value": "Yes"
-                                    }
-                                ]
-                            },
-                            "toolTip": "Choose whether to deploy Hub and Spoke topology."
-                        },
-                        {
                             "name": "vnetName",
                             "type": "Microsoft.Common.TextBox",
                             "label": "VNet Name",
@@ -152,18 +137,13 @@
                     "elements": [
                         {
                             "name": "deployLogAnalytics",
-                            "type": "Microsoft.Common.OptionsGroup",
+                            "type": "Microsoft.Common.TextBox",
                             "label": "Deploy Log Analytics Workspace",
                             "defaultValue": "Yes",
                             "constraints": {
-                                "allowedValues": [
-                                    {
-                                        "label": "Yes",
-                                        "value": "Yes"
-                                    }
-                                ]
+                                "required": true
                             },
-                            "toolTip": "Choose whether to deploy a Log Analytics Workspace."
+                            "visible": false
                         },
                         {
                             "name": "logAnalyticsWorkspaceName",
@@ -199,25 +179,6 @@
                     "label": "Storage",
                     "elements": [
                         {
-                            "name": "deployStorageAccount",
-                            "type": "Microsoft.Common.OptionsGroup",
-                            "label": "Deploy Storage Account",
-                            "defaultValue": "No",
-                            "constraints": {
-                                "allowedValues": [
-                                    {
-                                        "label": "Yes",
-                                        "value": "Yes"
-                                    },
-                                    {
-                                        "label": "No",
-                                        "value": "No"
-                                    }
-                                ]
-                            },
-                            "toolTip": "Choose whether to deploy a Storage Account."
-                        },
-                        {
                             "name": "storageAccountName",
                             "type": "Microsoft.Common.TextBox",
                             "label": "Storage Account Name",
@@ -231,8 +192,7 @@
                                         "message": "The Storage Account name must be between 3 and 24 characters long and contain only lowercase letters and numbers."
                                     }
                                 ]
-                            },
-                            "visible": "[equals(steps('storage').deployStorageAccount, 'Yes')]"
+                            }
                         },
                         {
                             "name": "storageAccountSku",
@@ -260,8 +220,7 @@
                                 ],
                                 "required": true
                             },
-                            "toolTip": "The SKU for the Storage Account.",
-                            "visible": "[equals(steps('storage').deployStorageAccount, 'Yes')]"
+                            "toolTip": "The SKU for the Storage Account."
                         }
                     ]
                 }
@@ -271,7 +230,6 @@
             "parameters": {
                 "location": "[steps('basics').resourceScope.location.name]",
                 "keyVaultName": "[steps('identityAndAccess').keyVaultName]",
-                "deployHubSpoke": "[steps('networking').deployHubSpoke]",
                 "vnetName": "[steps('networking').vnetName]",
                 "firewallSubnetAddress": "[steps('networking').firewallSubnetAddress]",
                 "gatewaySubnetAddress": "[steps('networking').gatewaySubnetAddress]",
@@ -280,7 +238,6 @@
                 "deployLogAnalytics": "[steps('monitoring').deployLogAnalytics]",
                 "logAnalyticsWorkspaceName": "[steps('monitoring').logAnalyticsWorkspaceName]",
                 "logRetentionDays": "[steps('monitoring').logRetentionDays]",
-                "deployStorageAccount": "[steps('storage').deployStorageAccount]",
                 "storageAccountName": "[steps('storage').storageAccountName]",
                 "storageAccountSku": "[steps('storage').storageAccountSku]"
             },
