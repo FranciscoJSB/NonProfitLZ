@@ -23,6 +23,9 @@
         "dnsZone": {
             "type": "string"
         },
+        "nsgName": {
+            "type": "string"
+        },
         "additionalSubnetName": {
             "type": "string"
         },
@@ -99,8 +102,8 @@
                 "vpnType": "RouteBased",
                 "enableBgp": false,
                 "sku": {
-                    "name": "VpnGW1",
-                    "tier": "VpnGW1"
+                    "name": "VpnGw1",
+                    "tier": "VpnGw1"
                 },
                 "gatewayDefaultSite": null
             }
@@ -119,6 +122,26 @@
             "apiVersion": "2018-05-01",
             "name": "[parameters('dnsZone')]",
             "location": "[parameters('location')]"
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[parameters('nsgName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "securityRules": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2020-06-01",
+            "name": "[concat(parameters('vnetName'), '/', parameters('additionalSubnetName'))]",
+            "properties": {
+                "addressPrefix": "[parameters('additionalSubnetAddress')]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
+                }
+            }
         },
         {
             "type": "Microsoft.KeyVault/vaults",
@@ -195,6 +218,10 @@
         "dnsZone": {
             "type": "string",
             "value": "[parameters('dnsZone')]"
+        },
+        "nsgName": {
+            "type": "string",
+            "value": "[parameters('nsgName')]"
         },
         "logAnalyticsWorkspaceName": {
             "type": "string",
