@@ -35,9 +35,6 @@
         "recoveryServicesVaultName": {
             "type": "string"
         },
-        "defenderForCloud": {
-            "type": "string"
-        },
         "nsgName": {
             "type": "string"
         }
@@ -144,14 +141,6 @@
             "properties": {
                 "accessTier": "Hot"
             }
-        },
-        {
-            "type": "Microsoft.Security/pricings",
-            "apiVersion": "2018-06-01",
-            "name": "default",
-            "properties": {
-                "pricingTier": "[parameters('defenderForCloud')]"
-            }
         }
     ],
     "outputs": {
@@ -178,10 +167,6 @@
         "recoveryServicesVaultName": {
             "type": "string",
             "value": "[parameters('recoveryServicesVaultName')]"
-        },
-        "defenderForCloud": {
-            "type": "string",
-            "value": "[parameters('defenderForCloud')]"
         }
     }
 }
