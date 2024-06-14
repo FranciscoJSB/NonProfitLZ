@@ -108,6 +108,23 @@
                             }
                         },
                         {
+                            "name": "firewallSubnetDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "The Azure Firewall Subnet is used to host the Azure Firewall."
+                            }
+                        },
+                        {
+                            "name": "firewallSubnetAddress",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Azure Firewall Subnet Address",
+                            "toolTip": "Address space for the Azure Firewall subnet.",
+                            "defaultValue": "10.0.1.0/24",
+                            "constraints": {
+                                "required": true
+                            }
+                        },
+                        {
                             "name": "gatewaySubnetDescription",
                             "type": "Microsoft.Common.TextBlock",
                             "options": {
@@ -122,54 +139,6 @@
                             "defaultValue": "10.0.2.0/24",
                             "constraints": {
                                 "required": true
-                            }
-                        },
-                        {
-                            "name": "vpnGateway",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "VPN Gateway",
-                            "toolTip": "The name of the VPN Gateway.",
-                            "defaultValue": "my-vpn-gateway",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The VPN Gateway name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "dnsZone",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "DNS Zone",
-                            "toolTip": "The name of the DNS Zone.",
-                            "defaultValue": "my-dns-zone",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The DNS Zone name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "nsgName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Network Security Group Name",
-                            "toolTip": "The name of the Network Security Group.",
-                            "defaultValue": "my-nsg",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The Network Security Group name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
                             }
                         },
                         {
@@ -248,61 +217,6 @@
                     ]
                 },
                 {
-                    "name": "recovery",
-                    "label": "Recovery",
-                    "elements": [
-                        {
-                            "name": "recoveryServicesVaultDescription",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "A Recovery Services Vault is used to back up and restore data in the Microsoft cloud. It provides a simple, reliable, and cost-effective backup and disaster recovery solution."
-                            }
-                        },
-                        {
-                            "name": "recoveryServicesVaultName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Recovery Services Vault Name",
-                            "toolTip": "The name of the Recovery Services Vault.",
-                            "defaultValue": "my-recovery-vault",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The Recovery Services Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "securityAndCompliance",
-                    "label": "Security and Compliance",
-                    "elements": [
-                        {
-                            "name": "defenderForCloud",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Defender for Cloud",
-                            "toolTip": "Select the pricing tier for Defender for Cloud.",
-                            "defaultValue": "Free",
-                            "constraints": {
-                                "allowedValues": [
-                                    {
-                                        "label": "Free",
-                                        "value": "Free"
-                                    },
-                                    {
-                                        "label": "Standard",
-                                        "value": "Standard"
-                                    }
-                                ],
-                                "required": true
-                            }
-                        }
-                    ]
-                },
-                {
                     "name": "storage",
                     "label": "Storage",
                     "elements": [
@@ -367,16 +281,12 @@
                 "keyVaultName": "[steps('identityAndAccess').keyVaultName]",
                 "vnetName": "[steps('networking').vnetName]",
                 "vnetAddressSpace": "[steps('networking').vnetAddressSpace]",
+                "firewallSubnetAddress": "[steps('networking').firewallSubnetAddress]",
                 "gatewaySubnetAddress": "[steps('networking').gatewaySubnetAddress]",
-                "vpnGateway": "[steps('networking').vpnGateway]",
-                "dnsZone": "[steps('networking').dnsZone]",
-                "nsgName": "[steps('networking').nsgName]",
                 "additionalSubnetName": "[steps('networking').additionalSubnetName]",
                 "additionalSubnetAddress": "[steps('networking').additionalSubnetAddress]",
                 "logAnalyticsWorkspaceName": "[steps('monitoring').logAnalyticsWorkspaceName]",
                 "logRetentionDays": "[steps('monitoring').logRetentionDays]",
-                "recoveryServicesVaultName": "[steps('recovery').recoveryServicesVaultName]",
-                "defenderForCloud": "[steps('securityAndCompliance').defenderForCloud]",
                 "storageAccountName": "[steps('storage').storageAccountName]",
                 "storageAccountSku": "[steps('storage').storageAccountSku]"
             },
