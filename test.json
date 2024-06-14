@@ -1,102 +1,39 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2021-09-09/uiFormDefinition.schema.json#",
-    "view": {
-        "kind": "Form",
-        "properties": {
-            "title": "TestRGTab v5",
-            "steps": [
-                {
-                    "name": "landingZone",
-                    "label": "Landing Zone",
-                    "elements": [
-                        {
-                            "name": "subscriptionSelectorText",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "Select the subscription and enter the resource group name for your Landing Zone deployment."
-                            }
-                        },
-                        {
-                            "name": "subscription",
-                            "type": "Microsoft.Common.SubscriptionSelector",
-                            "label": "Subscription",
-                            "constraints": {
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "resourceGroupName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Resource Group Name",
-                            "toolTip": "Enter the name of the resource group to be created.",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-_]+$",
-                                        "message": "The resource group name must only contain letters, numbers, hyphens, and underscores."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "location",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Region",
-                            "toolTip": "Select the region for the resource group.",
-                            "constraints": {
-                                "required": true,
-                                "allowedValues": [
-                                    {
-                                        "label": "East US",
-                                        "value": "eastus"
-                                    },
-                                    {
-                                        "label": "East US 2",
-                                        "value": "eastus2"
-                                    },
-                                    {
-                                        "label": "West US",
-                                        "value": "westus"
-                                    },
-                                    {
-                                        "label": "West US 2",
-                                        "value": "westus2"
-                                    },
-                                    {
-                                        "label": "Central US",
-                                        "value": "centralus"
-                                    },
-                                    {
-                                        "label": "North Central US",
-                                        "value": "northcentralus"
-                                    },
-                                    {
-                                        "label": "South Central US",
-                                        "value": "southcentralus"
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                }
-            ]
-        },
-        "outputs": {
-            "parameters": {
-                "subscriptionId": {
-                    "type": "string",
-                    "value": "[steps('landingZone').subscription.subscriptionId]"
-                },
-                "resourceGroupName": {
-                    "type": "string",
-                    "value": "[steps('landingZone').resourceGroupName]"
-                },
-                "location": {
-                    "type": "string",
-                    "value": "[steps('landingZone').location]"
-                }
-            }
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "subscriptionId": {
+      "type": "string",
+      "metadata": {
+        "description": "Subscription ID for the resource group."
+      }
+    },
+    "resourceGroupName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the resource group to be created."
+      }
+    },
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location for the resource group."
+      }
     }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2021-04-01",
+      "location": "[parameters('location')]",
+      "name": "[parameters('resourceGroupName')]",
+      "properties": {}
+    }
+  ],
+  "outputs": {
+    "resourceGroupName": {
+      "type": "string",
+      "value": "[parameters('resourceGroupName')]"
+    }
+  }
 }
