@@ -27,12 +27,21 @@
                         },
                         {
                             "name": "landingZoneResourceGroup",
-                            "type": "Microsoft.Common.ResourceGroupComboBox",
+                            "type": "Microsoft.Common.DropDown",
                             "label": "Landing Zone Resource Group",
                             "toolTip": "Select the resource group for the Landing Zone deployment.",
-                            "subscriptionId": "[steps('basics').landingZoneSubscription]",
                             "constraints": {
                                 "required": true
+                            },
+                            "options": {
+                                "dependsOn": [
+                                    "landingZoneSubscription"
+                                ],
+                                "items": {
+                                    "list": "[resourceGroups(steps('basics').landingZoneSubscription)]",
+                                    "displayProperty": "name",
+                                    "valueProperty": "id"
+                                }
                             }
                         },
                         {
