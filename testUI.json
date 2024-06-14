@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "NPF - Landing Zone v5",
+            "title": "Prueba RG 1",
             "steps": [
                 {
                     "name": "basics",
