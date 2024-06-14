@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "RG Test",
+            "title": "RG Test 12",
             "steps": [
                 {
                     "name": "basics",
@@ -65,9 +65,7 @@
                     "type": "string",
                     "value": "[steps('basics').landingZoneSubscription]"
                 }
-            },
-            "kind": "ResourceGroup",
-            "location": "[steps('basics').resourceScope.location.name]"
+            }
         }
     }
 }
