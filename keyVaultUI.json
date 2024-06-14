@@ -245,32 +245,6 @@
                     ]
                 },
                 {
-                    "name": "securityAndCompliance",
-                    "label": "Security and Compliance",
-                    "elements": [
-                        {
-                            "name": "defenderForCloud",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Defender for Cloud",
-                            "toolTip": "Select the pricing tier for Defender for Cloud.",
-                            "defaultValue": "Free",
-                            "constraints": {
-                                "allowedValues": [
-                                    {
-                                        "label": "Free",
-                                        "value": "Free"
-                                    },
-                                    {
-                                        "label": "Standard",
-                                        "value": "Standard"
-                                    }
-                                ],
-                                "required": true
-                            }
-                        }
-                    ]
-                },
-                {
                     "name": "storage",
                     "label": "Storage",
                     "elements": [
@@ -343,8 +317,7 @@
                 "logRetentionDays": "[steps('monitoring').logRetentionDays]",
                 "storageAccountName": "[steps('storage').storageAccountName]",
                 "storageAccountSku": "[steps('storage').storageAccountSku]",
-                "recoveryServicesVaultName": "[steps('recovery').recoveryServicesVaultName]",
-                "defenderForCloud": "[steps('securityAndCompliance').defenderForCloud]"
+                "recoveryServicesVaultName": "[steps('recovery').recoveryServicesVaultName]"
             },
             "kind": "ResourceGroup",
             "location": "[steps('basics').resourceScope.location.name]",
