@@ -136,16 +136,6 @@
                     "label": "Monitoring",
                     "elements": [
                         {
-                            "name": "deployLogAnalytics",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Deploy Log Analytics Workspace",
-                            "defaultValue": "Yes",
-                            "constraints": {
-                                "required": true
-                            },
-                            "visible": false
-                        },
-                        {
                             "name": "logAnalyticsWorkspaceName",
                             "type": "Microsoft.Common.TextBox",
                             "label": "Log Analytics Workspace Name",
@@ -235,7 +225,6 @@
                 "gatewaySubnetAddress": "[steps('networking').gatewaySubnetAddress]",
                 "additionalSubnetName": "[steps('networking').additionalSubnetName]",
                 "additionalSubnetAddress": "[steps('networking').additionalSubnetAddress]",
-                "deployLogAnalytics": "[steps('monitoring').deployLogAnalytics]",
                 "logAnalyticsWorkspaceName": "[steps('monitoring').logAnalyticsWorkspaceName]",
                 "logRetentionDays": "[steps('monitoring').logRetentionDays]",
                 "storageAccountName": "[steps('storage').storageAccountName]",
