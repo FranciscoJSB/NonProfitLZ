@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "NPF - Landing Zone v5",
+            "title": "RG Test",
             "steps": [
                 {
                     "name": "basics",
@@ -57,8 +57,14 @@
         },
         "outputs": {
             "parameters": {
-                "location": "[steps('basics').resourceScope.location.name]",
-                "landingZoneSubscription": "[steps('basics').landingZoneSubscription]"
+                "location": {
+                    "type": "string",
+                    "value": "[steps('basics').resourceScope.location.name]"
+                },
+                "landingZoneSubscription": {
+                    "type": "string",
+                    "value": "[steps('basics').landingZoneSubscription]"
+                }
             },
             "kind": "ResourceGroup",
             "location": "[steps('basics').resourceScope.location.name]"
