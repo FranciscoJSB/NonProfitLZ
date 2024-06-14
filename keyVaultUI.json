@@ -31,7 +31,7 @@
                             "name": "location",
                             "type": "Microsoft.Common.DropDown",
                             "label": "Region",
-                            "toolTip": "Azure region",
+                            "toolTip": "Select the Azure region for the deployment.",
                             "constraints": {
                                 "allowedValues": [
                                     {
