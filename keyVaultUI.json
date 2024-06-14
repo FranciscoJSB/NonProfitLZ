@@ -25,185 +25,18 @@
                                     "Microsoft.KeyVault",
                                     "Microsoft.Storage"
                                 ]
-                            }
-                        },
-                        {
-                            "name": "location",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Region",
-                            "toolTip": "Select the Azure region for the deployment.",
-                            "constraints": {
-                                "allowedValues": [
-                                    {
-                                        "label": "East US",
-                                        "value": "eastus"
-                                    },
-                                    {
-                                        "label": "East US 2",
-                                        "value": "eastus2"
-                                    },
-                                    {
-                                        "label": "Central US",
-                                        "value": "centralus"
-                                    },
-                                    {
-                                        "label": "North Central US",
-                                        "value": "northcentralus"
-                                    },
-                                    {
-                                        "label": "South Central US",
-                                        "value": "southcentralus"
-                                    },
-                                    {
-                                        "label": "West US",
-                                        "value": "westus"
-                                    },
-                                    {
-                                        "label": "West US 2",
-                                        "value": "westus2"
-                                    },
-                                    {
-                                        "label": "West US 3",
-                                        "value": "westus3"
-                                    },
-                                    {
-                                        "label": "East Asia",
-                                        "value": "eastasia"
-                                    },
-                                    {
-                                        "label": "Southeast Asia",
-                                        "value": "southeastasia"
-                                    },
-                                    {
-                                        "label": "Japan East",
-                                        "value": "japaneast"
-                                    },
-                                    {
-                                        "label": "Japan West",
-                                        "value": "japanwest"
-                                    },
-                                    {
-                                        "label": "Australia East",
-                                        "value": "australiaeast"
-                                    },
-                                    {
-                                        "label": "Australia Southeast",
-                                        "value": "australiasoutheast"
-                                    },
-                                    {
-                                        "label": "Australia Central",
-                                        "value": "australiacentral"
-                                    },
-                                    {
-                                        "label": "Australia Central 2",
-                                        "value": "australiacentral2"
-                                    },
-                                    {
-                                        "label": "Central India",
-                                        "value": "centralindia"
-                                    },
-                                    {
-                                        "label": "South India",
-                                        "value": "southindia"
-                                    },
-                                    {
-                                        "label": "West India",
-                                        "value": "westindia"
-                                    },
-                                    {
-                                        "label": "Canada Central",
-                                        "value": "canadacentral"
-                                    },
-                                    {
-                                        "label": "Canada East",
-                                        "value": "canadaeast"
-                                    },
-                                    {
-                                        "label": "UK South",
-                                        "value": "uksouth"
-                                    },
-                                    {
-                                        "label": "UK West",
-                                        "value": "ukwest"
-                                    },
-                                    {
-                                        "label": "West Europe",
-                                        "value": "westeurope"
-                                    },
-                                    {
-                                        "label": "North Europe",
-                                        "value": "northeurope"
-                                    },
-                                    {
-                                        "label": "France Central",
-                                        "value": "francecentral"
-                                    },
-                                    {
-                                        "label": "France South",
-                                        "value": "francesouth"
-                                    },
-                                    {
-                                        "label": "Germany Central",
-                                        "value": "germanycentral"
-                                    },
-                                    {
-                                        "label": "Germany North",
-                                        "value": "germanynorth"
-                                    },
-                                    {
-                                        "label": "Germany Northeast",
-                                        "value": "germanynortheast"
-                                    },
-                                    {
-                                        "label": "Germany West Central",
-                                        "value": "germanywestcentral"
-                                    },
-                                    {
-                                        "label": "Norway East",
-                                        "value": "norwayeast"
-                                    },
-                                    {
-                                        "label": "Norway West",
-                                        "value": "norwaywest"
-                                    },
-                                    {
-                                        "label": "Switzerland North",
-                                        "value": "switzerlandnorth"
-                                    },
-                                    {
-                                        "label": "Switzerland West",
-                                        "value": "switzerlandwest"
-                                    },
-                                    {
-                                        "label": "UAE Central",
-                                        "value": "uaecentral"
-                                    },
-                                    {
-                                        "label": "UAE North",
-                                        "value": "uaenorth"
-                                    },
-                                    {
-                                        "label": "Brazil South",
-                                        "value": "brazilsouth"
-                                    },
-                                    {
-                                        "label": "Brazil Southeast",
-                                        "value": "brazilsoutheast"
-                                    },
-                                    {
-                                        "label": "South Africa North",
-                                        "value": "southafricanorth"
-                                    },
-                                    {
-                                        "label": "South Africa West",
-                                        "value": "southafricawest"
-                                    },
-                                    {
-                                        "label": "Qatar Central",
-                                        "value": "qatarcentral"
-                                    }
+                            },
+                            "location": {
+                                "label": "Region",
+                                "toolTip": "Azure region",
+                                "resourceTypes": [
+                                    "Microsoft.KeyVault/vaults",
+                                    "Microsoft.Storage/storageAccounts"
                                 ],
-                                "required": true
+                                "allowedValues": [
+                                    "eastus",
+                                    "westus2"
+                                ]
                             }
                         }
                     ]
@@ -275,23 +108,6 @@
                             }
                         },
                         {
-                            "name": "firewallSubnetDescription",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "The Azure Firewall Subnet is used to host the Azure Firewall."
-                            }
-                        },
-                        {
-                            "name": "firewallSubnetAddress",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Azure Firewall Subnet Address",
-                            "toolTip": "Address space for the Azure Firewall subnet.",
-                            "defaultValue": "10.0.1.0/24",
-                            "constraints": {
-                                "required": true
-                            }
-                        },
-                        {
                             "name": "gatewaySubnetDescription",
                             "type": "Microsoft.Common.TextBlock",
                             "options": {
@@ -306,6 +122,38 @@
                             "defaultValue": "10.0.2.0/24",
                             "constraints": {
                                 "required": true
+                            }
+                        },
+                        {
+                            "name": "vpnGateway",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "VPN Gateway",
+                            "toolTip": "The name of the VPN Gateway.",
+                            "defaultValue": "my-vpn-gateway",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The VPN Gateway name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "dnsZone",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "DNS Zone",
+                            "toolTip": "The name of the DNS Zone.",
+                            "defaultValue": "my-dns-zone",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The DNS Zone name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
                             }
                         },
                         {
@@ -384,6 +232,55 @@
                     ]
                 },
                 {
+                    "name": "recovery",
+                    "label": "Recovery",
+                    "elements": [
+                        {
+                            "name": "recoveryServicesVaultDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A Recovery Services Vault is used to back up and restore data in the Microsoft cloud. It provides a simple, reliable, and cost-effective backup and disaster recovery solution."
+                            }
+                        },
+                        {
+                            "name": "recoveryServicesVaultName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Recovery Services Vault Name",
+                            "toolTip": "The name of the Recovery Services Vault.",
+                            "defaultValue": "my-recovery-vault",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Recovery Services Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "defenderForCloud",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Defender for Cloud",
+                            "toolTip": "Select the pricing tier for Defender for Cloud.",
+                            "defaultValue": "Free",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Free",
+                                        "value": "Free"
+                                    },
+                                    {
+                                        "label": "Standard",
+                                        "value": "Standard"
+                                    }
+                                ],
+                                "required": true
+                            }
+                        }
+                    ]
+                },
+                {
                     "name": "storage",
                     "label": "Storage",
                     "elements": [
@@ -444,21 +341,24 @@
         },
         "outputs": {
             "parameters": {
-                "location": "[steps('basics').location]",
+                "location": "[steps('basics').resourceScope.location.name]",
                 "keyVaultName": "[steps('identityAndAccess').keyVaultName]",
                 "vnetName": "[steps('networking').vnetName]",
                 "vnetAddressSpace": "[steps('networking').vnetAddressSpace]",
-                "firewallSubnetAddress": "[steps('networking').firewallSubnetAddress]",
                 "gatewaySubnetAddress": "[steps('networking').gatewaySubnetAddress]",
+                "vpnGateway": "[steps('networking').vpnGateway]",
+                "dnsZone": "[steps('networking').dnsZone]",
                 "additionalSubnetName": "[steps('networking').additionalSubnetName]",
                 "additionalSubnetAddress": "[steps('networking').additionalSubnetAddress]",
                 "logAnalyticsWorkspaceName": "[steps('monitoring').logAnalyticsWorkspaceName]",
                 "logRetentionDays": "[steps('monitoring').logRetentionDays]",
+                "recoveryServicesVaultName": "[steps('recovery').recoveryServicesVaultName]",
+                "defenderForCloud": "[steps('recovery').defenderForCloud]",
                 "storageAccountName": "[steps('storage').storageAccountName]",
                 "storageAccountSku": "[steps('storage').storageAccountSku]"
             },
             "kind": "ResourceGroup",
-            "location": "[steps('basics').location]",
+            "location": "[steps('basics').resourceScope.location.name]",
             "resourceGroupId": "[steps('basics').resourceScope.resourceGroup.id]"
         }
     }
