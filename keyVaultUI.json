@@ -10,15 +10,6 @@
                     "label": "Basics",
                     "elements": [
                         {
-                            "name": "landingZoneSubscription",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Choose your subscription for the Landing Zone creation",
-                            "constraints": {
-                                "allowedValues": "[subscriptions()]",
-                                "required": true
-                            }
-                        },
-                        {
                             "name": "resourceScope",
                             "type": "Microsoft.Common.ResourceScope",
                             "subscription": {
@@ -46,6 +37,15 @@
                                     "eastus",
                                     "westus2"
                                 ]
+                            }
+                        },
+                        {
+                            "name": "landingZoneSubscription",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Choose your subscription for the Landing Zone creation",
+                            "constraints": {
+                                "allowedValues": "[subscriptions()]",
+                                "required": true
                             }
                         }
                     ]
@@ -338,7 +338,6 @@
         "outputs": {
             "parameters": {
                 "location": "[steps('basics').resourceScope.location.name]",
-                "keyVaultSubscription": "[steps('identityAndAccess').keyVaultSubscription]",
                 "keyVaultName": "[steps('identityAndAccess').keyVaultName]",
                 "landingZoneSubscription": "[steps('basics').landingZoneSubscription]",
                 "landingZoneKeyVaultName": "[steps('identityAndAccess').landingZoneKeyVaultName]",
