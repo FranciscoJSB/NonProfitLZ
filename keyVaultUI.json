@@ -108,23 +108,6 @@
                             }
                         },
                         {
-                            "name": "gatewaySubnetDescription",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "The Gateway Subnet is required for deploying a VPN or ExpressRoute gateway."
-                            }
-                        },
-                        {
-                            "name": "gatewaySubnetAddress",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Gateway Subnet Address",
-                            "toolTip": "Address space for the Gateway Subnet.",
-                            "defaultValue": "10.0.2.0/24",
-                            "constraints": {
-                                "required": true
-                            }
-                        },
-                        {
                             "name": "nsgName",
                             "type": "Microsoft.Common.TextBox",
                             "label": "Network Security Group Name",
@@ -216,30 +199,27 @@
                     ]
                 },
                 {
-                    "name": "recovery",
-                    "label": "Recovery",
+                    "name": "securityAndCompliance",
+                    "label": "Security and Compliance",
                     "elements": [
                         {
-                            "name": "recoveryServicesVaultDescription",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "A Recovery Services Vault is used to back up and restore data in the Microsoft cloud. It provides a simple, reliable, and cost-effective backup and disaster recovery solution."
-                            }
-                        },
-                        {
-                            "name": "recoveryServicesVaultName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Recovery Services Vault Name",
-                            "toolTip": "The name of the Recovery Services Vault.",
-                            "defaultValue": "my-recovery-vault",
+                            "name": "defenderForCloud",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Defender for Cloud",
+                            "toolTip": "Select the pricing tier for Defender for Cloud.",
+                            "defaultValue": "Free",
                             "constraints": {
-                                "required": true,
-                                "validations": [
+                                "allowedValues": [
                                     {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The Recovery Services Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                        "label": "Free",
+                                        "value": "Free"
+                                    },
+                                    {
+                                        "label": "Standard",
+                                        "value": "Standard"
                                     }
-                                ]
+                                ],
+                                "required": true
                             }
                         }
                     ]
@@ -309,7 +289,6 @@
                 "keyVaultName": "[steps('identityAndAccess').keyVaultName]",
                 "vnetName": "[steps('networking').vnetName]",
                 "vnetAddressSpace": "[steps('networking').vnetAddressSpace]",
-                "gatewaySubnetAddress": "[steps('networking').gatewaySubnetAddress]",
                 "nsgName": "[steps('networking').nsgName]",
                 "additionalSubnetName": "[steps('networking').additionalSubnetName]",
                 "additionalSubnetAddress": "[steps('networking').additionalSubnetAddress]",
@@ -317,7 +296,7 @@
                 "logRetentionDays": "[steps('monitoring').logRetentionDays]",
                 "storageAccountName": "[steps('storage').storageAccountName]",
                 "storageAccountSku": "[steps('storage').storageAccountSku]",
-                "recoveryServicesVaultName": "[steps('recovery').recoveryServicesVaultName]"
+                "defenderForCloud": "[steps('securityAndCompliance').defenderForCloud]"
             },
             "kind": "ResourceGroup",
             "location": "[steps('basics').resourceScope.location.name]",
