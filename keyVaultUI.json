@@ -27,16 +27,182 @@
                                 ]
                             },
                             "location": {
+                                "type": "Microsoft.Common.DropDown",
                                 "label": "Region",
                                 "toolTip": "Azure region",
-                                "resourceTypes": [
-                                    "Microsoft.KeyVault/vaults",
-                                    "Microsoft.Storage/storageAccounts"
-                                ],
-                                "allowedValues": [
-                                    "eastus",
-                                    "westus2"
-                                ]
+                                "constraints": {
+                                    "allowedValues": [
+                                        {
+                                            "label": "East US",
+                                            "value": "eastus"
+                                        },
+                                        {
+                                            "label": "East US 2",
+                                            "value": "eastus2"
+                                        },
+                                        {
+                                            "label": "Central US",
+                                            "value": "centralus"
+                                        },
+                                        {
+                                            "label": "North Central US",
+                                            "value": "northcentralus"
+                                        },
+                                        {
+                                            "label": "South Central US",
+                                            "value": "southcentralus"
+                                        },
+                                        {
+                                            "label": "West US",
+                                            "value": "westus"
+                                        },
+                                        {
+                                            "label": "West US 2",
+                                            "value": "westus2"
+                                        },
+                                        {
+                                            "label": "West US 3",
+                                            "value": "westus3"
+                                        },
+                                        {
+                                            "label": "East Asia",
+                                            "value": "eastasia"
+                                        },
+                                        {
+                                            "label": "Southeast Asia",
+                                            "value": "southeastasia"
+                                        },
+                                        {
+                                            "label": "Japan East",
+                                            "value": "japaneast"
+                                        },
+                                        {
+                                            "label": "Japan West",
+                                            "value": "japanwest"
+                                        },
+                                        {
+                                            "label": "Australia East",
+                                            "value": "australiaeast"
+                                        },
+                                        {
+                                            "label": "Australia Southeast",
+                                            "value": "australiasoutheast"
+                                        },
+                                        {
+                                            "label": "Australia Central",
+                                            "value": "australiacentral"
+                                        },
+                                        {
+                                            "label": "Australia Central 2",
+                                            "value": "australiacentral2"
+                                        },
+                                        {
+                                            "label": "Central India",
+                                            "value": "centralindia"
+                                        },
+                                        {
+                                            "label": "South India",
+                                            "value": "southindia"
+                                        },
+                                        {
+                                            "label": "West India",
+                                            "value": "westindia"
+                                        },
+                                        {
+                                            "label": "Canada Central",
+                                            "value": "canadacentral"
+                                        },
+                                        {
+                                            "label": "Canada East",
+                                            "value": "canadaeast"
+                                        },
+                                        {
+                                            "label": "UK South",
+                                            "value": "uksouth"
+                                        },
+                                        {
+                                            "label": "UK West",
+                                            "value": "ukwest"
+                                        },
+                                        {
+                                            "label": "West Europe",
+                                            "value": "westeurope"
+                                        },
+                                        {
+                                            "label": "North Europe",
+                                            "value": "northeurope"
+                                        },
+                                        {
+                                            "label": "France Central",
+                                            "value": "francecentral"
+                                        },
+                                        {
+                                            "label": "France South",
+                                            "value": "francesouth"
+                                        },
+                                        {
+                                            "label": "Germany Central",
+                                            "value": "germanycentral"
+                                        },
+                                        {
+                                            "label": "Germany North",
+                                            "value": "germanynorth"
+                                        },
+                                        {
+                                            "label": "Germany Northeast",
+                                            "value": "germanynortheast"
+                                        },
+                                        {
+                                            "label": "Germany West Central",
+                                            "value": "germanywestcentral"
+                                        },
+                                        {
+                                            "label": "Norway East",
+                                            "value": "norwayeast"
+                                        },
+                                        {
+                                            "label": "Norway West",
+                                            "value": "norwaywest"
+                                        },
+                                        {
+                                            "label": "Switzerland North",
+                                            "value": "switzerlandnorth"
+                                        },
+                                        {
+                                            "label": "Switzerland West",
+                                            "value": "switzerlandwest"
+                                        },
+                                        {
+                                            "label": "UAE Central",
+                                            "value": "uaecentral"
+                                        },
+                                        {
+                                            "label": "UAE North",
+                                            "value": "uaenorth"
+                                        },
+                                        {
+                                            "label": "Brazil South",
+                                            "value": "brazilsouth"
+                                        },
+                                        {
+                                            "label": "Brazil Southeast",
+                                            "value": "brazilsoutheast"
+                                        },
+                                        {
+                                            "label": "South Africa North",
+                                            "value": "southafricanorth"
+                                        },
+                                        {
+                                            "label": "South Africa West",
+                                            "value": "southafricawest"
+                                        },
+                                        {
+                                            "label": "Qatar Central",
+                                            "value": "qatarcentral"
+                                        }
+                                    ],
+                                    "required": true
+                                }
                             }
                         }
                     ]
@@ -218,7 +384,7 @@
         },
         "outputs": {
             "parameters": {
-                "location": "[steps('basics').resourceScope.location.name]",
+                "location": "[steps('basics').resourceScope.location]",
                 "keyVaultName": "[steps('identityAndAccess').keyVaultName]",
                 "vnetName": "[steps('networking').vnetName]",
                 "firewallSubnetAddress": "[steps('networking').firewallSubnetAddress]",
@@ -231,7 +397,7 @@
                 "storageAccountSku": "[steps('storage').storageAccountSku]"
             },
             "kind": "ResourceGroup",
-            "location": "[steps('basics').resourceScope.location.name]",
+            "location": "[steps('basics').resourceScope.location]",
             "resourceGroupId": "[steps('basics').resourceScope.resourceGroup.id]"
         }
     }
