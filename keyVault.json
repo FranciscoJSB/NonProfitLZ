@@ -11,9 +11,6 @@
         "vnetName": {
             "type": "string"
         },
-        "firewallSubnetAddress": {
-            "type": "string"
-        },
         "gatewaySubnetAddress": {
             "type": "string"
         },
@@ -33,6 +30,15 @@
             "type": "string"
         },
         "storageAccountSku": {
+            "type": "string"
+        },
+        "recoveryServicesVaultName": {
+            "type": "string"
+        },
+        "defenderForCloud": {
+            "type": "string"
+        },
+        "nsgName": {
             "type": "string"
         }
     },
@@ -69,12 +75,6 @@
                         }
                     },
                     {
-                        "name": "AzureFirewallSubnet",
-                        "properties": {
-                            "addressPrefix": "[parameters('firewallSubnetAddress')]"
-                        }
-                    },
-                    {
                         "name": "GatewaySubnet",
                         "properties": {
                             "addressPrefix": "[parameters('gatewaySubnetAddress')]"
@@ -90,45 +90,23 @@
             }
         },
         {
-            "type": "Microsoft.Network/azureFirewalls",
-            "apiVersion": "2020-06-01",
-            "name": "myAzureFirewall",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[parameters('nsgName')]",
             "location": "[parameters('location')]",
             "properties": {
-                "sku": {
-                    "name": "AZFW_VNet",
-                    "tier": "Standard"
-                },
-                "ipConfigurations": [
-                    {
-                        "name": "ipConfig",
-                        "properties": {
-                            "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), 'AzureFirewallSubnet')]"
-                            },
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'myFirewallPublicIP')]"
-                            }
-                        }
-                    }
-                ]
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]",
-                "[resourceId('Microsoft.Network/publicIPAddresses', 'myFirewallPublicIP')]"
-            ]
+                "securityRules": []
+            }
         },
         {
-            "type": "Microsoft.Network/publicIPAddresses",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2020-06-01",
-            "name": "myFirewallPublicIP",
-            "location": "[parameters('location')]",
+            "name": "[concat(parameters('vnetName'), '/', parameters('additionalSubnetName'))]",
             "properties": {
-                "sku": {
-                    "name": "Standard"
-                },
-                "publicIPAllocationMethod": "Static",
-                "publicIPAddressVersion": "IPv4"
+                "addressPrefix": "[parameters('additionalSubnetAddress')]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
+                }
             }
         },
         {
@@ -144,6 +122,17 @@
             }
         },
         {
+            "type": "Microsoft.RecoveryServices/vaults",
+            "apiVersion": "2018-01-10",
+            "name": "[parameters('recoveryServicesVaultName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "sku": {
+                    "name": "Standard"
+                }
+            }
+        },
+        {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2019-06-01",
             "name": "[parameters('storageAccountName')]",
@@ -155,6 +144,44 @@
             "properties": {
                 "accessTier": "Hot"
             }
+        },
+        {
+            "type": "Microsoft.Security/pricings",
+            "apiVersion": "2018-06-01",
+            "name": "default",
+            "properties": {
+                "pricingTier": "[parameters('defenderForCloud')]"
+            }
         }
-    ]
+    ],
+    "outputs": {
+        "keyVaultName": {
+            "type": "string",
+            "value": "[parameters('keyVaultName')]"
+        },
+        "vnetName": {
+            "type": "string",
+            "value": "[parameters('vnetName')]"
+        },
+        "nsgName": {
+            "type": "string",
+            "value": "[parameters('nsgName')]"
+        },
+        "logAnalyticsWorkspaceName": {
+            "type": "string",
+            "value": "[parameters('logAnalyticsWorkspaceName')]"
+        },
+        "storageAccountName": {
+            "type": "string",
+            "value": "[parameters('storageAccountName')]"
+        },
+        "recoveryServicesVaultName": {
+            "type": "string",
+            "value": "[parameters('recoveryServicesVaultName')]"
+        },
+        "defenderForCloud": {
+            "type": "string",
+            "value": "[parameters('defenderForCloud')]"
+        }
+    }
 }
