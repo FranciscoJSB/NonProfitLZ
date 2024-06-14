@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "NPF - Landing Zone v2",
+            "title": "NPF - Landing Zone v3",
             "steps": [
                 {
                     "name": "basics",
@@ -33,12 +33,13 @@
                                 "required": true
                             },
                             "options": {
-                                "items": [
-                                    {
-                                        "value": "[resourceGroups(steps('basics').landingZoneSubscription).name]",
-                                        "label": "[resourceGroups(steps('basics').landingZoneSubscription).name]"
-                                    }
-                                ]
+                                "dependsOn": [
+                                    "landingZoneSubscription"
+                                ],
+                                "items": {
+                                    "value": "[resourceGroups(subscription().subscriptionId)]",
+                                    "label": "[resourceGroups(subscription().subscriptionId).name]"
+                                }
                             }
                         },
                         {
