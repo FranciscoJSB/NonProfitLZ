@@ -28,6 +28,15 @@
         },
         "additionalSubnetAddress": {
             "type": "string"
+        },
+        "deployLogAnalytics": {
+            "type": "string"
+        },
+        "logAnalyticsWorkspaceName": {
+            "type": "string"
+        },
+        "logRetentionDays": {
+            "type": "int"
         }
     },
     "resources": [
@@ -129,6 +138,19 @@
                 },
                 "publicIPAllocationMethod": "Static",
                 "publicIPAddressVersion": "IPv4"
+            }
+        },
+        {
+            "condition": "[equals(parameters('deployLogAnalytics'), 'Yes')]",
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "apiVersion": "2020-08-01",
+            "name": "[parameters('logAnalyticsWorkspaceName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "sku": {
+                    "name": "PerGB2018"
+                },
+                "retentionInDays": "[parameters('logRetentionDays')]"
             }
         }
     ]
