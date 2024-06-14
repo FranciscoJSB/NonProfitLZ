@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "NPF - Landing Zone v5",
+            "title": "NPF - Landing Zone v6",
             "steps": [
                 {
                     "name": "basics",
