@@ -1,146 +1,323 @@
 {
-    "$schema": "<relative path to createFormUI.schema.json>",
+    "$schema": "http://schema.management.azure.com/schemas/2021-09-09/uiFormDefinition.schema.json#",
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "FSI Landing Zones on Microsoft Azure",
-            "isWizard": false,
+            "title": "NPF - Landing Zone v4",
             "steps": [
                 {
                     "name": "basics",
-                    "label": "Deployment location",
+                    "label": "Basics",
                     "elements": [
                         {
+                            "name": "landingZoneSubscriptionText",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "Choose the subscription to use for your Landing Zone deployment"
+                            }
+                        },
+                        {
+                            "name": "landingZoneSubscription",
+                            "type": "Microsoft.Common.SubscriptionSelector",
+                            "label": "Landing Zone Subscription",
+                            "constraints": {
+                                "required": true
+                            }
+                        },
+                        {
                             "name": "resourceScope",
-                            "type": "Microsoft.Common.ResourceScope"
+                            "type": "Microsoft.Common.ResourceScope",
+                            "subscription": {
+                                "constraints": {
+                                    "validations": [
+                                        {
+                                            "isValid": "[not(contains(toLower(steps('basics').resourceScope.subscription.displayName),'test'))]",
+                                            "message": "Can't use test subscription."
+                                        }
+                                    ]
+                                },
+                                "resourceProviders": [
+                                    "Microsoft.KeyVault",
+                                    "Microsoft.Storage"
+                                ]
+                            },
+                            "location": {
+                                "label": "Region",
+                                "toolTip": "Azure region",
+                                "resourceTypes": [
+                                    "Microsoft.KeyVault/vaults",
+                                    "Microsoft.Storage/storageAccounts"
+                                ],
+                                "allowedValues": "[locations(subscription().subscriptionId)]"
+                            }
                         }
                     ]
                 },
                 {
-                    "name": "esGoalState",
-                    "label": "Management and Monitoring",
+                    "name": "identityAndAccess",
+                    "label": "Identity and Access",
                     "elements": [
                         {
-                            "name": "azMonSection",
-                            "type": "Microsoft.Common.Section",
-                            "label": "Azure Monitor",
-                            "elements": [
-                                {
-                                    "name": "azMonText",
-                                    "type": "Microsoft.Common.TextBlock",
-                                    "visible": true,
-                                    "options": {
-                                        "text": "Azure Monitor with Log Analytics provides the core infrastructure to enable platform observability, security, and log retention for the FSI Landing Zones. You can create a dedicated Log Analytics workspace and enable curated analytical solutions.",
-                                        "link": {
-                                            "label": "Learn more",
-                                            "uri": "https://learn.microsoft.com/azure/azure-monitor/logs/log-analytics-overview"
-                                        }
+                            "name": "keyVaultDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A Key Vault is a cloud service for securely storing and accessing secrets. Secrets are application passwords, database connection strings, API keys, and other sensitive data."
+                            }
+                        },
+                        {
+                            "name": "keyVaultName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Key Vault Name",
+                            "toolTip": "The name of the Key Vault.",
+                            "defaultValue": "my-keyvault",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Key Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
                                     }
-                                },
-                                {
-                                    "name": "esLogAnalytics",
-                                    "type": "Microsoft.Common.OptionsGroup",
-                                    "label": "Deploy Log Analytics workspace",
-                                    "defaultValue": "Yes (recommended)",
-                                    "constraints": {
-                                        "allowedValues": [
-                                            {
-                                                "label": "Yes (recommended)",
-                                                "value": "Yes"
-                                            },
-                                            {
-                                                "label": "No",
-                                                "value": "No"
-                                            }
-                                        ]
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "networking",
+                    "label": "Networking",
+                    "elements": [
+                        {
+                            "name": "vnetDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "Configure your Virtual Network (VNet) and its subnets."
+                            }
+                        },
+                        {
+                            "name": "vnetName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Virtual Network Name",
+                            "toolTip": "The name of the Virtual Network.",
+                            "defaultValue": "my-vnet",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Virtual Network name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "vnetAddressSpace",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Virtual Network Address Space",
+                            "toolTip": "Address space for the Virtual Network (e.g., 10.0.0.0/16).",
+                            "defaultValue": "10.0.0.0/16",
+                            "constraints": {
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "nsgName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Network Security Group Name",
+                            "toolTip": "The name of the Network Security Group.",
+                            "defaultValue": "my-nsg",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Network Security Group name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "additionalSubnetDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "The Additional Subnet can be used for other resources you may want to deploy."
+                            }
+                        },
+                        {
+                            "name": "additionalSubnetName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Additional Subnet Name",
+                            "toolTip": "The name of the Additional Subnet.",
+                            "defaultValue": "additional-subnet",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Additional Subnet name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "additionalSubnetAddress",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Additional Subnet Address",
+                            "toolTip": "Address space for the Additional Subnet.",
+                            "defaultValue": "10.0.3.0/24",
+                            "constraints": {
+                                "required": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "monitoring",
+                    "label": "Monitoring",
+                    "elements": [
+                        {
+                            "name": "logAnalyticsDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A Log Analytics Workspace is a unique environment for monitoring data sent to Azure Monitor Logs. It provides a way to aggregate and analyze log data from different sources."
+                            }
+                        },
+                        {
+                            "name": "logAnalyticsWorkspaceName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Log Analytics Workspace Name",
+                            "toolTip": "The name of the Log Analytics Workspace.",
+                            "defaultValue": "my-log-analytics-workspace",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{4,50}$",
+                                        "message": "The Log Analytics Workspace name must be between 4 and 50 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "logRetentionDays",
+                            "type": "Microsoft.Common.Slider",
+                            "label": "Log Analytics Data Retention (days)",
+                            "defaultValue": 30,
+                            "min": 30,
+                            "max": 730,
+                            "constraints": {
+                                "required": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "securityAndCompliance",
+                    "label": "Security and Compliance",
+                    "elements": [
+                        {
+                            "name": "defenderForCloud",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Defender for Cloud",
+                            "toolTip": "Select the pricing tier for Defender for Cloud.",
+                            "defaultValue": "Free",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Free",
+                                        "value": "Free"
                                     },
-                                    "visible": true
-                                },
-                                {
-                                    "name": "esLogRetention",
-                                    "type": "Microsoft.Common.Slider",
-                                    "min": 30,
-                                    "max": 730,
-                                    "label": "Log Analytics Data Retention (days)",
-                                    "defaultValue": 30,
-                                    "visible": "[equals(steps('esGoalState').azMonSection.esLogAnalytics,'Yes')]"
-                                }
-                            ],
-                            "visible": true
+                                    {
+                                        "label": "Standard",
+                                        "value": "Standard"
+                                    }
+                                ],
+                                "required": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "storage",
+                    "label": "Storage",
+                    "elements": [
+                        {
+                            "name": "storageDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A Storage Account is a Microsoft Azure service that provides storage that can be accessed from anywhere in the world over HTTP or HTTPS."
+                            }
+                        },
+                        {
+                            "name": "storageAccountName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Storage Account Name",
+                            "toolTip": "The name of the Storage Account.",
+                            "defaultValue": "mystorageaccount",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-z0-9]{3,24}$",
+                                        "message": "The Storage Account name must be between 3 and 24 characters long and contain only lowercase letters and numbers."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "storageAccountSku",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Storage Account SKU",
+                            "defaultValue": "Standard_LRS",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Standard_LRS",
+                                        "value": "Standard_LRS"
+                                    },
+                                    {
+                                        "label": "Standard_GRS",
+                                        "value": "Standard_GRS"
+                                    },
+                                    {
+                                        "label": "Standard_ZRS",
+                                        "value": "Standard_ZRS"
+                                    },
+                                    {
+                                        "label": "Premium_LRS",
+                                        "value": "Premium_LRS"
+                                    }
+                                ],
+                                "required": true
+                            },
+                            "toolTip": "The SKU for the Storage Account."
                         }
                     ]
                 }
-            ],
-            "outputs": {
-                "workspaceId": {
+            ]
+        },
+        "outputs": {
+            "parameters": {
+                "location": "[steps('basics').resourceScope.location.name]",
+                "landingZoneSubscription": "[steps('basics').landingZoneSubscription]",
+                "landingZoneResourceGroup": {
                     "type": "string",
-                    "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2020-08-01').customerId]"
+                    "value": "Landing-Zone-RG-001"
                 },
-                "workspaceKey": {
-                    "type": "string",
-                    "value": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2020-08-01').primarySharedKey]"
-                },
-                "parameters": {
-                    "workspaceName": {
-                        "type": "string",
-                        "label": "Log Analytics Workspace Name",
-                        "defaultValue": "",
-                        "constraints": {
-                            "required": true
-                        }
-                    },
-                    "logRetention": {
-                        "type": "int",
-                        "label": "Log Retention (days)",
-                        "defaultValue": 30,
-                        "constraints": {
-                            "required": true,
-                            "range": {
-                                "min": 30,
-                                "max": 730
-                            }
-                        }
-                    },
-                    "region": {
-                        "type": "string",
-                        "label": "Region",
-                        "defaultValue": "",
-                        "constraints": {
-                            "required": true,
-                            "allowedValues": [
-                                {
-                                    "label": "East US",
-                                    "value": "eastus"
-                                },
-                                {
-                                    "label": "East US 2",
-                                    "value": "eastus2"
-                                },
-                                {
-                                    "label": "Central US",
-                                    "value": "centralus"
-                                },
-                                {
-                                    "label": "North Central US",
-                                    "value": "northcentralus"
-                                },
-                                {
-                                    "label": "South Central US",
-                                    "value": "southcentralus"
-                                },
-                                {
-                                    "label": "West US",
-                                    "value": "westus"
-                                },
-                                {
-                                    "label": "West US 2",
-                                    "value": "westus2"
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
+                "keyVaultName": "[steps('identityAndAccess').keyVaultName]",
+                "vnetName": "[steps('networking').vnetName]",
+                "vnetAddressSpace": "[steps('networking').vnetAddressSpace]",
+                "nsgName": "[steps('networking').nsgName]",
+                "additionalSubnetName": "[steps('networking').additionalSubnetName]",
+                "additionalSubnetAddress": "[steps('networking').additionalSubnetAddress]",
+                "logAnalyticsWorkspaceName": "[steps('monitoring').logAnalyticsWorkspaceName]",
+                "logRetentionDays": "[steps('monitoring').logRetentionDays]",
+                "storageAccountName": "[steps('storage').storageAccountName]",
+                "storageAccountSku": "[steps('storage').storageAccountSku]",
+                "defenderForCloud": "[steps('securityAndCompliance').defenderForCloud]"
+            },
+            "kind": "ResourceGroup",
+            "location": "[steps('basics').resourceScope.location.name]",
+            "resourceGroupId": "[steps('basics').resourceScope.resourceGroup.id]"
         }
     }
 }
