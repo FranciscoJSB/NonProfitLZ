@@ -1,39 +1,83 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01-preview/uiDefinition.json#",
-  "handler": "Microsoft.Azure.CreateUIDef",
-  "version": "0.1.0-preview",
-  "parameters": {
-    "basics": [
-      {
-        "name": "keyVaultName",
-        "type": "Microsoft.Common.TextBox",
-        "label": "Key Vault Name",
-        "toolTip": "Name of the Key Vault",
-        "constraints": {
-          "required": true,
-          "regex": "^[a-zA-Z0-9-]{3,24}$"
+    "$schema": "http://schema.management.azure.com/schemas/2021-09-09/uiFormDefinition.schema.json#",
+    "view": {
+        "kind": "Form",
+        "properties": {
+            "title": "Custom Key Vault Creation",
+            "steps": [
+                {
+                    "name": "basics",
+                    "label": "Basics",
+                    "elements": [
+                        {
+                            "name": "resourceScope",
+                            "type": "Microsoft.Common.ResourceScope",
+                            "subscription": {
+                                "constraints": {
+                                    "validations": [
+                                        {
+                                            "isValid": "[not(contains(toLower(steps('basics').resourceScope.subscription.displayName),'test'))]",
+                                            "message": "Can't use test subscription."
+                                        }
+                                    ]
+                                },
+                                "resourceProviders": [
+                                    "Microsoft.KeyVault"
+                                ]
+                            },
+                            "location": {
+                                "label": "Region",
+                                "toolTip": "Azure region",
+                                "resourceTypes": [
+                                    "Microsoft.KeyVault/vaults"
+                                ],
+                                "allowedValues": [
+                                    "eastus",
+                                    "westus2"
+                                ]
+                            }
+                        },
+                        {
+                            "name": "keyVaultName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Key Vault Name",
+                            "toolTip": "The name of the Key Vault.",
+                            "defaultValue": "my-keyvault",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Key Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "accessPolicies",
+                            "type": "Microsoft.KeyVault.AccessPolicies",
+                            "label": "Access Policies",
+                            "toolTip": "Configure access policies for the Key Vault.",
+                            "constraints": {
+                                "required": true
+                            },
+                            "options": {
+                                "hide": false
+                            }
+                        }
+                    ]
+                }
+            ]
         },
-        "defaultValue": "",
-        "visible": true
-      },
-      {
-        "name": "location",
-        "type": "Microsoft.Common.Location",
-        "label": "Location",
-        "toolTip": "Location of the Key Vault",
-        "defaultValue": "[resourceGroup().location]",
-        "visible": true
-      }
-    ]
-  },
-  "outputs": {
-    "keyVaultName": {
-      "type": "string",
-      "value": "[basics('keyVaultName')]"
-    },
-    "location": {
-      "type": "string",
-      "value": "[basics('location')]"
+        "outputs": {
+            "parameters": {
+                "location": "[steps('basics').resourceScope.location.name]",
+                "keyVaultName": "[steps('basics').keyVaultName]",
+                "accessPolicies": "[steps('basics').accessPolicies]"
+            },
+            "kind": "ResourceGroup",
+            "location": "[steps('basics').resourceScope.location.name]",
+            "resourceGroupId": "[steps('basics').resourceScope.resourceGroup.id]"
+        }
     }
-  }
 }
