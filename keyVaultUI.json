@@ -18,10 +18,9 @@
                         },
                         {
                             "name": "landingZoneSubscription",
-                            "type": "Microsoft.Common.DropDown",
+                            "type": "Microsoft.Common.SubscriptionSelector",
                             "label": "Landing Zone Subscription",
                             "constraints": {
-                                "allowedValues": "[subscriptions()]",
                                 "required": true
                             }
                         },
@@ -38,9 +37,8 @@
                                     "landingZoneSubscription"
                                 ],
                                 "items": {
-                                    "list": "[resourceGroups(steps('basics').landingZoneSubscription)]",
-                                    "displayProperty": "name",
-                                    "valueProperty": "id"
+                                    "value": "[resourceGroups(steps('basics').landingZoneSubscription)]",
+                                    "label": "[resourceGroups(steps('basics').landingZoneSubscription).name]"
                                 }
                             }
                         },
