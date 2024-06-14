@@ -41,13 +41,42 @@
                         },
                         {
                             "name": "location",
-                            "type": "Microsoft.Common.Location",
+                            "type": "Microsoft.Common.DropDown",
                             "label": "Region",
                             "toolTip": "Select the region for the resource group.",
                             "constraints": {
-                                "required": true
-                            },
-                            "defaultValue": "[resourceGroup().location]"
+                                "required": true,
+                                "allowedValues": [
+                                    {
+                                        "label": "East US",
+                                        "value": "eastus"
+                                    },
+                                    {
+                                        "label": "East US 2",
+                                        "value": "eastus2"
+                                    },
+                                    {
+                                        "label": "West US",
+                                        "value": "westus"
+                                    },
+                                    {
+                                        "label": "West US 2",
+                                        "value": "westus2"
+                                    },
+                                    {
+                                        "label": "Central US",
+                                        "value": "centralus"
+                                    },
+                                    {
+                                        "label": "North Central US",
+                                        "value": "northcentralus"
+                                    },
+                                    {
+                                        "label": "South Central US",
+                                        "value": "southcentralus"
+                                    }
+                                ]
+                            }
                         }
                     ]
                 }
