@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "NPF - Landing Zone v6",
+            "title": "NPF - Landing Zone v5",
             "steps": [
                 {
                     "name": "basics",
@@ -22,23 +22,6 @@
                             "label": "Landing Zone Subscription",
                             "constraints": {
                                 "required": true
-                            }
-                        },
-                        {
-                            "name": "landingZoneResourceGroup",
-                            "type": "Microsoft.Common.AzureResource",
-                            "label": "Landing Zone Resource Group",
-                            "toolTip": "Select the resource group for the Landing Zone deployment.",
-                            "constraints": {
-                                "required": true
-                            },
-                            "options": {
-                                "filter": {
-                                    "subscription": "[steps('basics').landingZoneSubscription]",
-                                    "resourceType": "Microsoft.Resources/resourceGroups"
-                                },
-                                "displayField": "name",
-                                "valueField": "id"
                             }
                         },
                         {
@@ -316,7 +299,10 @@
             "parameters": {
                 "location": "[steps('basics').resourceScope.location.name]",
                 "landingZoneSubscription": "[steps('basics').landingZoneSubscription]",
-                "landingZoneResourceGroup": "[steps('basics').landingZoneResourceGroup]",
+                "landingZoneResourceGroup": {
+                    "type": "string",
+                    "value": "Landing-Zone-RG-001"
+                },
                 "keyVaultName": "[steps('identityAndAccess').keyVaultName]",
                 "vnetName": "[steps('networking').vnetName]",
                 "vnetAddressSpace": "[steps('networking').vnetAddressSpace]",
