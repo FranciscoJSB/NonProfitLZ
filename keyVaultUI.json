@@ -18,10 +18,9 @@
                         },
                         {
                             "name": "landingZoneSubscription",
-                            "type": "Microsoft.Common.DropDown",
+                            "type": "Microsoft.Common.SubscriptionSelector",
                             "label": "Landing Zone Subscription",
                             "constraints": {
-                                "allowedValues": "[subscriptions()]",
                                 "required": true
                             }
                         },
@@ -49,7 +48,7 @@
                                     "Microsoft.KeyVault/vaults",
                                     "Microsoft.Storage/storageAccounts"
                                 ],
-                                "allowedValues": "[locations(subscription().subscriptionId)]"
+                                "allowedValues": "[locations()]"
                             }
                         }
                     ]
