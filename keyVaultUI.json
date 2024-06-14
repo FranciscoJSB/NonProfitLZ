@@ -105,6 +105,14 @@
                             "visible": "[equals(steps('networking').deployHubSpoke, 'Yes')]"
                         },
                         {
+                            "name": "firewallSubnetAddress",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Azure Firewall Subnet Address",
+                            "toolTip": "Address space for the Azure Firewall subnet (e.g., 10.0.1.0/24).",
+                            "defaultValue": "10.0.1.0/24",
+                            "visible": "[equals(steps('networking').deployAzureFirewall, 'Yes')]"
+                        },
+                        {
                             "name": "deployGatewaySubnet",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Deploy Gateway Subnet",
@@ -125,6 +133,14 @@
                             "visible": "[equals(steps('networking').deployHubSpoke, 'Yes')]"
                         },
                         {
+                            "name": "gatewaySubnetAddress",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Gateway Subnet Address",
+                            "toolTip": "Address space for the Gateway Subnet (e.g., 10.0.2.0/24).",
+                            "defaultValue": "10.0.2.0/24",
+                            "visible": "[equals(steps('networking').deployGatewaySubnet, 'Yes')]"
+                        },
+                        {
                             "name": "deployAdditionalSubnet",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Deploy Additional Subnet",
@@ -143,6 +159,14 @@
                             },
                             "toolTip": "Choose whether to deploy an Additional Subnet.",
                             "visible": "[equals(steps('networking').deployHubSpoke, 'Yes')]"
+                        },
+                        {
+                            "name": "additionalSubnetAddress",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Additional Subnet Address",
+                            "toolTip": "Address space for the Additional Subnet (e.g., 10.0.3.0/24).",
+                            "defaultValue": "10.0.3.0/24",
+                            "visible": "[equals(steps('networking').deployAdditionalSubnet, 'Yes')]"
                         }
                     ]
                 }
@@ -154,8 +178,11 @@
                 "keyVaultName": "[steps('identityAndAccess').keyVaultName]",
                 "deployHubSpoke": "[steps('networking').deployHubSpoke]",
                 "deployAzureFirewall": "[steps('networking').deployAzureFirewall]",
+                "firewallSubnetAddress": "[steps('networking').firewallSubnetAddress]",
                 "deployGatewaySubnet": "[steps('networking').deployGatewaySubnet]",
-                "deployAdditionalSubnet": "[steps('networking').deployAdditionalSubnet]"
+                "gatewaySubnetAddress": "[steps('networking').gatewaySubnetAddress]",
+                "deployAdditionalSubnet": "[steps('networking').deployAdditionalSubnet]",
+                "additionalSubnetAddress": "[steps('networking').additionalSubnetAddress]"
             },
             "kind": "ResourceGroup",
             "location": "[steps('basics').resourceScope.location.name]",
