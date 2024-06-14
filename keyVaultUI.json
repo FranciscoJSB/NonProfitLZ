@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Custom Key Vault Creation",
+            "title": "Custom Deployment",
             "steps": [
                 {
                     "name": "basics",
@@ -22,14 +22,16 @@
                                     ]
                                 },
                                 "resourceProviders": [
-                                    "Microsoft.KeyVault"
+                                    "Microsoft.KeyVault",
+                                    "Microsoft.Storage"
                                 ]
                             },
                             "location": {
                                 "label": "Region",
                                 "toolTip": "Azure region",
                                 "resourceTypes": [
-                                    "Microsoft.KeyVault/vaults"
+                                    "Microsoft.KeyVault/vaults",
+                                    "Microsoft.Storage/storageAccounts"
                                 ],
                                 "allowedValues": [
                                     "eastus",
@@ -69,40 +71,32 @@
                             "name": "deployHubSpoke",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Deploy Hub and Spoke Topology",
-                            "defaultValue": "No",
+                            "defaultValue": "Yes",
                             "constraints": {
                                 "allowedValues": [
                                     {
                                         "label": "Yes",
                                         "value": "Yes"
-                                    },
-                                    {
-                                        "label": "No",
-                                        "value": "No"
                                     }
                                 ]
                             },
                             "toolTip": "Choose whether to deploy Hub and Spoke topology."
                         },
                         {
-                            "name": "deployAzureFirewall",
-                            "type": "Microsoft.Common.OptionsGroup",
-                            "label": "Deploy Azure Firewall",
-                            "defaultValue": "No",
+                            "name": "vnetName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "VNet Name",
+                            "toolTip": "The name of the Virtual Network.",
+                            "defaultValue": "my-vnet",
                             "constraints": {
-                                "allowedValues": [
+                                "required": true,
+                                "validations": [
                                     {
-                                        "label": "Yes",
-                                        "value": "Yes"
-                                    },
-                                    {
-                                        "label": "No",
-                                        "value": "No"
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The VNet name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
                                     }
                                 ]
-                            },
-                            "toolTip": "Choose whether to deploy Azure Firewall.",
-                            "visible": "[equals(steps('networking').deployHubSpoke, 'Yes')]"
+                            }
                         },
                         {
                             "name": "firewallSubnetAddress",
@@ -110,27 +104,9 @@
                             "label": "Azure Firewall Subnet Address",
                             "toolTip": "Address space for the Azure Firewall subnet (e.g., 10.0.1.0/24).",
                             "defaultValue": "10.0.1.0/24",
-                            "visible": "[equals(steps('networking').deployAzureFirewall, 'Yes')]"
-                        },
-                        {
-                            "name": "deployGatewaySubnet",
-                            "type": "Microsoft.Common.OptionsGroup",
-                            "label": "Deploy Gateway Subnet",
-                            "defaultValue": "No",
                             "constraints": {
-                                "allowedValues": [
-                                    {
-                                        "label": "Yes",
-                                        "value": "Yes"
-                                    },
-                                    {
-                                        "label": "No",
-                                        "value": "No"
-                                    }
-                                ]
-                            },
-                            "toolTip": "Choose whether to deploy a Gateway Subnet.",
-                            "visible": "[equals(steps('networking').deployHubSpoke, 'Yes')]"
+                                "required": true
+                            }
                         },
                         {
                             "name": "gatewaySubnetAddress",
@@ -138,27 +114,25 @@
                             "label": "Gateway Subnet Address",
                             "toolTip": "Address space for the Gateway Subnet (e.g., 10.0.2.0/24).",
                             "defaultValue": "10.0.2.0/24",
-                            "visible": "[equals(steps('networking').deployGatewaySubnet, 'Yes')]"
+                            "constraints": {
+                                "required": true
+                            }
                         },
                         {
-                            "name": "deployAdditionalSubnet",
-                            "type": "Microsoft.Common.OptionsGroup",
-                            "label": "Deploy Additional Subnet",
-                            "defaultValue": "No",
+                            "name": "additionalSubnetName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Additional Subnet Name",
+                            "toolTip": "The name of the Additional Subnet.",
+                            "defaultValue": "additional-subnet",
                             "constraints": {
-                                "allowedValues": [
+                                "required": true,
+                                "validations": [
                                     {
-                                        "label": "Yes",
-                                        "value": "Yes"
-                                    },
-                                    {
-                                        "label": "No",
-                                        "value": "No"
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Additional Subnet name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
                                     }
                                 ]
-                            },
-                            "toolTip": "Choose whether to deploy an Additional Subnet.",
-                            "visible": "[equals(steps('networking').deployHubSpoke, 'Yes')]"
+                            }
                         },
                         {
                             "name": "additionalSubnetAddress",
@@ -166,7 +140,9 @@
                             "label": "Additional Subnet Address",
                             "toolTip": "Address space for the Additional Subnet (e.g., 10.0.3.0/24).",
                             "defaultValue": "10.0.3.0/24",
-                            "visible": "[equals(steps('networking').deployAdditionalSubnet, 'Yes')]"
+                            "constraints": {
+                                "required": true
+                            }
                         }
                     ]
                 },
@@ -178,16 +154,12 @@
                             "name": "deployLogAnalytics",
                             "type": "Microsoft.Common.OptionsGroup",
                             "label": "Deploy Log Analytics Workspace",
-                            "defaultValue": "No",
+                            "defaultValue": "Yes",
                             "constraints": {
                                 "allowedValues": [
                                     {
                                         "label": "Yes",
                                         "value": "Yes"
-                                    },
-                                    {
-                                        "label": "No",
-                                        "value": "No"
                                     }
                                 ]
                             },
@@ -207,8 +179,7 @@
                                         "message": "The Log Analytics Workspace name must be between 4 and 50 characters long and contain only letters, numbers, and hyphens."
                                     }
                                 ]
-                            },
-                            "visible": "[equals(steps('monitoring').deployLogAnalytics, 'Yes')]"
+                            }
                         },
                         {
                             "name": "logRetentionDays",
@@ -217,7 +188,80 @@
                             "defaultValue": 30,
                             "min": 30,
                             "max": 730,
-                            "visible": "[equals(steps('monitoring').deployLogAnalytics, 'Yes')]"
+                            "constraints": {
+                                "required": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "storage",
+                    "label": "Storage",
+                    "elements": [
+                        {
+                            "name": "deployStorageAccount",
+                            "type": "Microsoft.Common.OptionsGroup",
+                            "label": "Deploy Storage Account",
+                            "defaultValue": "No",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Yes",
+                                        "value": "Yes"
+                                    },
+                                    {
+                                        "label": "No",
+                                        "value": "No"
+                                    }
+                                ]
+                            },
+                            "toolTip": "Choose whether to deploy a Storage Account."
+                        },
+                        {
+                            "name": "storageAccountName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Storage Account Name",
+                            "toolTip": "The name of the Storage Account.",
+                            "defaultValue": "mystorageaccount",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-z0-9]{3,24}$",
+                                        "message": "The Storage Account name must be between 3 and 24 characters long and contain only lowercase letters and numbers."
+                                    }
+                                ]
+                            },
+                            "visible": "[equals(steps('storage').deployStorageAccount, 'Yes')]"
+                        },
+                        {
+                            "name": "storageAccountSku",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Storage Account SKU",
+                            "defaultValue": "Standard_LRS",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Standard_LRS",
+                                        "value": "Standard_LRS"
+                                    },
+                                    {
+                                        "label": "Standard_GRS",
+                                        "value": "Standard_GRS"
+                                    },
+                                    {
+                                        "label": "Standard_ZRS",
+                                        "value": "Standard_ZRS"
+                                    },
+                                    {
+                                        "label": "Premium_LRS",
+                                        "value": "Premium_LRS"
+                                    }
+                                ],
+                                "required": true
+                            },
+                            "toolTip": "The SKU for the Storage Account.",
+                            "visible": "[equals(steps('storage').deployStorageAccount, 'Yes')]"
                         }
                     ]
                 }
@@ -228,15 +272,17 @@
                 "location": "[steps('basics').resourceScope.location.name]",
                 "keyVaultName": "[steps('identityAndAccess').keyVaultName]",
                 "deployHubSpoke": "[steps('networking').deployHubSpoke]",
-                "deployAzureFirewall": "[steps('networking').deployAzureFirewall]",
+                "vnetName": "[steps('networking').vnetName]",
                 "firewallSubnetAddress": "[steps('networking').firewallSubnetAddress]",
-                "deployGatewaySubnet": "[steps('networking').deployGatewaySubnet]",
                 "gatewaySubnetAddress": "[steps('networking').gatewaySubnetAddress]",
-                "deployAdditionalSubnet": "[steps('networking').deployAdditionalSubnet]",
+                "additionalSubnetName": "[steps('networking').additionalSubnetName]",
                 "additionalSubnetAddress": "[steps('networking').additionalSubnetAddress]",
                 "deployLogAnalytics": "[steps('monitoring').deployLogAnalytics]",
                 "logAnalyticsWorkspaceName": "[steps('monitoring').logAnalyticsWorkspaceName]",
-                "logRetentionDays": "[steps('monitoring').logRetentionDays]"
+                "logRetentionDays": "[steps('monitoring').logRetentionDays]",
+                "deployStorageAccount": "[steps('storage').deployStorageAccount]",
+                "storageAccountName": "[steps('storage').storageAccountName]",
+                "storageAccountSku": "[steps('storage').storageAccountSku]"
             },
             "kind": "ResourceGroup",
             "location": "[steps('basics').resourceScope.location.name]",
