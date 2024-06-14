@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "pinga",
+            "title": "NPF - Landing Zone v5",
             "steps": [
                 {
                     "name": "basics",
@@ -63,7 +63,7 @@
                 },
                 "landingZoneSubscription": {
                     "type": "string",
-                    "value": "[steps('basics').landingZoneSubscription]"
+                    "value": "[steps('basics').landingZoneSubscription.subscriptionId]"
                 }
             }
         }
