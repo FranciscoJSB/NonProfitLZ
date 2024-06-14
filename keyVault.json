@@ -7,6 +7,18 @@
         },
         "location": {
             "type": "string"
+        },
+        "deployHubSpoke": {
+            "type": "string"
+        },
+        "deployAzureFirewall": {
+            "type": "string"
+        },
+        "deployGatewaySubnet": {
+            "type": "string"
+        },
+        "deployAdditionalSubnet": {
+            "type": "string"
         }
     },
     "resources": [
@@ -22,7 +34,98 @@
                 },
                 "tenantId": "[subscription().tenantId]"
             }
+        },
+        {
+            "condition": "[equals(parameters('deployHubSpoke'), 'Yes')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-06-01",
+            "name": "hubVNet",
+            "location": "[parameters('location')]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "default",
+                        "properties": {
+                            "addressPrefix": "10.0.1.0/24"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('deployHubSpoke'), 'Yes'), equals(parameters('deployAzureFirewall'), 'Yes'))]",
+            "type": "Microsoft.Network/azureFirewalls",
+            "apiVersion": "2020-06-01",
+            "name": "myAzureFirewall",
+            "location": "[parameters('location')]",
+            "properties": {
+                "sku": {
+                    "name": "AZFW_VNet",
+                    "tier": "Standard"
+                },
+                "ipConfigurations": [
+                    {
+                        "name": "ipConfig",
+                        "properties": {
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'hubVNet', 'default')]"
+                            },
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'myFirewallPublicIP')]"
+                            }
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', 'hubVNet')]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', 'myFirewallPublicIP')]"
+            ]
+        },
+        {
+            "condition": "[and(equals(parameters('deployHubSpoke'), 'Yes'), equals(parameters('deployGatewaySubnet'), 'Yes'))]",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2020-06-01",
+            "name": "gatewaySubnet",
+            "location": "[parameters('location')]",
+            "properties": {
+                "addressPrefix": "10.0.2.0/24"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', 'hubVNet')]"
+            ]
+        },
+        {
+            "condition": "[and(equals(parameters('deployHubSpoke'), 'Yes'), equals(parameters('deployAdditionalSubnet'), 'Yes'))]",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2020-06-01",
+            "name": "additionalSubnet",
+            "location": "[parameters('location')]",
+            "properties": {
+                "addressPrefix": "10.0.3.0/24"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', 'hubVNet')]"
+            ]
+        },
+        {
+            "condition": "[and(equals(parameters('deployHubSpoke'), 'Yes'), equals(parameters('deployAzureFirewall'), 'Yes'))]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2020-06-01",
+            "name": "myFirewallPublicIP",
+            "location": "[parameters('location')]",
+            "properties": {
+                "sku": {
+                    "name": "Standard"
+                },
+                "publicIPAllocationMethod": "Static",
+                "publicIPAddressVersion": "IPv4"
+            }
         }
     ]
 }
-
