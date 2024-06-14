@@ -11,9 +11,6 @@
         "vnetName": {
             "type": "string"
         },
-        "gatewaySubnetAddress": {
-            "type": "string"
-        },
         "additionalSubnetName": {
             "type": "string"
         },
@@ -32,10 +29,10 @@
         "storageAccountSku": {
             "type": "string"
         },
-        "recoveryServicesVaultName": {
+        "nsgName": {
             "type": "string"
         },
-        "nsgName": {
+        "defenderForCloud": {
             "type": "string"
         }
     },
@@ -69,12 +66,6 @@
                         "name": "default",
                         "properties": {
                             "addressPrefix": "10.0.0.0/24"
-                        }
-                    },
-                    {
-                        "name": "GatewaySubnet",
-                        "properties": {
-                            "addressPrefix": "[parameters('gatewaySubnetAddress')]"
                         }
                     },
                     {
@@ -119,17 +110,6 @@
             }
         },
         {
-            "type": "Microsoft.RecoveryServices/vaults",
-            "apiVersion": "2018-01-10",
-            "name": "[parameters('recoveryServicesVaultName')]",
-            "location": "[parameters('location')]",
-            "properties": {
-                "sku": {
-                    "name": "Standard"
-                }
-            }
-        },
-        {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2019-06-01",
             "name": "[parameters('storageAccountName')]",
@@ -140,6 +120,14 @@
             "kind": "StorageV2",
             "properties": {
                 "accessTier": "Hot"
+            }
+        },
+        {
+            "type": "Microsoft.Security/pricings",
+            "apiVersion": "2018-06-01",
+            "name": "default",
+            "properties": {
+                "pricingTier": "[parameters('defenderForCloud')]"
             }
         }
     ],
@@ -164,9 +152,9 @@
             "type": "string",
             "value": "[parameters('storageAccountName')]"
         },
-        "recoveryServicesVaultName": {
+        "defenderForCloud": {
             "type": "string",
-            "value": "[parameters('recoveryServicesVaultName')]"
+            "value": "[parameters('defenderForCloud')]"
         }
     }
 }
