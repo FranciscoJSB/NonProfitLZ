@@ -46,6 +46,13 @@
                     "label": "Identity and Access",
                     "elements": [
                         {
+                            "name": "keyVaultDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A Key Vault is a cloud service for securely storing and accessing secrets. Secrets are application passwords, database connection strings, API keys, and other sensitive data."
+                            }
+                        },
+                        {
                             "name": "keyVaultName",
                             "type": "Microsoft.Common.TextBox",
                             "label": "Key Vault Name",
@@ -68,6 +75,13 @@
                     "label": "Networking",
                     "elements": [
                         {
+                            "name": "vnetDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "The first value corresponds to the Virtual Network name."
+                            }
+                        },
+                        {
                             "name": "vnetName",
                             "type": "Microsoft.Common.TextBox",
                             "label": "VNet Name",
@@ -84,23 +98,54 @@
                             }
                         },
                         {
+                            "name": "vnetAddressSpace",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "VNet Address Space",
+                            "toolTip": "Address space for the Virtual Network (e.g., 10.0.0.0/16).",
+                            "defaultValue": "10.0.0.0/16",
+                            "constraints": {
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "firewallSubnetDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "Address space for the Azure Firewall subnet (e.g., 10.0.1.0/24)."
+                            }
+                        },
+                        {
                             "name": "firewallSubnetAddress",
                             "type": "Microsoft.Common.TextBox",
                             "label": "Azure Firewall Subnet Address",
-                            "toolTip": "Address space for the Azure Firewall subnet (e.g., 10.0.1.0/24).",
+                            "toolTip": "Address space for the Azure Firewall subnet.",
                             "defaultValue": "10.0.1.0/24",
                             "constraints": {
                                 "required": true
                             }
                         },
                         {
+                            "name": "gatewaySubnetDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "Address space for the Gateway Subnet (e.g., 10.0.2.0/24)."
+                            }
+                        },
+                        {
                             "name": "gatewaySubnetAddress",
                             "type": "Microsoft.Common.TextBox",
                             "label": "Gateway Subnet Address",
-                            "toolTip": "Address space for the Gateway Subnet (e.g., 10.0.2.0/24).",
+                            "toolTip": "Address space for the Gateway Subnet.",
                             "defaultValue": "10.0.2.0/24",
                             "constraints": {
                                 "required": true
+                            }
+                        },
+                        {
+                            "name": "additionalSubnetDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "Address space for the Additional Subnet (e.g., 10.0.3.0/24)."
                             }
                         },
                         {
@@ -123,7 +168,7 @@
                             "name": "additionalSubnetAddress",
                             "type": "Microsoft.Common.TextBox",
                             "label": "Additional Subnet Address",
-                            "toolTip": "Address space for the Additional Subnet (e.g., 10.0.3.0/24).",
+                            "toolTip": "Address space for the Additional Subnet.",
                             "defaultValue": "10.0.3.0/24",
                             "constraints": {
                                 "required": true
@@ -135,6 +180,13 @@
                     "name": "monitoring",
                     "label": "Monitoring",
                     "elements": [
+                        {
+                            "name": "logAnalyticsDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A Log Analytics Workspace is a unique environment for monitoring data sent to Azure Monitor Logs. It provides a way to aggregate and analyze log data from different sources."
+                            }
+                        },
                         {
                             "name": "logAnalyticsWorkspaceName",
                             "type": "Microsoft.Common.TextBox",
@@ -168,6 +220,13 @@
                     "name": "storage",
                     "label": "Storage",
                     "elements": [
+                        {
+                            "name": "storageDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A Storage Account is a Microsoft Azure service that provides storage that can be accessed from anywhere in the world over HTTP or HTTPS."
+                            }
+                        },
                         {
                             "name": "storageAccountName",
                             "type": "Microsoft.Common.TextBox",
@@ -221,6 +280,7 @@
                 "location": "[steps('basics').resourceScope.location.name]",
                 "keyVaultName": "[steps('identityAndAccess').keyVaultName]",
                 "vnetName": "[steps('networking').vnetName]",
+                "vnetAddressSpace": "[steps('networking').vnetAddressSpace]",
                 "firewallSubnetAddress": "[steps('networking').firewallSubnetAddress]",
                 "gatewaySubnetAddress": "[steps('networking').gatewaySubnetAddress]",
                 "additionalSubnetName": "[steps('networking').additionalSubnetName]",
