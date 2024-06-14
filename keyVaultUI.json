@@ -10,6 +10,22 @@
                     "label": "Basics",
                     "elements": [
                         {
+                            "name": "landingZoneSubscriptionText",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "Choose the subscription to use for your Landing Zone deployment"
+                            }
+                        },
+                        {
+                            "name": "landingZoneSubscription",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Landing Zone Subscription",
+                            "constraints": {
+                                "allowedValues": "[subscriptions()]",
+                                "required": true
+                            }
+                        },
+                        {
                             "name": "resourceScope",
                             "type": "Microsoft.Common.ResourceScope",
                             "subscription": {
@@ -286,6 +302,7 @@
         "outputs": {
             "parameters": {
                 "location": "[steps('basics').resourceScope.location.name]",
+                "landingZoneSubscription": "[steps('basics').landingZoneSubscription]",
                 "keyVaultName": "[steps('identityAndAccess').keyVaultName]",
                 "vnetName": "[steps('networking').vnetName]",
                 "vnetAddressSpace": "[steps('networking').vnetAddressSpace]",
