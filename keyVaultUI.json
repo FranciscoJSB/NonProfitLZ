@@ -169,6 +169,57 @@
                             "visible": "[equals(steps('networking').deployAdditionalSubnet, 'Yes')]"
                         }
                     ]
+                },
+                {
+                    "name": "monitoring",
+                    "label": "Monitoring",
+                    "elements": [
+                        {
+                            "name": "deployLogAnalytics",
+                            "type": "Microsoft.Common.OptionsGroup",
+                            "label": "Deploy Log Analytics Workspace",
+                            "defaultValue": "No",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Yes",
+                                        "value": "Yes"
+                                    },
+                                    {
+                                        "label": "No",
+                                        "value": "No"
+                                    }
+                                ]
+                            },
+                            "toolTip": "Choose whether to deploy a Log Analytics Workspace."
+                        },
+                        {
+                            "name": "logAnalyticsWorkspaceName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Log Analytics Workspace Name",
+                            "toolTip": "The name of the Log Analytics Workspace.",
+                            "defaultValue": "my-log-analytics-workspace",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{4,50}$",
+                                        "message": "The Log Analytics Workspace name must be between 4 and 50 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            },
+                            "visible": "[equals(steps('monitoring').deployLogAnalytics, 'Yes')]"
+                        },
+                        {
+                            "name": "logRetentionDays",
+                            "type": "Microsoft.Common.Slider",
+                            "label": "Log Analytics Data Retention (days)",
+                            "defaultValue": 30,
+                            "min": 30,
+                            "max": 730,
+                            "visible": "[equals(steps('monitoring').deployLogAnalytics, 'Yes')]"
+                        }
+                    ]
                 }
             ]
         },
@@ -182,7 +233,10 @@
                 "deployGatewaySubnet": "[steps('networking').deployGatewaySubnet]",
                 "gatewaySubnetAddress": "[steps('networking').gatewaySubnetAddress]",
                 "deployAdditionalSubnet": "[steps('networking').deployAdditionalSubnet]",
-                "additionalSubnetAddress": "[steps('networking').additionalSubnetAddress]"
+                "additionalSubnetAddress": "[steps('networking').additionalSubnetAddress]",
+                "deployLogAnalytics": "[steps('monitoring').deployLogAnalytics]",
+                "logAnalyticsWorkspaceName": "[steps('monitoring').logAnalyticsWorkspaceName]",
+                "logRetentionDays": "[steps('monitoring').logRetentionDays]"
             },
             "kind": "ResourceGroup",
             "location": "[steps('basics').resourceScope.location.name]",
