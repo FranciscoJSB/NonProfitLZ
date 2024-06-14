@@ -49,10 +49,7 @@
                                     "Microsoft.KeyVault/vaults",
                                     "Microsoft.Storage/storageAccounts"
                                 ],
-                                "allowedValues": [
-                                    "eastus",
-                                    "westus2"
-                                ]
+                                "allowedValues": "[locations(subscription().subscriptionId)]"
                             }
                         }
                     ]
