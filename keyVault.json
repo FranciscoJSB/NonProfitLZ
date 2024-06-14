@@ -7,9 +7,6 @@
         },
         "location": {
             "type": "string"
-        },
-        "accessPolicies": {
-            "type": "array"
         }
     },
     "resources": [
@@ -23,9 +20,9 @@
                     "family": "A",
                     "name": "standard"
                 },
-                "tenantId": "[subscription().tenantId]",
-                "accessPolicies": "[parameters('accessPolicies')]"
+                "tenantId": "[subscription().tenantId]"
             }
         }
     ]
 }
+
