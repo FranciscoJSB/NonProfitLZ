@@ -38,15 +38,6 @@
                                     "westus2"
                                 ]
                             }
-                        },
-                        {
-                            "name": "landingZoneSubscription",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Choose your subscription for the Landing Zone creation",
-                            "constraints": {
-                                "allowedValues": "[subscriptions()]",
-                                "required": true
-                            }
                         }
                     ]
                 },
@@ -73,29 +64,6 @@
                                     {
                                         "regex": "^[a-zA-Z0-9-]{3,24}$",
                                         "message": "The Key Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "landingZoneKeyVaultDescription",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "This is your key vault for the Landing Zone subscription"
-                            }
-                        },
-                        {
-                            "name": "landingZoneKeyVaultName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Landing Zone Key Vault Name",
-                            "toolTip": "The name of the Landing Zone Key Vault.",
-                            "defaultValue": "lz-keyvault",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The Landing Zone Key Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
                                     }
                                 ]
                             }
@@ -202,16 +170,6 @@
                             }
                         },
                         {
-                            "name": "logAnalyticsWorkspaceSubscription",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Log Analytics Workspace Subscription",
-                            "toolTip": "Select the subscription for the Log Analytics Workspace.",
-                            "constraints": {
-                                "allowedValues": "[subscriptions()]",
-                                "required": true
-                            }
-                        },
-                        {
                             "name": "logAnalyticsWorkspaceName",
                             "type": "Microsoft.Common.TextBox",
                             "label": "Log Analytics Workspace Name",
@@ -278,16 +236,6 @@
                             }
                         },
                         {
-                            "name": "storageAccountSubscription",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Storage Account Subscription",
-                            "toolTip": "Select the subscription for the Storage Account.",
-                            "constraints": {
-                                "allowedValues": "[subscriptions()]",
-                                "required": true
-                            }
-                        },
-                        {
                             "name": "storageAccountName",
                             "type": "Microsoft.Common.TextBox",
                             "label": "Storage Account Name",
@@ -339,17 +287,13 @@
             "parameters": {
                 "location": "[steps('basics').resourceScope.location.name]",
                 "keyVaultName": "[steps('identityAndAccess').keyVaultName]",
-                "landingZoneSubscription": "[steps('basics').landingZoneSubscription]",
-                "landingZoneKeyVaultName": "[steps('identityAndAccess').landingZoneKeyVaultName]",
                 "vnetName": "[steps('networking').vnetName]",
                 "vnetAddressSpace": "[steps('networking').vnetAddressSpace]",
                 "nsgName": "[steps('networking').nsgName]",
                 "additionalSubnetName": "[steps('networking').additionalSubnetName]",
                 "additionalSubnetAddress": "[steps('networking').additionalSubnetAddress]",
-                "logAnalyticsWorkspaceSubscription": "[steps('monitoring').logAnalyticsWorkspaceSubscription]",
                 "logAnalyticsWorkspaceName": "[steps('monitoring').logAnalyticsWorkspaceName]",
                 "logRetentionDays": "[steps('monitoring').logRetentionDays]",
-                "storageAccountSubscription": "[steps('storage').storageAccountSubscription]",
                 "storageAccountName": "[steps('storage').storageAccountName]",
                 "storageAccountSku": "[steps('storage').storageAccountSku]",
                 "defenderForCloud": "[steps('securityAndCompliance').defenderForCloud]"
