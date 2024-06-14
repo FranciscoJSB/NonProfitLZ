@@ -60,13 +60,102 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "networking",
+                    "label": "Networking",
+                    "elements": [
+                        {
+                            "name": "deployHubSpoke",
+                            "type": "Microsoft.Common.OptionsGroup",
+                            "label": "Deploy Hub and Spoke Topology",
+                            "defaultValue": "No",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Yes",
+                                        "value": "Yes"
+                                    },
+                                    {
+                                        "label": "No",
+                                        "value": "No"
+                                    }
+                                ]
+                            },
+                            "toolTip": "Choose whether to deploy Hub and Spoke topology."
+                        },
+                        {
+                            "name": "deployAzureFirewall",
+                            "type": "Microsoft.Common.OptionsGroup",
+                            "label": "Deploy Azure Firewall",
+                            "defaultValue": "No",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Yes",
+                                        "value": "Yes"
+                                    },
+                                    {
+                                        "label": "No",
+                                        "value": "No"
+                                    }
+                                ]
+                            },
+                            "toolTip": "Choose whether to deploy Azure Firewall.",
+                            "visible": "[equals(steps('networking').deployHubSpoke, 'Yes')]"
+                        },
+                        {
+                            "name": "deployGatewaySubnet",
+                            "type": "Microsoft.Common.OptionsGroup",
+                            "label": "Deploy Gateway Subnet",
+                            "defaultValue": "No",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Yes",
+                                        "value": "Yes"
+                                    },
+                                    {
+                                        "label": "No",
+                                        "value": "No"
+                                    }
+                                ]
+                            },
+                            "toolTip": "Choose whether to deploy a Gateway Subnet.",
+                            "visible": "[equals(steps('networking').deployHubSpoke, 'Yes')]"
+                        },
+                        {
+                            "name": "deployAdditionalSubnet",
+                            "type": "Microsoft.Common.OptionsGroup",
+                            "label": "Deploy Additional Subnet",
+                            "defaultValue": "No",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Yes",
+                                        "value": "Yes"
+                                    },
+                                    {
+                                        "label": "No",
+                                        "value": "No"
+                                    }
+                                ]
+                            },
+                            "toolTip": "Choose whether to deploy an Additional Subnet.",
+                            "visible": "[equals(steps('networking').deployHubSpoke, 'Yes')]"
+                        }
+                    ]
                 }
             ]
         },
         "outputs": {
             "parameters": {
                 "location": "[steps('basics').resourceScope.location.name]",
-                "keyVaultName": "[steps('identityAndAccess').keyVaultName]"
+                "keyVaultName": "[steps('identityAndAccess').keyVaultName]",
+                "deployHubSpoke": "[steps('networking').deployHubSpoke]",
+                "deployAzureFirewall": "[steps('networking').deployAzureFirewall]",
+                "deployGatewaySubnet": "[steps('networking').deployGatewaySubnet]",
+                "deployAdditionalSubnet": "[steps('networking').deployAdditionalSubnet]"
             },
             "kind": "ResourceGroup",
             "location": "[steps('basics').resourceScope.location.name]",
