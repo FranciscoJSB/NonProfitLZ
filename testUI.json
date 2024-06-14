@@ -1,0 +1,67 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2021-09-09/uiFormDefinition.schema.json#",
+    "view": {
+        "kind": "Form",
+        "properties": {
+            "title": "NPF - Landing Zone v5",
+            "steps": [
+                {
+                    "name": "basics",
+                    "label": "Basics",
+                    "elements": [
+                        {
+                            "name": "landingZoneSubscriptionText",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "Choose the subscription to use for your Landing Zone deployment"
+                            }
+                        },
+                        {
+                            "name": "landingZoneSubscription",
+                            "type": "Microsoft.Common.SubscriptionSelector",
+                            "label": "Landing Zone Subscription",
+                            "constraints": {
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "resourceScope",
+                            "type": "Microsoft.Common.ResourceScope",
+                            "subscription": {
+                                "constraints": {
+                                    "validations": [
+                                        {
+                                            "isValid": "[not(contains(toLower(steps('basics').resourceScope.subscription.displayName),'test'))]",
+                                            "message": "Can't use test subscription."
+                                        }
+                                    ]
+                                },
+                                "resourceProviders": [
+                                    "Microsoft.KeyVault",
+                                    "Microsoft.Storage"
+                                ]
+                            },
+                            "location": {
+                                "label": "Region",
+                                "toolTip": "Azure region",
+                                "resourceTypes": [
+                                    "Microsoft.KeyVault/vaults",
+                                    "Microsoft.Storage/storageAccounts"
+                                ],
+                                "allowedValues": "[locations(subscription().subscriptionId)]"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "outputs": {
+            "parameters": {
+                "location": "[steps('basics').resourceScope.location.name]",
+                "landingZoneSubscription": "[steps('basics').landingZoneSubscription]"
+            },
+            "kind": "ResourceGroup",
+            "location": "[steps('basics').resourceScope.location.name]"
+        }
+    }
+}
