@@ -52,18 +52,6 @@
                                     }
                                 ]
                             }
-                        },
-                        {
-                            "name": "accessPolicies",
-                            "type": "Microsoft.KeyVault.AccessPolicies",
-                            "label": "Access Policies",
-                            "toolTip": "Configure access policies for the Key Vault.",
-                            "constraints": {
-                                "required": true
-                            },
-                            "options": {
-                                "hide": false
-                            }
                         }
                     ]
                 }
@@ -72,8 +60,7 @@
         "outputs": {
             "parameters": {
                 "location": "[steps('basics').resourceScope.location.name]",
-                "keyVaultName": "[steps('basics').keyVaultName]",
-                "accessPolicies": "[steps('basics').accessPolicies]"
+                "keyVaultName": "[steps('basics').keyVaultName]"
             },
             "kind": "ResourceGroup",
             "location": "[steps('basics').resourceScope.location.name]",
