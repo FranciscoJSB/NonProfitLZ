@@ -1,41 +1,31 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "keyVaultName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the Key Vault"
-      }
-    },
-    "location": {
-      "type": "string",
-      "defaultValue": "[resourceGroup().location]",
-      "metadata": {
-        "description": "The location of the Key Vault"
-      }
-    }
-  },
-  "resources": [
-    {
-      "type": "Microsoft.KeyVault/vaults",
-      "apiVersion": "2019-09-01",
-      "name": "[parameters('keyVaultName')]",
-      "location": "[parameters('location')]",
-      "properties": {
-        "sku": {
-          "family": "A",
-          "name": "standard"
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "keyVaultName": {
+            "type": "string"
         },
-        "tenantId": "[subscription().tenantId]",
-        "accessPolicies": []
-      }
-    }
-  ],
-  "outputs": {
-    "keyVaultName": {
-      "type": "string",
-      "value": "[parameters('keyVaultName')]"
-    }
-  }
+        "location": {
+            "type": "string"
+        },
+        "accessPolicies": {
+            "type": "array"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2021-06-01-preview",
+            "name": "[parameters('keyVaultName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "sku": {
+                    "family": "A",
+                    "name": "standard"
+                },
+                "tenantId": "[subscription().tenantId]",
+                "accessPolicies": "[parameters('accessPolicies')]"
+            }
+        }
+    ]
 }
