@@ -21,7 +21,8 @@
       "apiVersion": "2021-04-01",
       "location": "[parameters('location')]",
       "name": "prueba",
-      "properties": {}
+      "properties": {},
+      "subscriptionId": "[parameters('landingZoneSubscription')]"
     }
   ],
   "outputs": {
