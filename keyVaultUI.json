@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "NPF - Landing Zone v5",
+            "title": "NPF - Landing Zone v6",
             "steps": [
                 {
                     "name": "basics",
@@ -26,14 +26,19 @@
                         },
                         {
                             "name": "landingZoneResourceGroup",
-                            "type": "Microsoft.Common.ResourceGroupCombo",
+                            "type": "Microsoft.Common.AzureResource",
                             "label": "Landing Zone Resource Group",
                             "toolTip": "Select the resource group for the Landing Zone deployment.",
                             "constraints": {
                                 "required": true
                             },
                             "options": {
-                                "subscriptionId": "[steps('basics').landingZoneSubscription]"
+                                "filter": {
+                                    "subscription": "[steps('basics').landingZoneSubscription]",
+                                    "resourceType": "Microsoft.Resources/resourceGroups"
+                                },
+                                "displayField": "name",
+                                "valueField": "id"
                             }
                         },
                         {
