@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "RG Test 2",
+            "title": "NPF - Landing Zone v5",
             "steps": [
                 {
                     "name": "basics",
@@ -37,16 +37,14 @@
                                     ]
                                 },
                                 "resourceProviders": [
-                                    "Microsoft.KeyVault",
-                                    "Microsoft.Storage"
+                                    "Microsoft.Resources"
                                 ]
                             },
                             "location": {
                                 "label": "Region",
                                 "toolTip": "Azure region",
                                 "resourceTypes": [
-                                    "Microsoft.KeyVault/vaults",
-                                    "Microsoft.Storage/storageAccounts"
+                                    "Microsoft.Resources/resourceGroups"
                                 ],
                                 "allowedValues": "[locations(subscription().subscriptionId)]"
                             }
@@ -63,7 +61,7 @@
                 },
                 "landingZoneSubscription": {
                     "type": "string",
-                    "value": "[steps('basics').landingZoneSubscription]"
+                    "value": "[steps('basics').landingZoneSubscription.subscriptionId]"
                 }
             }
         }
