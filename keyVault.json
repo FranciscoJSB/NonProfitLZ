@@ -5,6 +5,9 @@
         "keyVaultName": {
             "type": "string"
         },
+        "keyVaultSubscription": {
+            "type": "string"
+        },
         "location": {
             "type": "string"
         },
@@ -20,6 +23,9 @@
         "logAnalyticsWorkspaceName": {
             "type": "string"
         },
+        "logAnalyticsWorkspaceSubscription": {
+            "type": "string"
+        },
         "logRetentionDays": {
             "type": "int"
         },
@@ -29,7 +35,16 @@
         "storageAccountSku": {
             "type": "string"
         },
+        "storageAccountSubscription": {
+            "type": "string"
+        },
         "nsgName": {
+            "type": "string"
+        },
+        "landingZoneSubscription": {
+            "type": "string"
+        },
+        "landingZoneKeyVaultName": {
             "type": "string"
         },
         "defenderForCloud": {
@@ -42,6 +57,21 @@
             "apiVersion": "2021-06-01-preview",
             "name": "[parameters('keyVaultName')]",
             "location": "[parameters('location')]",
+            "subscriptionId": "[parameters('keyVaultSubscription')]",
+            "properties": {
+                "sku": {
+                    "family": "A",
+                    "name": "standard"
+                },
+                "tenantId": "[subscription().tenantId]"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2021-06-01-preview",
+            "name": "[parameters('landingZoneKeyVaultName')]",
+            "location": "[parameters('location')]",
+            "subscriptionId": "[parameters('landingZoneSubscription')]",
             "properties": {
                 "sku": {
                     "family": "A",
@@ -102,6 +132,7 @@
             "apiVersion": "2020-08-01",
             "name": "[parameters('logAnalyticsWorkspaceName')]",
             "location": "[parameters('location')]",
+            "subscriptionId": "[parameters('logAnalyticsWorkspaceSubscription')]",
             "properties": {
                 "sku": {
                     "name": "PerGB2018"
@@ -114,6 +145,7 @@
             "apiVersion": "2019-06-01",
             "name": "[parameters('storageAccountName')]",
             "location": "[parameters('location')]",
+            "subscriptionId": "[parameters('storageAccountSubscription')]",
             "sku": {
                 "name": "[parameters('storageAccountSku')]"
             },
@@ -135,6 +167,10 @@
         "keyVaultName": {
             "type": "string",
             "value": "[parameters('keyVaultName')]"
+        },
+        "landingZoneKeyVaultName": {
+            "type": "string",
+            "value": "[parameters('landingZoneKeyVaultName')]"
         },
         "vnetName": {
             "type": "string",
