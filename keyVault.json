@@ -1,133 +1,47 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    },
+    "landingZoneSubscription": {
+      "type": "string",
+      "metadata": {
+        "description": "Subscription ID for the landing zone."
+      }
+    }
+  },
   "resources": [
     {
-      "type": "Microsoft.Resources/resourceGroups",
+      "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
-      "location": "[parameters('location')]",
-      "name": "[parameters('landingZoneResourceGroup')]",
-      "properties": {}
-    },
-    {
-      "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2020-06-01",
-      "location": "[parameters('location')]",
-      "name": "[parameters('vnetName')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/resourceGroups', parameters('landingZoneResourceGroup'))]"
-      ],
+      "name": "nestedResourceGroupDeployment",
       "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "[parameters('vnetAddressSpace')]"
-          ]
-        },
-        "subnets": [
-          {
-            "name": "[parameters('additionalSubnetName')]",
-            "properties": {
-              "addressPrefix": "[parameters('additionalSubnetAddress')]"
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "resources": [
+            {
+              "type": "Microsoft.Resources/resourceGroups",
+              "apiVersion": "2021-04-01",
+              "location": "[parameters('location')]",
+              "name": "prueba",
+              "properties": {}
             }
-          }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.Network/networkSecurityGroups",
-      "apiVersion": "2020-06-01",
-      "location": "[parameters('location')]",
-      "name": "[parameters('nsgName')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/resourceGroups', parameters('landingZoneResourceGroup'))]"
-      ],
-      "properties": {
-        "securityRules": []
-      }
-    },
-    {
-      "type": "Microsoft.OperationalInsights/workspaces",
-      "apiVersion": "2020-08-01",
-      "location": "[parameters('location')]",
-      "name": "[parameters('logAnalyticsWorkspaceName')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/resourceGroups', parameters('landingZoneResourceGroup'))]"
-      ],
-      "properties": {
-        "sku": {
-          "name": "PerGB2018"
-        },
-        "retentionInDays": "[parameters('logRetentionDays')]"
-      }
-    },
-    {
-      "type": "Microsoft.KeyVault/vaults",
-      "apiVersion": "2019-09-01",
-      "location": "[parameters('location')]",
-      "name": "[parameters('keyVaultName')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/resourceGroups', parameters('landingZoneResourceGroup'))]",
-        "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
-      ],
-      "properties": {
-        "sku": {
-          "family": "A",
-          "name": "standard"
-        },
-        "tenantId": "[subscription().tenantId]",
-        "accessPolicies": []
-      }
-    },
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2021-04-01",
-      "location": "[parameters('location')]",
-      "name": "[parameters('storageAccountName')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/resourceGroups', parameters('landingZoneResourceGroup'))]",
-        "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
-      ],
-      "sku": {
-        "name": "[parameters('storageAccountSku')]"
-      },
-      "kind": "StorageV2",
-      "properties": {
-        "accessTier": "Hot"
+          ]
+        }
       }
     }
   ],
   "outputs": {
     "resourceGroupName": {
       "type": "string",
-      "value": "[parameters('landingZoneResourceGroup')]"
-    },
-    "logAnalyticsWorkspaceName": {
-      "type": "string",
-      "value": "[parameters('logAnalyticsWorkspaceName')]"
-    },
-    "keyVaultName": {
-      "type": "string",
-      "value": "[parameters('keyVaultName')]"
-    },
-    "storageAccountName": {
-      "type": "string",
-      "value": "[parameters('storageAccountName')]"
-    },
-    "vnetName": {
-      "type": "string",
-      "value": "[parameters('vnetName')]"
-    },
-    "nsgName": {
-      "type": "string",
-      "value": "[parameters('nsgName')]"
-    },
-    "additionalSubnetName": {
-      "type": "string",
-      "value": "[parameters('additionalSubnetName')]"
-    },
-    "additionalSubnetAddress": {
-      "type": "string",
-      "value": "[parameters('additionalSubnetAddress')]"
+      "value": "prueba"
     }
   }
 }
