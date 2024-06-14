@@ -14,10 +14,19 @@
         "deployAzureFirewall": {
             "type": "string"
         },
+        "firewallSubnetAddress": {
+            "type": "string"
+        },
         "deployGatewaySubnet": {
             "type": "string"
         },
+        "gatewaySubnetAddress": {
+            "type": "string"
+        },
         "deployAdditionalSubnet": {
+            "type": "string"
+        },
+        "additionalSubnetAddress": {
             "type": "string"
         }
     },
@@ -51,7 +60,28 @@
                     {
                         "name": "default",
                         "properties": {
-                            "addressPrefix": "10.0.1.0/24"
+                            "addressPrefix": "10.0.0.0/24"
+                        }
+                    },
+                    {
+                        "condition": "[equals(parameters('deployAzureFirewall'), 'Yes')]",
+                        "name": "AzureFirewallSubnet",
+                        "properties": {
+                            "addressPrefix": "[parameters('firewallSubnetAddress')]"
+                        }
+                    },
+                    {
+                        "condition": "[equals(parameters('deployGatewaySubnet'), 'Yes')]",
+                        "name": "GatewaySubnet",
+                        "properties": {
+                            "addressPrefix": "[parameters('gatewaySubnetAddress')]"
+                        }
+                    },
+                    {
+                        "condition": "[equals(parameters('deployAdditionalSubnet'), 'Yes')]",
+                        "name": "AdditionalSubnet",
+                        "properties": {
+                            "addressPrefix": "[parameters('additionalSubnetAddress')]"
                         }
                     }
                 ]
@@ -73,7 +103,7 @@
                         "name": "ipConfig",
                         "properties": {
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'hubVNet', 'default')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'hubVNet', 'AzureFirewallSubnet')]"
                             },
                             "publicIPAddress": {
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'myFirewallPublicIP')]"
@@ -85,32 +115,6 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', 'hubVNet')]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', 'myFirewallPublicIP')]"
-            ]
-        },
-        {
-            "condition": "[and(equals(parameters('deployHubSpoke'), 'Yes'), equals(parameters('deployGatewaySubnet'), 'Yes'))]",
-            "type": "Microsoft.Network/virtualNetworks/subnets",
-            "apiVersion": "2020-06-01",
-            "name": "gatewaySubnet",
-            "location": "[parameters('location')]",
-            "properties": {
-                "addressPrefix": "10.0.2.0/24"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', 'hubVNet')]"
-            ]
-        },
-        {
-            "condition": "[and(equals(parameters('deployHubSpoke'), 'Yes'), equals(parameters('deployAdditionalSubnet'), 'Yes'))]",
-            "type": "Microsoft.Network/virtualNetworks/subnets",
-            "apiVersion": "2020-06-01",
-            "name": "additionalSubnet",
-            "location": "[parameters('location')]",
-            "properties": {
-                "addressPrefix": "10.0.3.0/24"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', 'hubVNet')]"
             ]
         },
         {
