@@ -157,6 +157,22 @@
                             }
                         },
                         {
+                            "name": "nsgName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Network Security Group Name",
+                            "toolTip": "The name of the Network Security Group.",
+                            "defaultValue": "my-nsg",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Network Security Group name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
                             "name": "additionalSubnetDescription",
                             "type": "Microsoft.Common.TextBlock",
                             "options": {
@@ -257,7 +273,13 @@
                                     }
                                 ]
                             }
-                        },
+                        }
+                    ]
+                },
+                {
+                    "name": "securityAndCompliance",
+                    "label": "Security and Compliance",
+                    "elements": [
                         {
                             "name": "defenderForCloud",
                             "type": "Microsoft.Common.DropDown",
@@ -348,12 +370,13 @@
                 "gatewaySubnetAddress": "[steps('networking').gatewaySubnetAddress]",
                 "vpnGateway": "[steps('networking').vpnGateway]",
                 "dnsZone": "[steps('networking').dnsZone]",
+                "nsgName": "[steps('networking').nsgName]",
                 "additionalSubnetName": "[steps('networking').additionalSubnetName]",
                 "additionalSubnetAddress": "[steps('networking').additionalSubnetAddress]",
                 "logAnalyticsWorkspaceName": "[steps('monitoring').logAnalyticsWorkspaceName]",
                 "logRetentionDays": "[steps('monitoring').logRetentionDays]",
                 "recoveryServicesVaultName": "[steps('recovery').recoveryServicesVaultName]",
-                "defenderForCloud": "[steps('recovery').defenderForCloud]",
+                "defenderForCloud": "[steps('securityAndCompliance').defenderForCloud]",
                 "storageAccountName": "[steps('storage').storageAccountName]",
                 "storageAccountSku": "[steps('storage').storageAccountSku]"
             },
