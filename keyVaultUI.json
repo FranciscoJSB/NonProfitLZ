@@ -78,13 +78,13 @@
                             "name": "vnetDescription",
                             "type": "Microsoft.Common.TextBlock",
                             "options": {
-                                "text": "The first value corresponds to the Virtual Network name."
+                                "text": "Configure your Virtual Network (VNet) and its subnets."
                             }
                         },
                         {
                             "name": "vnetName",
                             "type": "Microsoft.Common.TextBox",
-                            "label": "VNet Name",
+                            "label": "Virtual Network Name",
                             "toolTip": "The name of the Virtual Network.",
                             "defaultValue": "my-vnet",
                             "constraints": {
@@ -92,7 +92,7 @@
                                 "validations": [
                                     {
                                         "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The VNet name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                        "message": "The Virtual Network name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
                                     }
                                 ]
                             }
@@ -100,7 +100,7 @@
                         {
                             "name": "vnetAddressSpace",
                             "type": "Microsoft.Common.TextBox",
-                            "label": "VNet Address Space",
+                            "label": "Virtual Network Address Space",
                             "toolTip": "Address space for the Virtual Network (e.g., 10.0.0.0/16).",
                             "defaultValue": "10.0.0.0/16",
                             "constraints": {
@@ -111,7 +111,7 @@
                             "name": "firewallSubnetDescription",
                             "type": "Microsoft.Common.TextBlock",
                             "options": {
-                                "text": "Address space for the Azure Firewall subnet (e.g., 10.0.1.0/24)."
+                                "text": "The Azure Firewall Subnet is used to host the Azure Firewall."
                             }
                         },
                         {
@@ -128,7 +128,7 @@
                             "name": "gatewaySubnetDescription",
                             "type": "Microsoft.Common.TextBlock",
                             "options": {
-                                "text": "Address space for the Gateway Subnet (e.g., 10.0.2.0/24)."
+                                "text": "The Gateway Subnet is required for deploying a VPN or ExpressRoute gateway."
                             }
                         },
                         {
@@ -145,7 +145,7 @@
                             "name": "additionalSubnetDescription",
                             "type": "Microsoft.Common.TextBlock",
                             "options": {
-                                "text": "Address space for the Additional Subnet (e.g., 10.0.3.0/24)."
+                                "text": "The Additional Subnet can be used for other resources you may want to deploy."
                             }
                         },
                         {
