@@ -23,9 +23,6 @@
         "additionalSubnetAddress": {
             "type": "string"
         },
-        "deployLogAnalytics": {
-            "type": "string"
-        },
         "logAnalyticsWorkspaceName": {
             "type": "string"
         },
