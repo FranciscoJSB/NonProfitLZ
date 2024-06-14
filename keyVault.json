@@ -11,19 +11,16 @@
         "deployHubSpoke": {
             "type": "string"
         },
-        "deployAzureFirewall": {
+        "vnetName": {
             "type": "string"
         },
         "firewallSubnetAddress": {
             "type": "string"
         },
-        "deployGatewaySubnet": {
-            "type": "string"
-        },
         "gatewaySubnetAddress": {
             "type": "string"
         },
-        "deployAdditionalSubnet": {
+        "additionalSubnetName": {
             "type": "string"
         },
         "additionalSubnetAddress": {
@@ -37,6 +34,15 @@
         },
         "logRetentionDays": {
             "type": "int"
+        },
+        "deployStorageAccount": {
+            "type": "string"
+        },
+        "storageAccountName": {
+            "type": "string"
+        },
+        "storageAccountSku": {
+            "type": "string"
         }
     },
     "resources": [
@@ -57,7 +63,7 @@
             "condition": "[equals(parameters('deployHubSpoke'), 'Yes')]",
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-06-01",
-            "name": "hubVNet",
+            "name": "[parameters('vnetName')]",
             "location": "[parameters('location')]",
             "properties": {
                 "addressSpace": {
@@ -73,22 +79,19 @@
                         }
                     },
                     {
-                        "condition": "[equals(parameters('deployAzureFirewall'), 'Yes')]",
                         "name": "AzureFirewallSubnet",
                         "properties": {
                             "addressPrefix": "[parameters('firewallSubnetAddress')]"
                         }
                     },
                     {
-                        "condition": "[equals(parameters('deployGatewaySubnet'), 'Yes')]",
                         "name": "GatewaySubnet",
                         "properties": {
                             "addressPrefix": "[parameters('gatewaySubnetAddress')]"
                         }
                     },
                     {
-                        "condition": "[equals(parameters('deployAdditionalSubnet'), 'Yes')]",
-                        "name": "AdditionalSubnet",
+                        "name": "[parameters('additionalSubnetName')]",
                         "properties": {
                             "addressPrefix": "[parameters('additionalSubnetAddress')]"
                         }
@@ -97,7 +100,6 @@
             }
         },
         {
-            "condition": "[and(equals(parameters('deployHubSpoke'), 'Yes'), equals(parameters('deployAzureFirewall'), 'Yes'))]",
             "type": "Microsoft.Network/azureFirewalls",
             "apiVersion": "2020-06-01",
             "name": "myAzureFirewall",
@@ -112,7 +114,7 @@
                         "name": "ipConfig",
                         "properties": {
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'hubVNet', 'AzureFirewallSubnet')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), 'AzureFirewallSubnet')]"
                             },
                             "publicIPAddress": {
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'myFirewallPublicIP')]"
@@ -122,12 +124,11 @@
                 ]
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', 'hubVNet')]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', 'myFirewallPublicIP')]"
             ]
         },
         {
-            "condition": "[and(equals(parameters('deployHubSpoke'), 'Yes'), equals(parameters('deployAzureFirewall'), 'Yes'))]",
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2020-06-01",
             "name": "myFirewallPublicIP",
@@ -141,7 +142,6 @@
             }
         },
         {
-            "condition": "[equals(parameters('deployLogAnalytics'), 'Yes')]",
             "type": "Microsoft.OperationalInsights/workspaces",
             "apiVersion": "2020-08-01",
             "name": "[parameters('logAnalyticsWorkspaceName')]",
@@ -151,6 +151,20 @@
                     "name": "PerGB2018"
                 },
                 "retentionInDays": "[parameters('logRetentionDays')]"
+            }
+        },
+        {
+            "condition": "[equals(parameters('deployStorageAccount'), 'Yes')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('storageAccountSku')]"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "accessTier": "Hot"
             }
         }
     ]
