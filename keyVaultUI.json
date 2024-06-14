@@ -36,7 +36,13 @@
                                     "westus2"
                                 ]
                             }
-                        },
+                        }
+                    ]
+                },
+                {
+                    "name": "identityAndAccess",
+                    "label": "Identity and Access",
+                    "elements": [
                         {
                             "name": "keyVaultName",
                             "type": "Microsoft.Common.TextBox",
@@ -60,7 +66,7 @@
         "outputs": {
             "parameters": {
                 "location": "[steps('basics').resourceScope.location.name]",
-                "keyVaultName": "[steps('basics').keyVaultName]"
+                "keyVaultName": "[steps('identityAndAccess').keyVaultName]"
             },
             "kind": "ResourceGroup",
             "location": "[steps('basics').resourceScope.location.name]",
