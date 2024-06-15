@@ -57,7 +57,6 @@
                             "type": "Microsoft.Common.TextBox",
                             "label": "Key Vault Name",
                             "toolTip": "The name of the Key Vault.",
-                            "defaultValue": "my-keyvault",
                             "constraints": {
                                 "required": true,
                                 "validations": [
@@ -240,15 +239,6 @@
                                 "required": true
                             },
                             "toolTip": "The SKU for the DNS Resolver."
-                        },
-                        {
-                            "name": "dnsResolverSubnetId",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "DNS Resolver Subnet ID",
-                            "toolTip": "Subnet ID for the DNS Resolver.",
-                            "constraints": {
-                                "required": true
-                            }
                         }
                     ]
                 },
@@ -395,8 +385,7 @@
                 "vpnGatewaySku": "[steps('connectivity').vpnGatewaySku]",
                 "vpnGatewaySubnetAddress": "[steps('connectivity').vpnGatewaySubnetAddress]",
                 "dnsResolverName": "[steps('connectivity').dnsResolverName]",
-                "dnsResolverSku": "[steps('connectivity').dnsResolverSku]",
-                "dnsResolverSubnetId": "[steps('connectivity').dnsResolverSubnetId]"
+                "dnsResolverSku": "[steps('connectivity').dnsResolverSku]"
             },
             "kind": "ResourceGroup",
             "location": "[steps('basics').resourceScope.location.name]",
