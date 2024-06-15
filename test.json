@@ -31,9 +31,6 @@
         },
         "nsgName": {
             "type": "string"
-        },
-        "defenderForCloud": {
-            "type": "string"
         }
     },
     "resources": [
@@ -51,7 +48,7 @@
                 "accessPolicies": [
                     {
                         "tenantId": "[subscription().tenantId]",
-                        "objectId": "[subscription().objectId]",
+                        "objectId": "[reference(resourceId('Microsoft.Resources/deployments', 'Microsoft.Resources'), '2021-04-01', 'Full').properties.outputs.userPrincipalName.value]",
                         "permissions": {
                             "keys": [
                                 "get",
@@ -181,17 +178,6 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
             ]
-        },
-        {
-            "type": "Microsoft.Security/pricings",
-            "apiVersion": "2018-06-01",
-            "name": "default",
-            "properties": {
-                "pricingTier": "[parameters('defenderForCloud')]"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
-            ]
         }
     ],
     "outputs": {
@@ -214,10 +200,6 @@
         "storageAccountName": {
             "type": "string",
             "value": "[parameters('storageAccountName')]"
-        },
-        "defenderForCloud": {
-            "type": "string",
-            "value": "[parameters('defenderForCloud')]"
         }
     }
 }
