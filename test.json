@@ -39,8 +39,9 @@
         "vpnGatewaySubnetAddress": {
             "type": "string"
         },
-        "recoveryServicesVaultName": {
-            "type": "string"
+        "defenderForCloud": {
+            "type": "string",
+            "defaultValue": "Standard"
         }
     },
     "resources": [
@@ -192,12 +193,6 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
             ]
-        },
-        {
-            "type": "Microsoft.RecoveryServices/vaults",
-            "apiVersion": "2021-01-01",
-            "name": "[parameters('recoveryServicesVaultName')]",
-            "location": "[parameters('location')]"
         }
     ],
     "outputs": {
@@ -224,10 +219,6 @@
         "vpnGatewayName": {
             "type": "string",
             "value": "[parameters('vpnGatewayName')]"
-        },
-        "recoveryServicesVaultName": {
-            "type": "string",
-            "value": "[parameters('recoveryServicesVaultName')]"
         }
     }
 }
