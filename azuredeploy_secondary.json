@@ -1,0 +1,68 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "secondarySubscriptionId": {
+        "type": "string",
+        "metadata": {
+          "description": "Subscription ID for the secondary resource group."
+        }
+      },
+      "secondaryResourceGroupName": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of the secondary resource group to be created."
+        }
+      },
+      "secondaryLocation": {
+        "type": "string",
+        "metadata": {
+          "description": "Location for the secondary resource group."
+        }
+      },
+      "vnetName": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of the Virtual Network to be created."
+        }
+      },
+      "vnetAddressPrefix": {
+        "type": "string",
+        "metadata": {
+          "description": "Address prefix for the Virtual Network."
+        }
+      }
+    },
+    "resources": [
+      {
+        "type": "Microsoft.Resources/resourceGroups",
+        "apiVersion": "2021-04-01",
+        "name": "[parameters('secondaryResourceGroupName')]",
+        "location": "[parameters('secondaryLocation')]",
+        "properties": {}
+      },
+      {
+        "type": "Microsoft.Network/virtualNetworks",
+        "apiVersion": "2020-06-01",
+        "name": "[parameters('vnetName')]",
+        "location": "[parameters('secondaryLocation')]",
+        "dependsOn": [
+          "[resourceId('Microsoft.Resources/resourceGroups', parameters('secondaryResourceGroupName'))]"
+        ],
+        "properties": {
+          "addressSpace": {
+            "addressPrefixes": [
+              "[parameters('vnetAddressPrefix')]"
+            ]
+          }
+        }
+      }
+    ],
+    "outputs": {
+      "vnetName": {
+        "type": "string",
+        "value": "[parameters('vnetName')]"
+      }
+    }
+  }
+  
