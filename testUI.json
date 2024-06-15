@@ -27,11 +27,18 @@
                         },
                         {
                             "name": "location1",
-                            "type": "Microsoft.Common.Location",
+                            "type": "Microsoft.Common.TextBox",
                             "label": "Location for Key Vault",
                             "toolTip": "The Azure location where the Key Vault will be deployed.",
+                            "defaultValue": "eastus",
                             "constraints": {
-                                "required": true
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The location must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -58,11 +65,18 @@
                         },
                         {
                             "name": "location2",
-                            "type": "Microsoft.Common.Location",
+                            "type": "Microsoft.Common.TextBox",
                             "label": "Location for Virtual Network",
                             "toolTip": "The Azure location where the Virtual Network will be deployed.",
+                            "defaultValue": "westus2",
                             "constraints": {
-                                "required": true
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The location must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
                             }
                         },
                         {
