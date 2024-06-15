@@ -71,8 +71,8 @@
                     ]
                 },
                 {
-                    "name": "networking",
-                    "label": "Networking",
+                    "name": "connectivity",
+                    "label": "Connectivity",
                     "elements": [
                         {
                             "name": "vnetDescription",
@@ -152,6 +152,60 @@
                             "label": "Additional Subnet Address",
                             "toolTip": "Address space for the Additional Subnet.",
                             "defaultValue": "10.0.3.0/24",
+                            "constraints": {
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "vpnGatewayName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "VPN Gateway Name",
+                            "toolTip": "The name of the VPN Gateway.",
+                            "defaultValue": "my-vpn-gateway",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The VPN Gateway name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "vpnGatewaySku",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "VPN Gateway SKU",
+                            "defaultValue": "VpnGw1",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Basic",
+                                        "value": "Basic"
+                                    },
+                                    {
+                                        "label": "VpnGw1",
+                                        "value": "VpnGw1"
+                                    },
+                                    {
+                                        "label": "VpnGw2",
+                                        "value": "VpnGw2"
+                                    },
+                                    {
+                                        "label": "VpnGw3",
+                                        "value": "VpnGw3"
+                                    }
+                                ],
+                                "required": true
+                            },
+                            "toolTip": "The SKU for the VPN Gateway."
+                        },
+                        {
+                            "name": "vpnGatewaySubnetAddress",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "VPN Gateway Subnet Address",
+                            "toolTip": "Address space for the VPN Gateway Subnet.",
+                            "defaultValue": "10.0.255.0/27",
                             "constraints": {
                                 "required": true
                             }
@@ -287,16 +341,19 @@
             "parameters": {
                 "location": "[steps('basics').resourceScope.location.name]",
                 "keyVaultName": "[steps('identityAndAccess').keyVaultName]",
-                "vnetName": "[steps('networking').vnetName]",
-                "vnetAddressSpace": "[steps('networking').vnetAddressSpace]",
-                "nsgName": "[steps('networking').nsgName]",
-                "additionalSubnetName": "[steps('networking').additionalSubnetName]",
-                "additionalSubnetAddress": "[steps('networking').additionalSubnetAddress]",
+                "vnetName": "[steps('connectivity').vnetName]",
+                "vnetAddressSpace": "[steps('connectivity').vnetAddressSpace]",
+                "nsgName": "[steps('connectivity').nsgName]",
+                "additionalSubnetName": "[steps('connectivity').additionalSubnetName]",
+                "additionalSubnetAddress": "[steps('connectivity').additionalSubnetAddress]",
                 "logAnalyticsWorkspaceName": "[steps('monitoring').logAnalyticsWorkspaceName]",
                 "logRetentionDays": "[steps('monitoring').logRetentionDays]",
                 "storageAccountName": "[steps('storage').storageAccountName]",
                 "storageAccountSku": "[steps('storage').storageAccountSku]",
-                "defenderForCloud": "[steps('securityAndCompliance').defenderForCloud]"
+                "defenderForCloud": "[steps('securityAndCompliance').defenderForCloud]",
+                "vpnGatewayName": "[steps('connectivity').vpnGatewayName]",
+                "vpnGatewaySku": "[steps('connectivity').vpnGatewaySku]",
+                "vpnGatewaySubnetAddress": "[steps('connectivity').vpnGatewaySubnetAddress]"
             },
             "kind": "ResourceGroup",
             "location": "[steps('basics').resourceScope.location.name]",
