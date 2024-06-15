@@ -42,6 +42,9 @@
         "defenderForCloud": {
             "type": "string",
             "defaultValue": "Standard"
+        },
+        "recoveryServicesVaultName": {
+            "type": "string"
         }
     },
     "resources": [
@@ -193,6 +196,17 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
             ]
+        },
+        {
+            "type": "Microsoft.RecoveryServices/vaults",
+            "apiVersion": "2021-01-01",
+            "name": "[parameters('recoveryServicesVaultName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "sku": {
+                    "name": "RS0"
+                }
+            }
         }
     ],
     "outputs": {
@@ -219,6 +233,10 @@
         "vpnGatewayName": {
             "type": "string",
             "value": "[parameters('vpnGatewayName')]"
+        },
+        "recoveryServicesVaultName": {
+            "type": "string",
+            "value": "[parameters('recoveryServicesVaultName')]"
         }
     }
 }
