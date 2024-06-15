@@ -186,14 +186,6 @@
                                     {
                                         "label": "VpnGw1",
                                         "value": "VpnGw1"
-                                    },
-                                    {
-                                        "label": "VpnGw2",
-                                        "value": "VpnGw2"
-                                    },
-                                    {
-                                        "label": "VpnGw3",
-                                        "value": "VpnGw3"
                                     }
                                 ],
                                 "required": true
