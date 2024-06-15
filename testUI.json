@@ -3,107 +3,124 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Custom Deployment xxdd",
+            "title": "Custom Deployment for Identity and Connectivity",
             "steps": [
                 {
-                    "name": "identityManagement",
-                    "label": "Identity Management",
+                    "name": "basics",
+                    "label": "Basics",
                     "elements": [
                         {
-                            "name": "keyVaultName",
+                            "name": "managementGroupPrefix",
                             "type": "Microsoft.Common.TextBox",
-                            "label": "Key Vault Name",
-                            "toolTip": "The name of the Key Vault.",
-                            "defaultValue": "my-keyvault",
+                            "label": "Management Group Prefix",
+                            "toolTip": "Prefix for the management group",
                             "constraints": {
                                 "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The Key Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "location1",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Location for Key Vault",
-                            "toolTip": "The Azure location where the Key Vault will be deployed.",
-                            "defaultValue": "eastus",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The location must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
+                                "regex": "^[a-zA-Z0-9-]{1,10}$",
+                                "validationMessage": "Prefix must be between 1 and 10 characters long and contain letters, numbers, and hyphens only."
                             }
                         }
                     ]
                 },
                 {
-                    "name": "connectivity",
-                    "label": "Connectivity",
+                    "name": "identityManagement",
+                    "label": "Identity Management and Connectivity",
                     "elements": [
+                        {
+                            "name": "resourceScopeIdentity",
+                            "type": "Microsoft.Common.ResourceScope",
+                            "subscription": {
+                                "constraints": {
+                                    "validations": [
+                                        {
+                                            "isValid": "[not(contains(toLower(steps('identityManagement').resourceScopeIdentity.subscription.displayName),'test'))]",
+                                            "message": "Can't use test subscription."
+                                        }
+                                    ]
+                                },
+                                "resourceProviders": [
+                                    "Microsoft.KeyVault"
+                                ]
+                            },
+                            "location": {
+                                "label": "Region",
+                                "toolTip": "Azure region",
+                                "resourceTypes": [
+                                    "Microsoft.KeyVault/vaults"
+                                ],
+                                "allowedValues": [
+                                    "eastus",
+                                    "westus2"
+                                ]
+                            }
+                        },
+                        {
+                            "name": "keyVaultName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Key Vault name",
+                            "toolTip": "The name of the Key Vault.",
+                            "constraints": {
+                                "required": true,
+                                "regex": "^[a-z0-9A-Z-]{3,24}$",
+                                "validationMessage": "The Key Vault name must be between 3 and 24 characters long and contain letters, numbers, and hyphens only."
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "landingZone",
+                    "label": "Small Landing Zone",
+                    "elements": [
+                        {
+                            "name": "resourceScopeLandingZone",
+                            "type": "Microsoft.Common.ResourceScope",
+                            "subscription": {
+                                "constraints": {
+                                    "validations": [
+                                        {
+                                            "isValid": "[not(contains(toLower(steps('landingZone').resourceScopeLandingZone.subscription.displayName),'test'))]",
+                                            "message": "Can't use test subscription."
+                                        }
+                                    ]
+                                },
+                                "resourceProviders": [
+                                    "Microsoft.Network"
+                                ]
+                            },
+                            "location": {
+                                "label": "Region",
+                                "toolTip": "Azure region",
+                                "resourceTypes": [
+                                    "Microsoft.Network/virtualNetworks"
+                                ],
+                                "allowedValues": [
+                                    "eastus",
+                                    "westus2"
+                                ]
+                            }
+                        },
                         {
                             "name": "vnetName",
                             "type": "Microsoft.Common.TextBox",
-                            "label": "Virtual Network Name",
+                            "label": "VNet name",
                             "toolTip": "The name of the Virtual Network.",
-                            "defaultValue": "my-vnet",
                             "constraints": {
                                 "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The Virtual Network name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
+                                "regex": "^[a-z0-9A-Z-]{3,64}$",
+                                "validationMessage": "The VNet name must be between 3 and 64 characters long and contain letters, numbers, and hyphens only."
                             }
                         },
                         {
-                            "name": "location2",
+                            "name": "addressSpace",
                             "type": "Microsoft.Common.TextBox",
-                            "label": "Location for Virtual Network",
-                            "toolTip": "The Azure location where the Virtual Network will be deployed.",
-                            "defaultValue": "westus2",
+                            "label": "Address Space",
+                            "toolTip": "The address space for the Virtual Network.",
                             "constraints": {
                                 "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The location must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "additionalSubnetName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Additional Subnet Name",
-                            "toolTip": "The name of the Additional Subnet.",
-                            "defaultValue": "additional-subnet",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The Additional Subnet name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "additionalSubnetAddress",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Additional Subnet Address",
-                            "toolTip": "Address space for the Additional Subnet.",
-                            "defaultValue": "10.0.3.0/24",
-                            "constraints": {
-                                "required": true
-                            }
+                                "regex": "^([0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,2}$",
+                                "validationMessage": "The address space must be in CIDR format."
+                            },
+                            "defaultValue": "10.0.0.0/16"
                         }
                     ]
                 }
@@ -111,13 +128,16 @@
         },
         "outputs": {
             "parameters": {
+                "managementGroupPrefix": "[steps('basics').managementGroupPrefix]",
                 "keyVaultName": "[steps('identityManagement').keyVaultName]",
-                "location1": "[steps('identityManagement').location1]",
-                "vnetName": "[steps('connectivity').vnetName]",
-                "location2": "[steps('connectivity').location2]",
-                "additionalSubnetName": "[steps('connectivity').additionalSubnetName]",
-                "additionalSubnetAddress": "[steps('connectivity').additionalSubnetAddress]"
-            }
+                "keyVaultRegion": "[steps('identityManagement').resourceScopeIdentity.location.name]",
+                "vnetName": "[steps('landingZone').vnetName]",
+                "vnetRegion": "[steps('landingZone').resourceScopeLandingZone.location.name]",
+                "addressSpace": "[steps('landingZone').addressSpace]"
+            },
+            "kind": "ResourceGroup",
+            "location": "[steps('identityManagement').resourceScopeIdentity.location.name]",
+            "resourceGroupId": "[steps('identityManagement').resourceScopeIdentity.resourceGroup.id]"
         }
     }
 }
