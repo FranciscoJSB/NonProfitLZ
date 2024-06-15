@@ -1,187 +1,98 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2021-09-09/uiFormDefinition.schema.json#",
-    "view": {
-        "kind": "Form",
-        "properties": {
-            "title": "TestRGTab v5",
-            "steps": [
-                {
-                    "name": "primaryDeployment",
-                    "label": "Primary Deployment",
-                    "elements": [
-                        {
-                            "name": "subscriptionSelectorText",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "Select the subscription and enter the resource group name for your primary deployment."
-                            }
-                        },
-                        {
-                            "name": "primarySubscription",
-                            "type": "Microsoft.Common.SubscriptionSelector",
-                            "label": "Primary Subscription",
-                            "constraints": {
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "primaryResourceGroupName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Primary Resource Group Name",
-                            "toolTip": "Enter the name of the resource group to be created.",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-_]+$",
-                                        "message": "The resource group name must only contain letters, numbers, hyphens, and underscores."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "primaryLocation",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Primary Region",
-                            "toolTip": "Select the region for the primary resource group.",
-                            "constraints": {
-                                "required": true,
-                                "allowedValues": [
-                                    {
-                                        "label": "East US",
-                                        "value": "eastus"
-                                    },
-                                    {
-                                        "label": "East US 2",
-                                        "value": "eastus2"
-                                    },
-                                    {
-                                        "label": "West US",
-                                        "value": "westus"
-                                    },
-                                    {
-                                        "label": "West US 2",
-                                        "value": "westus2"
-                                    },
-                                    {
-                                        "label": "Central US",
-                                        "value": "centralus"
-                                    },
-                                    {
-                                        "label": "North Central US",
-                                        "value": "northcentralus"
-                                    },
-                                    {
-                                        "label": "South Central US",
-                                        "value": "southcentralus"
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "secondaryDeployment",
-                    "label": "Secondary Deployment",
-                    "elements": [
-                        {
-                            "name": "secondarySubscriptionSelectorText",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "Select the subscription and enter the resource group name for your secondary deployment."
-                            }
-                        },
-                        {
-                            "name": "secondarySubscription",
-                            "type": "Microsoft.Common.SubscriptionSelector",
-                            "label": "Secondary Subscription",
-                            "constraints": {
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "secondaryResourceGroupName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Secondary Resource Group Name",
-                            "toolTip": "Enter the name of the resource group to be created.",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-_]+$",
-                                        "message": "The resource group name must only contain letters, numbers, hyphens, and underscores."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "secondaryLocation",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Secondary Region",
-                            "toolTip": "Select the region for the secondary resource group.",
-                            "constraints": {
-                                "required": true,
-                                "allowedValues": [
-                                    {
-                                        "label": "East US",
-                                        "value": "eastus"
-                                    },
-                                    {
-                                        "label": "East US 2",
-                                        "value": "eastus2"
-                                    },
-                                    {
-                                        "label": "West US",
-                                        "value": "westus"
-                                    },
-                                    {
-                                        "label": "West US 2",
-                                        "value": "westus2"
-                                    },
-                                    {
-                                        "label": "Central US",
-                                        "value": "centralus"
-                                    },
-                                    {
-                                        "label": "North Central US",
-                                        "value": "northcentralus"
-                                    },
-                                    {
-                                        "label": "South Central US",
-                                        "value": "southcentralus"
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                }
-            ]
-        },
-        "outputs": {
-            "primarySubscriptionId": {
-                "type": "string",
-                "value": "[steps('primaryDeployment').primarySubscription.subscriptionId]"
-            },
-            "primaryResourceGroupName": {
-                "type": "string",
-                "value": "[steps('primaryDeployment').primaryResourceGroupName]"
-            },
-            "primaryLocation": {
-                "type": "string",
-                "value": "[steps('primaryDeployment').primaryLocation]"
-            },
-            "secondarySubscriptionId": {
-                "type": "string",
-                "value": "[steps('secondaryDeployment').secondarySubscription.subscriptionId]"
-            },
-            "secondaryResourceGroupName": {
-                "type": "string",
-                "value": "[steps('secondaryDeployment').secondaryResourceGroupName]"
-            },
-            "secondaryLocation": {
-                "type": "string",
-                "value": "[steps('secondaryDeployment').secondaryLocation]"
-            }
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "primarySubscriptionId": {
+      "type": "string",
+      "metadata": {
+        "description": "Subscription ID for the primary resource group."
+      }
+    },
+    "primaryResourceGroupName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the primary resource group to be created."
+      }
+    },
+    "primaryLocation": {
+      "type": "string",
+      "metadata": {
+        "description": "Location for the primary resource group."
+      }
+    },
+    "secondarySubscriptionId": {
+      "type": "string",
+      "metadata": {
+        "description": "Subscription ID for the secondary resource group."
+      }
+    },
+    "secondaryResourceGroupName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the secondary resource group to be created."
+      }
+    },
+    "secondaryLocation": {
+      "type": "string",
+      "metadata": {
+        "description": "Location for the secondary resource group."
+      }
     }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "name": "primaryResourceGroupDeployment",
+      "subscriptionId": "[parameters('primarySubscriptionId')]",
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "resources": [
+            {
+              "type": "Microsoft.Resources/resourceGroups",
+              "apiVersion": "2021-04-01",
+              "location": "[parameters('primaryLocation')]",
+              "name": "[parameters('primaryResourceGroupName')]",
+              "properties": {}
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "name": "secondaryResourceGroupDeployment",
+      "subscriptionId": "[parameters('secondarySubscriptionId')]",
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "resources": [
+            {
+              "type": "Microsoft.Resources/resourceGroups",
+              "apiVersion": "2021-04-01",
+              "location": "[parameters('secondaryLocation')]",
+              "name": "[parameters('secondaryResourceGroupName')]",
+              "properties": {}
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "primaryResourceGroupName": {
+      "type": "string",
+      "value": "[parameters('primaryResourceGroupName')]"
+    },
+    "secondaryResourceGroupName": {
+      "type": "string",
+      "value": "[parameters('secondaryResourceGroupName')]"
+    }
+  }
 }
