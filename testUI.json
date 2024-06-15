@@ -326,6 +326,35 @@
                             "toolTip": "The SKU for the Storage Account."
                         }
                     ]
+                },
+                {
+                    "name": "backup",
+                    "label": "Backup",
+                    "elements": [
+                        {
+                            "name": "recoveryServicesVaultDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A Recovery Services vault is an Azure Resource Manager resource used to manage backup and disaster recovery of applications and data."
+                            }
+                        },
+                        {
+                            "name": "recoveryServicesVaultName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Recovery Services Vault Name",
+                            "toolTip": "The name of the Recovery Services Vault.",
+                            "defaultValue": "my-recovery-vault",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Recovery Services Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        }
+                    ]
                 }
             ]
         },
@@ -345,7 +374,8 @@
                 "defenderForCloud": "[steps('securityAndCompliance').defenderForCloud]",
                 "vpnGatewayName": "[steps('connectivity').vpnGatewayName]",
                 "vpnGatewaySku": "[steps('connectivity').vpnGatewaySku]",
-                "vpnGatewaySubnetAddress": "[steps('connectivity').vpnGatewaySubnetAddress]"
+                "vpnGatewaySubnetAddress": "[steps('connectivity').vpnGatewaySubnetAddress]",
+                "recoveryServicesVaultName": "[steps('backup').recoveryServicesVaultName]"
             },
             "kind": "ResourceGroup",
             "location": "[steps('basics').resourceScope.location.name]",
