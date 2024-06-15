@@ -1,76 +1,58 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "keyVaultName": {
-            "type": "string"
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2019-09-01",
+      "name": "[parameters('keyVaultName')]",
+      "location": "[parameters('keyVaultRegion')]",
+      "properties": {
+        "sku": {
+          "family": "A",
+          "name": "standard"
         },
-        "location1": {
-            "type": "string"
-        },
-        "vnetName": {
-            "type": "string"
-        },
-        "location2": {
-            "type": "string"
-        },
-        "additionalSubnetName": {
-            "type": "string"
-        },
-        "additionalSubnetAddress": {
-            "type": "string"
-        }
+        "tenantId": "[subscription().tenantId]",
+        "accessPolicies": []
+      }
     },
-    "resources": [
-        {
-            "type": "Microsoft.KeyVault/vaults",
-            "apiVersion": "2021-06-01-preview",
-            "name": "[parameters('keyVaultName')]",
-            "location": "[parameters('location1')]",
-            "properties": {
-                "sku": {
-                    "family": "A",
-                    "name": "standard"
-                },
-                "tenantId": "[subscription().tenantId]"
-            }
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2020-06-01",
+      "name": "[parameters('vnetName')]",
+      "location": "[parameters('vnetRegion')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('addressSpace')]"
+          ]
         },
-        {
-            "type": "Microsoft.Network/virtualNetworks",
-            "apiVersion": "2020-06-01",
-            "name": "[parameters('vnetName')]",
-            "location": "[parameters('location2')]",
+        "subnets": [
+          {
+            "name": "default",
             "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "10.0.0.0/16"
-                    ]
-                },
-                "subnets": [
-                    {
-                        "name": "default",
-                        "properties": {
-                            "addressPrefix": "10.0.0.0/24"
-                        }
-                    },
-                    {
-                        "name": "[parameters('additionalSubnetName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('additionalSubnetAddress')]"
-                        }
-                    }
-                ]
+              "addressPrefix": "[parameters('addressSpace')]"
             }
-        }
-    ],
-    "outputs": {
-        "keyVaultName": {
-            "type": "string",
-            "value": "[parameters('keyVaultName')]"
-        },
-        "vnetName": {
-            "type": "string",
-            "value": "[parameters('vnetName')]"
-        }
+          }
+        ]
+      }
     }
+  ],
+  "parameters": {
+    "keyVaultName": {
+      "type": "string"
+    },
+    "keyVaultRegion": {
+      "type": "string"
+    },
+    "vnetName": {
+      "type": "string"
+    },
+    "vnetRegion": {
+      "type": "string"
+    },
+    "addressSpace": {
+      "type": "string"
+    }
+  }
 }
