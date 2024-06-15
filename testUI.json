@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Custom Deployment - Test Subs 1 - v1",
+            "title": "Custom Deployment - v1",
             "steps": [
                 {
                     "name": "basics",
@@ -66,15 +66,6 @@
                                         "message": "The Key Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
                                     }
                                 ]
-                            }
-                        },
-                        {
-                            "name": "keyVaultObjectId",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Key Vault Object ID",
-                            "toolTip": "The Object ID for the Key Vault access policy.",
-                            "constraints": {
-                                "required": true
                             }
                         }
                     ]
@@ -296,7 +287,6 @@
             "parameters": {
                 "location": "[steps('basics').resourceScope.location.name]",
                 "keyVaultName": "[steps('identityAndAccess').keyVaultName]",
-                "keyVaultObjectId": "[steps('identityAndAccess').keyVaultObjectId]",
                 "vnetName": "[steps('networking').vnetName]",
                 "vnetAddressSpace": "[steps('networking').vnetAddressSpace]",
                 "nsgName": "[steps('networking').nsgName]",
