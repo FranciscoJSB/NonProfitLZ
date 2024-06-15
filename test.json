@@ -51,7 +51,7 @@
                 "accessPolicies": [
                     {
                         "tenantId": "[subscription().tenantId]",
-                        "objectId": "[parameters('keyVaultObjectId')]",
+                        "objectId": "[subscription().objectId]",
                         "permissions": {
                             "keys": [
                                 "get",
