@@ -86,7 +86,7 @@
             "parameters": {
                 "subscriptionId": {
                     "type": "string",
-                    "value": "[steps('landingZone').subscription.subscriptionId]"
+                    "value": "[steps('landingZone').subscription.id]"
                 },
                 "resourceGroupName": {
                     "type": "string",
