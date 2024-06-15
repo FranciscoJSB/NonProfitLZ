@@ -26,9 +26,6 @@
         "storageAccountName": {
             "type": "string"
         },
-        "storageAccountSku": {
-            "type": "string"
-        },
         "nsgName": {
             "type": "string"
         },
@@ -42,9 +39,8 @@
         "vpnGatewaySubnetAddress": {
             "type": "string"
         },
-        "defenderForCloud": {
-            "type": "string",
-            "defaultValue": "Standard"
+        "recoveryServicesVaultName": {
+            "type": "string"
         }
     },
     "resources": [
@@ -59,52 +55,7 @@
                     "name": "standard"
                 },
                 "tenantId": "[subscription().tenantId]",
-                "accessPolicies": [
-                    {
-                        "tenantId": "[subscription().tenantId]",
-                        "objectId": "[reference(resourceId('Microsoft.Resources/deployments', 'Microsoft.Resources'), '2021-04-01', 'Full').properties.outputs.userPrincipalName.value]",
-                        "permissions": {
-                            "keys": [
-                                "get",
-                                "list",
-                                "create",
-                                "update",
-                                "import",
-                                "delete",
-                                "backup",
-                                "restore",
-                                "recover",
-                                "purge"
-                            ],
-                            "secrets": [
-                                "get",
-                                "list",
-                                "set",
-                                "delete",
-                                "backup",
-                                "restore",
-                                "recover",
-                                "purge"
-                            ],
-                            "certificates": [
-                                "get",
-                                "list",
-                                "delete",
-                                "create",
-                                "import",
-                                "update",
-                                "managecontacts",
-                                "getissuers",
-                                "listissuers",
-                                "setissuers",
-                                "deleteissuers",
-                                "manageissuers",
-                                "recover",
-                                "purge"
-                            ]
-                        }
-                    }
-                ]
+                "accessPolicies": []
             }
         },
         {
@@ -232,7 +183,7 @@
             "name": "[parameters('storageAccountName')]",
             "location": "[parameters('location')]",
             "sku": {
-                "name": "[parameters('storageAccountSku')]"
+                "name": "Standard_LRS"
             },
             "kind": "StorageV2",
             "properties": {
@@ -243,12 +194,10 @@
             ]
         },
         {
-            "type": "Microsoft.Security/pricings",
-            "apiVersion": "2018-06-01",
-            "name": "default",
-            "properties": {
-                "pricingTier": "[parameters('defenderForCloud')]"
-            }
+            "type": "Microsoft.RecoveryServices/vaults",
+            "apiVersion": "2021-01-01",
+            "name": "[parameters('recoveryServicesVaultName')]",
+            "location": "[parameters('location')]"
         }
     ],
     "outputs": {
@@ -275,6 +224,10 @@
         "vpnGatewayName": {
             "type": "string",
             "value": "[parameters('vpnGatewayName')]"
+        },
+        "recoveryServicesVaultName": {
+            "type": "string",
+            "value": "[parameters('recoveryServicesVaultName')]"
         }
     }
 }
