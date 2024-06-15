@@ -1,0 +1,195 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2021-09-09/uiFormDefinition.schema.json#",
+    "view": {
+        "kind": "Form",
+        "properties": {
+            "title": "Landing Zone Deployment v5",
+            "steps": [
+                {
+                    "name": "landingZoneResources",
+                    "label": "Landing Zone Resources",
+                    "elements": [
+                        {
+                            "name": "landingZoneDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A landing zone in Azure provides a secure, scalable, and compliant foundation for your cloud environment."
+                            }
+                        },
+                        {
+                            "name": "subscriptionLabel",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "Please select the subscription for the Landing Zone deployment (make sure it's a different subscription than the one used in the previous step)."
+                            }
+                        },
+                        {
+                            "name": "resourceScope",
+                            "type": "Microsoft.Common.ResourceScope",
+                            "subscription": {
+                                "constraints": {
+                                    "resourceProviders": [
+                                        "Microsoft.KeyVault",
+                                        "Microsoft.RecoveryServices",
+                                        "Microsoft.Network"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "keyVaultDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A Key Vault is a cloud service for securely storing and accessing secrets. Secrets are application passwords, database connection strings, API keys, and other sensitive data."
+                            }
+                        },
+                        {
+                            "name": "keyVaultName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Key Vault Name",
+                            "toolTip": "The name of the Key Vault.",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Key Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "recoveryServicesVaultDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A Recovery Services vault is an Azure Resource Manager resource used to manage backup and disaster recovery of applications and data."
+                            }
+                        },
+                        {
+                            "name": "recoveryServicesVaultName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Recovery Services Vault Name",
+                            "toolTip": "The name of the Recovery Services Vault.",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Recovery Services Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "vnetDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A Virtual Network (VNet) is the fundamental building block for your private network in Azure."
+                            }
+                        },
+                        {
+                            "name": "vnetName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Virtual Network Name",
+                            "toolTip": "The name of the Virtual Network.",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Virtual Network name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "vnetAddressSpace",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Virtual Network Address Space",
+                            "toolTip": "Address space for the Virtual Network (e.g., 10.0.0.0/16).",
+                            "constraints": {
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "vnetNote",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "**Must establish a peering connection between this Virtual Network and the one defined at the previous step.**"
+                            }
+                        },
+                        {
+                            "name": "subnetDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A subnet is a range of IP addresses in your VNet."
+                            }
+                        },
+                        {
+                            "name": "subnetName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Subnet Name",
+                            "toolTip": "The name of the Subnet.",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Subnet name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "subnetAddressSpace",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Subnet Address Space",
+                            "toolTip": "Address space for the Subnet (e.g., 10.0.0.0/24).",
+                            "constraints": {
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "nsgDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A Network Security Group (NSG) contains security rules that allow or deny inbound network traffic to, or outbound network traffic from, several types of Azure resources."
+                            }
+                        },
+                        {
+                            "name": "nsgName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Network Security Group Name",
+                            "toolTip": "The name of the Network Security Group.",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Network Security Group name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "outputs": {
+            "parameters": {
+                "subscriptionId": "[steps('landingZoneResources').resourceScope.subscription.subscriptionId]",
+                "location": "[steps('landingZoneResources').resourceScope.location.name]",
+                "keyVaultName": "[steps('landingZoneResources').keyVaultName]",
+                "recoveryServicesVaultName": "[steps('landingZoneResources').recoveryServicesVaultName]",
+                "vnetName": "[steps('landingZoneResources').vnetName]",
+                "vnetAddressSpace": "[steps('landingZoneResources').vnetAddressSpace]",
+                "subnetName": "[steps('landingZoneResources').subnetName]",
+                "subnetAddressSpace": "[steps('landingZoneResources').subnetAddressSpace]",
+                "nsgName": "[steps('landingZoneResources').nsgName]"
+            },
+            "kind": "ResourceGroup",
+            "location": "[steps('landingZoneResources').resourceScope.location.name]",
+            "resourceGroupId": "[steps('landingZoneResources').resourceScope.resourceGroup.id]"
+        }
+    }
+}
