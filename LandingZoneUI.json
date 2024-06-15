@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Landing Zone Deployment v5",
+            "title": "NFP - Landing Zone deployment",
             "steps": [
                 {
                     "name": "landingZoneResources",
