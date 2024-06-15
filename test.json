@@ -44,7 +44,6 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
       "name": "primaryResourceGroupDeployment",
-      "subscriptionId": "[parameters('primarySubscriptionId')]",
       "properties": {
         "mode": "Incremental",
         "template": {
@@ -59,14 +58,14 @@
               "properties": {}
             }
           ]
-        }
+        },
+        "subscriptionId": "[parameters('primarySubscriptionId')]"
       }
     },
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
       "name": "secondaryResourceGroupDeployment",
-      "subscriptionId": "[parameters('secondarySubscriptionId')]",
       "properties": {
         "mode": "Incremental",
         "template": {
@@ -81,7 +80,8 @@
               "properties": {}
             }
           ]
-        }
+        },
+        "subscriptionId": "[parameters('secondarySubscriptionId')]"
       }
     }
   ],
