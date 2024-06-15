@@ -31,6 +31,16 @@
         },
         "nsgName": {
             "type": "string"
+        },
+        "vpnGatewayName": {
+            "type": "string"
+        },
+        "vpnGatewaySku": {
+            "type": "string",
+            "defaultValue": "VpnGw1"
+        },
+        "vpnGatewaySubnetAddress": {
+            "type": "string"
         }
     },
     "resources": [
@@ -116,6 +126,12 @@
                         "properties": {
                             "addressPrefix": "[parameters('additionalSubnetAddress')]"
                         }
+                    },
+                    {
+                        "name": "GatewaySubnet",
+                        "properties": {
+                            "addressPrefix": "[parameters('vpnGatewaySubnetAddress')]"
+                        }
                     }
                 ]
             },
@@ -146,6 +162,49 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworkGateways",
+            "apiVersion": "2020-05-01",
+            "name": "[parameters('vpnGatewayName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "vpngatewayconfig",
+                        "properties": {
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vpnGatewayName'), '-pip'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), 'GatewaySubnet')]"
+                            }
+                        }
+                    }
+                ],
+                "gatewayType": "Vpn",
+                "vpnType": "RouteBased",
+                "enableBgp": false,
+                "sku": {
+                    "name": "[parameters('vpnGatewaySku')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vpnGatewayName'), '-pip'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('vpnGatewayName'), '-pip')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
             ]
         },
         {
@@ -200,6 +259,10 @@
         "storageAccountName": {
             "type": "string",
             "value": "[parameters('storageAccountName')]"
+        },
+        "vpnGatewayName": {
+            "type": "string",
+            "value": "[parameters('vpnGatewayName')]"
         }
     }
 }
