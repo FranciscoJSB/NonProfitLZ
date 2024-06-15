@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "TestRGTab 567890",
+            "title": "TestRGTab v6",
             "steps": [
                 {
                     "name": "primaryDeployment",
@@ -158,29 +158,31 @@
             ]
         },
         "outputs": {
-            "primarySubscriptionId": {
-                "type": "string",
-                "value": "[steps('primaryDeployment').primarySubscription.subscriptionId]"
-            },
-            "primaryResourceGroupName": {
-                "type": "string",
-                "value": "[steps('primaryDeployment').primaryResourceGroupName]"
-            },
-            "primaryLocation": {
-                "type": "string",
-                "value": "[steps('primaryDeployment').primaryLocation]"
-            },
-            "secondarySubscriptionId": {
-                "type": "string",
-                "value": "[steps('secondaryDeployment').secondarySubscription.subscriptionId]"
-            },
-            "secondaryResourceGroupName": {
-                "type": "string",
-                "value": "[steps('secondaryDeployment').secondaryResourceGroupName]"
-            },
-            "secondaryLocation": {
-                "type": "string",
-                "value": "[steps('secondaryDeployment').secondaryLocation]"
+            "parameters": {
+                "primarySubscriptionId": {
+                    "type": "string",
+                    "value": "[steps('primaryDeployment').primarySubscription.subscriptionId]"
+                },
+                "primaryResourceGroupName": {
+                    "type": "string",
+                    "value": "[steps('primaryDeployment').primaryResourceGroupName]"
+                },
+                "primaryLocation": {
+                    "type": "string",
+                    "value": "[steps('primaryDeployment').primaryLocation]"
+                },
+                "secondarySubscriptionId": {
+                    "type": "string",
+                    "value": "[steps('secondaryDeployment').secondarySubscription.subscriptionId]"
+                },
+                "secondaryResourceGroupName": {
+                    "type": "string",
+                    "value": "[steps('secondaryDeployment').secondaryResourceGroupName]"
+                },
+                "secondaryLocation": {
+                    "type": "string",
+                    "value": "[steps('secondaryDeployment').secondaryLocation]"
+                }
             }
         }
     }
