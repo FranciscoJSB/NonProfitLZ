@@ -1,58 +1,73 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "keyVaultName": {
-      "type": "string"
-    },
-    "keyVaultRegion": {
-      "type": "string"
-    },
-    "vnetName": {
-      "type": "string"
-    },
-    "vnetRegion": {
-      "type": "string"
-    },
-    "addressSpace": {
-      "type": "string"
-    }
-  },
-  "resources": [
-    {
-      "type": "Microsoft.KeyVault/vaults",
-      "apiVersion": "2019-09-01",
-      "name": "[parameters('keyVaultName')]",
-      "location": "[parameters('keyVaultRegion')]",
-      "properties": {
-        "sku": {
-          "family": "A",
-          "name": "standard"
-        },
-        "tenantId": "[subscription().tenantId]",
-        "accessPolicies": []
-      }
-    },
-    {
-      "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2020-06-01",
-      "name": "[parameters('vnetName')]",
-      "location": "[parameters('vnetRegion')]",
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "[parameters('addressSpace')]"
-          ]
-        },
-        "subnets": [
-          {
-            "name": "default",
-            "properties": {
-              "addressPrefix": "[parameters('addressSpace')]"
+    "$schema": "https://schema.management.azure.com/schemas/2019-08-01/tenantDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "managementGroupPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Prefix for the Management Group hierarchy"
             }
-          }
-        ]
-      }
-    }
-  ]
+        },
+        "subscription1": {
+            "type": "string",
+            "metadata": {
+                "description": "Subscription ID for Identity Management and Connectivity"
+            }
+        },
+        "subscription2": {
+            "type": "string",
+            "metadata": {
+                "description": "Subscription ID for the Landing Zone"
+            }
+        },
+        "keyVaultName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Key Vault to be created in Subscription 1"
+            }
+        },
+        "vnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the VNet to be created in Subscription 2"
+            }
+        },
+        "vnetAddressPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Address prefix for the VNet"
+            }
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2021-06-01-preview",
+            "name": "[parameters('keyVaultName')]",
+            "location": "[deployment().location]",
+            "properties": {
+                "sku": {
+                    "family": "A",
+                    "name": "standard"
+                },
+                "tenantId": "[subscription().tenantId]",
+                "accessPolicies": []
+            },
+            "subscriptionId": "[parameters('subscription1')]"
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-11-01",
+            "name": "[parameters('vnetName')]",
+            "location": "[deployment().location]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('vnetAddressPrefix')]"
+                    ]
+                }
+            },
+            "subscriptionId": "[parameters('subscription2')]"
+        }
+    ]
 }
