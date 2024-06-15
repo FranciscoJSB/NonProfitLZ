@@ -49,9 +49,6 @@
         "dnsResolverSku": {
             "type": "string",
             "defaultValue": "Standard"
-        },
-        "dnsResolverSubnetId": {
-            "type": "string"
         }
     },
     "resources": [
@@ -222,7 +219,7 @@
                         "properties": {
                             "dnsResolverOutboundEndpoints": [
                                 {
-                                    "id": "[parameters('dnsResolverSubnetId')]"
+                                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), 'default')]"
                                 }
                             ]
                         }
