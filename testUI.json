@@ -201,6 +201,54 @@
                             "constraints": {
                                 "required": true
                             }
+                        },
+                        {
+                            "name": "dnsResolverDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A DNS Resolver is a managed DNS service for your VNet, allowing you to use DNS forwarding and conditional forwarding rules."
+                            }
+                        },
+                        {
+                            "name": "dnsResolverName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "DNS Resolver Name",
+                            "toolTip": "The name of the DNS Resolver.",
+                            "defaultValue": "my-dns-resolver",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The DNS Resolver name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "dnsResolverSku",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "DNS Resolver SKU",
+                            "defaultValue": "Standard",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Standard",
+                                        "value": "Standard"
+                                    }
+                                ],
+                                "required": true
+                            },
+                            "toolTip": "The SKU for the DNS Resolver."
+                        },
+                        {
+                            "name": "dnsResolverSubnetId",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "DNS Resolver Subnet ID",
+                            "toolTip": "Subnet ID for the DNS Resolver.",
+                            "constraints": {
+                                "required": true
+                            }
                         }
                     ]
                 },
@@ -326,35 +374,6 @@
                             "toolTip": "The SKU for the Storage Account."
                         }
                     ]
-                },
-                {
-                    "name": "backup",
-                    "label": "Backup",
-                    "elements": [
-                        {
-                            "name": "recoveryServicesVaultDescription",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "A Recovery Services vault is an Azure Resource Manager resource used to manage backup and disaster recovery of applications and data."
-                            }
-                        },
-                        {
-                            "name": "recoveryServicesVaultName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Recovery Services Vault Name",
-                            "toolTip": "The name of the Recovery Services Vault.",
-                            "defaultValue": "my-recovery-vault",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The Recovery Services Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        }
-                    ]
                 }
             ]
         },
@@ -375,7 +394,9 @@
                 "vpnGatewayName": "[steps('connectivity').vpnGatewayName]",
                 "vpnGatewaySku": "[steps('connectivity').vpnGatewaySku]",
                 "vpnGatewaySubnetAddress": "[steps('connectivity').vpnGatewaySubnetAddress]",
-                "recoveryServicesVaultName": "[steps('backup').recoveryServicesVaultName]"
+                "dnsResolverName": "[steps('connectivity').dnsResolverName]",
+                "dnsResolverSku": "[steps('connectivity').dnsResolverSku]",
+                "dnsResolverSubnetId": "[steps('connectivity').dnsResolverSubnetId]"
             },
             "kind": "ResourceGroup",
             "location": "[steps('basics').resourceScope.location.name]",
