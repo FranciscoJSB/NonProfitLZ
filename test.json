@@ -204,7 +204,7 @@
             "location": "[parameters('location')]",
             "properties": {
                 "sku": {
-                    "name": "RS0"
+                    "name": "Standard"
                 }
             }
         }
