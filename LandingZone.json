@@ -2,32 +2,53 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "subscriptionId": {
+        "keyVaultName": {
             "type": "string"
         },
         "location": {
             "type": "string"
         },
-        "keyVaultName": {
-            "type": "string"
-        },
-        "recoveryServicesVaultName": {
-            "type": "string"
-        },
         "vnetName": {
             "type": "string"
         },
-        "vnetAddressSpace": {
+        "additionalSubnetName": {
             "type": "string"
         },
-        "subnetName": {
+        "additionalSubnetAddress": {
             "type": "string"
         },
-        "subnetAddressSpace": {
+        "logAnalyticsWorkspaceName": {
+            "type": "string"
+        },
+        "logRetentionDays": {
+            "type": "int"
+        },
+        "storageAccountName": {
             "type": "string"
         },
         "nsgName": {
             "type": "string"
+        },
+        "vpnGatewayName": {
+            "type": "string"
+        },
+        "vpnGatewaySku": {
+            "type": "string",
+            "defaultValue": "VpnGw1"
+        },
+        "vpnGatewaySubnetAddress": {
+            "type": "string"
+        },
+        "defenderForCloud": {
+            "type": "string",
+            "defaultValue": "Standard"
+        },
+        "dnsResolverName": {
+            "type": "string"
+        },
+        "dnsResolverSku": {
+            "type": "string",
+            "defaultValue": "Standard"
         }
     },
     "resources": [
@@ -46,17 +67,6 @@
             }
         },
         {
-            "type": "Microsoft.RecoveryServices/vaults",
-            "apiVersion": "2021-01-01",
-            "name": "[parameters('recoveryServicesVaultName')]",
-            "location": "[parameters('location')]",
-            "properties": {
-                "sku": {
-                    "name": "RS0"
-                }
-            }
-        },
-        {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-06-01",
             "name": "[parameters('vnetName')]",
@@ -64,22 +74,31 @@
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
-                        "[parameters('vnetAddressSpace')]"
+                        "10.0.0.0/16"
                     ]
                 },
                 "subnets": [
                     {
-                        "name": "[parameters('subnetName')]",
+                        "name": "default",
                         "properties": {
-                            "addressPrefix": "[parameters('subnetAddressSpace')]"
+                            "addressPrefix": "10.0.0.0/24"
+                        }
+                    },
+                    {
+                        "name": "[parameters('additionalSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('additionalSubnetAddress')]"
+                        }
+                    },
+                    {
+                        "name": "GatewaySubnet",
+                        "properties": {
+                            "addressPrefix": "[parameters('vpnGatewaySubnetAddress')]"
                         }
                     }
                 ]
             },
-            "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]",
-                "[resourceId('Microsoft.RecoveryServices/vaults', parameters('recoveryServicesVaultName'))]"
-            ]
+            "dependsOn": []
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
@@ -96,9 +115,9 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2020-06-01",
-            "name": "[concat(parameters('vnetName'), '/', parameters('subnetName'))]",
+            "name": "[concat(parameters('vnetName'), '/', parameters('additionalSubnetName'))]",
             "properties": {
-                "addressPrefix": "[parameters('subnetAddressSpace')]",
+                "addressPrefix": "[parameters('additionalSubnetAddress')]",
                 "networkSecurityGroup": {
                     "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
                 }
@@ -107,6 +126,109 @@
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
             ]
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworkGateways",
+            "apiVersion": "2020-05-01",
+            "name": "[parameters('vpnGatewayName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "vpngatewayconfig",
+                        "properties": {
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vpnGatewayName'), '-pip'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), 'GatewaySubnet')]"
+                            }
+                        }
+                    }
+                ],
+                "gatewayType": "Vpn",
+                "vpnType": "RouteBased",
+                "enableBgp": false,
+                "sku": {
+                    "name": "[parameters('vpnGatewaySku')]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vpnGatewayName'), '-pip'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('vpnGatewayName'), '-pip')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "apiVersion": "2020-08-01",
+            "name": "[parameters('logAnalyticsWorkspaceName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "sku": {
+                    "name": "PerGB2018"
+                },
+                "retentionInDays": "[parameters('logRetentionDays')]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "accessTier": "Hot"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/dnsResolvers",
+            "apiVersion": "2020-04-01-preview",
+            "name": "[parameters('dnsResolverName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "sku": {
+                    "name": "[parameters('dnsResolverSku')]"
+                },
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
+                },
+                "dnsForwardingRulesets": [
+                    {
+                        "name": "default",
+                        "properties": {
+                            "dnsResolverOutboundEndpoints": [
+                                {
+                                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), 'default')]"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
+            ]
         }
     ],
     "outputs": {
@@ -114,21 +236,29 @@
             "type": "string",
             "value": "[parameters('keyVaultName')]"
         },
-        "recoveryServicesVaultName": {
-            "type": "string",
-            "value": "[parameters('recoveryServicesVaultName')]"
-        },
         "vnetName": {
             "type": "string",
             "value": "[parameters('vnetName')]"
         },
-        "subnetName": {
-            "type": "string",
-            "value": "[parameters('subnetName')]"
-        },
         "nsgName": {
             "type": "string",
             "value": "[parameters('nsgName')]"
+        },
+        "logAnalyticsWorkspaceName": {
+            "type": "string",
+            "value": "[parameters('logAnalyticsWorkspaceName')]"
+        },
+        "storageAccountName": {
+            "type": "string",
+            "value": "[parameters('storageAccountName')]"
+        },
+        "vpnGatewayName": {
+            "type": "string",
+            "value": "[parameters('vpnGatewayName')]"
+        },
+        "dnsResolverName": {
+            "type": "string",
+            "value": "[parameters('dnsResolverName')]"
         }
     }
 }
