@@ -28,6 +28,7 @@
                             "name": "primaryResourceGroupName",
                             "type": "Microsoft.Common.TextBox",
                             "label": "Primary Resource Group Name",
+                            "defaultValue": "PrimaryResourceGroup",
                             "toolTip": "Enter the name of the resource group to be created.",
                             "constraints": {
                                 "required": true,
@@ -118,6 +119,7 @@
                             "name": "secondaryResourceGroupName",
                             "type": "Microsoft.Common.TextBox",
                             "label": "Secondary Resource Group Name",
+                            "defaultValue": "SecondaryResourceGroup",
                             "toolTip": "Enter the name of the resource group to be created.",
                             "constraints": {
                                 "required": true,
@@ -204,10 +206,6 @@
         },
         "outputs": {
             "parameters": {
-                "primarySubscriptionId": {
-                    "type": "string",
-                    "value": "[steps('primaryDeployment').primarySubscription.subscriptionId]"
-                },
                 "primaryResourceGroupName": {
                     "type": "string",
                     "value": "[steps('primaryDeployment').primaryResourceGroupName]"
