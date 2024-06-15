@@ -41,6 +41,10 @@
         },
         "vpnGatewaySubnetAddress": {
             "type": "string"
+        },
+        "defenderForCloud": {
+            "type": "string",
+            "defaultValue": "Standard"
         }
     },
     "resources": [
@@ -237,6 +241,14 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
             ]
+        },
+        {
+            "type": "Microsoft.Security/pricings",
+            "apiVersion": "2018-06-01",
+            "name": "default",
+            "properties": {
+                "pricingTier": "[parameters('defenderForCloud')]"
+            }
         }
     ],
     "outputs": {
