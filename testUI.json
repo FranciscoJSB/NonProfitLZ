@@ -3,201 +3,92 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "NPF - Landing Zone v6",
+            "title": "Custom Deployment",
             "steps": [
                 {
-                    "name": "primaryDeployment",
-                    "label": "Primary Deployment",
+                    "name": "identityManagement",
+                    "label": "Identity Management",
                     "elements": [
-                        {
-                            "name": "subscriptionSelectorText",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "Select the subscription and enter the resource group name for your primary deployment."
-                            }
-                        },
-                        {
-                            "name": "primarySubscription",
-                            "type": "Microsoft.Common.SubscriptionSelector",
-                            "label": "Primary Subscription",
-                            "constraints": {
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "primaryResourceGroupName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Primary Resource Group Name",
-                            "defaultValue": "PrimaryResourceGroup",
-                            "toolTip": "Enter the name of the resource group to be created.",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-_]+$",
-                                        "message": "The resource group name must only contain letters, numbers, hyphens, and underscores."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "primaryLocation",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Primary Region",
-                            "toolTip": "Select the region for the primary resource group.",
-                            "constraints": {
-                                "required": true,
-                                "allowedValues": [
-                                    {
-                                        "label": "East US",
-                                        "value": "eastus"
-                                    },
-                                    {
-                                        "label": "East US 2",
-                                        "value": "eastus2"
-                                    },
-                                    {
-                                        "label": "West US",
-                                        "value": "westus"
-                                    },
-                                    {
-                                        "label": "West US 2",
-                                        "value": "westus2"
-                                    },
-                                    {
-                                        "label": "Central US",
-                                        "value": "centralus"
-                                    },
-                                    {
-                                        "label": "North Central US",
-                                        "value": "northcentralus"
-                                    },
-                                    {
-                                        "label": "South Central US",
-                                        "value": "southcentralus"
-                                    }
-                                ]
-                            }
-                        },
                         {
                             "name": "keyVaultName",
                             "type": "Microsoft.Common.TextBox",
                             "label": "Key Vault Name",
-                            "toolTip": "Enter the name of the Key Vault to be created.",
+                            "toolTip": "The name of the Key Vault.",
+                            "defaultValue": "my-keyvault",
                             "constraints": {
                                 "required": true,
                                 "validations": [
                                     {
-                                        "regex": "^[a-zA-Z0-9-]+$",
-                                        "message": "The Key Vault name must only contain letters, numbers, and hyphens."
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Key Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
                                     }
                                 ]
+                            }
+                        },
+                        {
+                            "name": "location1",
+                            "type": "Microsoft.Common.Location",
+                            "label": "Location for Key Vault",
+                            "toolTip": "The Azure location where the Key Vault will be deployed.",
+                            "constraints": {
+                                "required": true
                             }
                         }
                     ]
                 },
                 {
-                    "name": "secondaryDeployment",
-                    "label": "Secondary Deployment",
+                    "name": "connectivity",
+                    "label": "Connectivity",
                     "elements": [
                         {
-                            "name": "secondarySubscriptionSelectorText",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "Select the subscription and enter the resource group name for your secondary deployment."
+                            "name": "vnetName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Virtual Network Name",
+                            "toolTip": "The name of the Virtual Network.",
+                            "defaultValue": "my-vnet",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Virtual Network name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
                             }
                         },
                         {
-                            "name": "secondarySubscription",
-                            "type": "Microsoft.Common.SubscriptionSelector",
-                            "label": "Secondary Subscription",
+                            "name": "location2",
+                            "type": "Microsoft.Common.Location",
+                            "label": "Location for Virtual Network",
+                            "toolTip": "The Azure location where the Virtual Network will be deployed.",
                             "constraints": {
                                 "required": true
                             }
                         },
                         {
-                            "name": "secondaryResourceGroupName",
+                            "name": "additionalSubnetName",
                             "type": "Microsoft.Common.TextBox",
-                            "label": "Secondary Resource Group Name",
-                            "defaultValue": "SecondaryResourceGroup",
-                            "toolTip": "Enter the name of the resource group to be created.",
+                            "label": "Additional Subnet Name",
+                            "toolTip": "The name of the Additional Subnet.",
+                            "defaultValue": "additional-subnet",
                             "constraints": {
                                 "required": true,
                                 "validations": [
                                     {
-                                        "regex": "^[a-zA-Z0-9-_]+$",
-                                        "message": "The resource group name must only contain letters, numbers, hyphens, and underscores."
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Additional Subnet name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
                                     }
                                 ]
                             }
                         },
                         {
-                            "name": "secondaryLocation",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Secondary Region",
-                            "toolTip": "Select the region for the secondary resource group.",
-                            "constraints": {
-                                "required": true,
-                                "allowedValues": [
-                                    {
-                                        "label": "East US",
-                                        "value": "eastus"
-                                    },
-                                    {
-                                        "label": "East US 2",
-                                        "value": "eastus2"
-                                    },
-                                    {
-                                        "label": "West US",
-                                        "value": "westus"
-                                    },
-                                    {
-                                        "label": "West US 2",
-                                        "value": "westus2"
-                                    },
-                                    {
-                                        "label": "Central US",
-                                        "value": "centralus"
-                                    },
-                                    {
-                                        "label": "North Central US",
-                                        "value": "northcentralus"
-                                    },
-                                    {
-                                        "label": "South Central US",
-                                        "value": "southcentralus"
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "vnetName",
+                            "name": "additionalSubnetAddress",
                             "type": "Microsoft.Common.TextBox",
-                            "label": "Virtual Network Name",
-                            "toolTip": "Enter the name of the Virtual Network to be created.",
+                            "label": "Additional Subnet Address",
+                            "toolTip": "Address space for the Additional Subnet.",
+                            "defaultValue": "10.0.3.0/24",
                             "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]+$",
-                                        "message": "The Virtual Network name must only contain letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "vnetAddressPrefix",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Virtual Network Address Prefix",
-                            "toolTip": "Enter the address prefix for the Virtual Network (e.g., 10.0.0.0/16).",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]+$",
-                                        "message": "The address prefix must be a valid CIDR notation (e.g., 10.0.0.0/16)."
-                                    }
-                                ]
+                                "required": true
                             }
                         }
                     ]
@@ -206,38 +97,12 @@
         },
         "outputs": {
             "parameters": {
-                "primaryResourceGroupName": {
-                    "type": "string",
-                    "value": "[steps('primaryDeployment').primaryResourceGroupName]"
-                },
-                "primaryLocation": {
-                    "type": "string",
-                    "value": "[steps('primaryDeployment').primaryLocation]"
-                },
-                "keyVaultName": {
-                    "type": "string",
-                    "value": "[steps('primaryDeployment').keyVaultName]"
-                },
-                "secondarySubscriptionId": {
-                    "type": "string",
-                    "value": "[steps('secondaryDeployment').secondarySubscription.subscriptionId]"
-                },
-                "secondaryResourceGroupName": {
-                    "type": "string",
-                    "value": "[steps('secondaryDeployment').secondaryResourceGroupName]"
-                },
-                "secondaryLocation": {
-                    "type": "string",
-                    "value": "[steps('secondaryDeployment').secondaryLocation]"
-                },
-                "vnetName": {
-                    "type": "string",
-                    "value": "[steps('secondaryDeployment').vnetName]"
-                },
-                "vnetAddressPrefix": {
-                    "type": "string",
-                    "value": "[steps('secondaryDeployment').vnetAddressPrefix]"
-                }
+                "keyVaultName": "[steps('identityManagement').keyVaultName]",
+                "location1": "[steps('identityManagement').location1]",
+                "vnetName": "[steps('connectivity').vnetName]",
+                "location2": "[steps('connectivity').location2]",
+                "additionalSubnetName": "[steps('connectivity').additionalSubnetName]",
+                "additionalSubnetAddress": "[steps('connectivity').additionalSubnetAddress]"
             }
         }
     }
