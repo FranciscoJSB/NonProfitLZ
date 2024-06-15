@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Custom Deployment",
+            "title": "Custom Deployment xxdd",
             "steps": [
                 {
                     "name": "identityManagement",
