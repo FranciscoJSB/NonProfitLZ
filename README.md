@@ -37,7 +37,7 @@ The provided links trigger the deployment of resources by creating a "wizard" in
 
 ### Identity, Management & Connectivity
 
-[Identity/Management & Connectivity Deployment](https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/CustomDeploymentBlade/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFranciscoJSB%2FNonProfitLZ%2Fmain%2Ftest.json/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2FFranciscoJSB%2FNonProfitLZ%2Fmain%2FtestUI.json)
+[Identity/Management & Connectivity Deployment](https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/CustomDeploymentBlade/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFranciscoJSB%2FNonProfitLZ%2Fmain%2FIdentity.json/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2FFranciscoJSB%2FNonProfitLZ%2Fmain%2FIdentityUI.json)
 
 ### Landing Zone
 
