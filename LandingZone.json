@@ -48,6 +48,51 @@
         "crossRegionRestore": {
             "type": "string",
             "defaultValue": "Disabled"
+        },
+        "sku": {
+            "type": "string",
+            "defaultValue": "Standard"
+        },
+        "accessPolicies": {
+            "type": "array",
+            "defaultValue": []
+        },
+        "tenant": {
+            "type": "string",
+            "defaultValue": "e25118ee-97b9-4609-9ba7-fee485861e21"
+        },
+        "enabledForDeployment": {
+            "type": "bool",
+            "defaultValue": false
+        },
+        "enabledForTemplateDeployment": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "enabledForDiskEncryption": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "enableRbacAuthorization": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "enableSoftDelete": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "softDeleteRetentionInDays": {
+            "type": "int",
+            "defaultValue": 90
+        },
+        "networkAcls": {
+            "type": "object",
+            "defaultValue": {
+                "defaultAction": "allow",
+                "bypass": "AzureServices",
+                "ipRules": [],
+                "virtualNetworkRules": []
+            }
         }
     },
     "resources": [
@@ -59,10 +104,20 @@
             "properties": {
                 "sku": {
                     "family": "A",
-                    "name": "standard"
+                    "name": "[parameters('sku')]"
                 },
-                "tenantId": "[subscription().tenantId]",
-                "accessPolicies": []
+                "tenantId": "[parameters('tenant')]",
+                "accessPolicies": "[parameters('accessPolicies')]",
+                "enabledForDeployment": "[parameters('enabledForDeployment')]",
+                "enabledForTemplateDeployment": "[parameters('enabledForTemplateDeployment')]",
+                "enabledForDiskEncryption": "[parameters('enabledForDiskEncryption')]",
+                "enableRbacAuthorization": "[parameters('enableRbacAuthorization')]",
+                "publicNetworkAccess": "[parameters('publicNetworkAccess')]",
+                "networkAcls": "[parameters('networkAcls')]",
+                "properties": {
+                    "enableSoftDelete": "[parameters('enableSoftDelete')]",
+                    "softDeleteRetentionInDays": "[parameters('softDeleteRetentionInDays')]"
+                }
             }
         },
         {
@@ -84,10 +139,7 @@
                         }
                     }
                 ]
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
-            ]
+            }
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
