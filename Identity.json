@@ -49,6 +49,29 @@
         "dnsResolverSku": {
             "type": "string",
             "defaultValue": "Standard"
+        },
+        "recoveryServicesVaultName": {
+            "type": "string"
+        },
+        "apiVersion": {
+            "type": "string",
+            "defaultValue": "2021-08-01"
+        },
+        "publicNetworkAccess": {
+            "type": "string",
+            "defaultValue": "Enabled"
+        },
+        "immutabilityState": {
+            "type": "string",
+            "defaultValue": "Unlocked"
+        },
+        "standardTierStorageRedundancy": {
+            "type": "string",
+            "defaultValue": "LocallyRedundant"
+        },
+        "crossRegionRestore": {
+            "type": "string",
+            "defaultValue": "Disabled"
         }
     },
     "resources": [
@@ -64,6 +87,28 @@
                 },
                 "tenantId": "[subscription().tenantId]",
                 "accessPolicies": []
+            }
+        },
+        {
+            "type": "Microsoft.RecoveryServices/vaults",
+            "apiVersion": "[parameters('apiVersion')]",
+            "name": "[parameters('recoveryServicesVaultName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "RS0",
+                "tier": "Standard"
+            },
+            "properties": {
+                "publicNetworkAccess": "[parameters('publicNetworkAccess')]",
+                "securitySettings": {
+                    "immutabilitySettings": {
+                        "state": "[parameters('immutabilityState')]"
+                    }
+                },
+                "redundancySettings": {
+                    "standardTierStorageRedundancy": "[parameters('standardTierStorageRedundancy')]",
+                    "crossRegionRestore": "[parameters('crossRegionRestore')]"
+                }
             }
         },
         {
@@ -259,6 +304,10 @@
         "dnsResolverName": {
             "type": "string",
             "value": "[parameters('dnsResolverName')]"
+        },
+        "recoveryServicesVaultName": {
+            "type": "string",
+            "value": "[parameters('recoveryServicesVaultName')]"
         }
     }
 }
