@@ -11,9 +11,6 @@
         "keyVaultName": {
             "type": "string"
         },
-        "recoveryServicesVaultName": {
-            "type": "string"
-        },
         "vnetName": {
             "type": "string"
         },
@@ -28,6 +25,29 @@
         },
         "nsgName": {
             "type": "string"
+        },
+        "recoveryServicesVaultName": {
+            "type": "string"
+        },
+        "apiVersion": {
+            "type": "string",
+            "defaultValue": "2021-08-01"
+        },
+        "publicNetworkAccess": {
+            "type": "string",
+            "defaultValue": "Enabled"
+        },
+        "immutabilityState": {
+            "type": "string",
+            "defaultValue": "Unlocked"
+        },
+        "standardTierStorageRedundancy": {
+            "type": "string",
+            "defaultValue": "LocallyRedundant"
+        },
+        "crossRegionRestore": {
+            "type": "string",
+            "defaultValue": "Disabled"
         }
     },
     "resources": [
@@ -43,17 +63,6 @@
                 },
                 "tenantId": "[subscription().tenantId]",
                 "accessPolicies": []
-            }
-        },
-        {
-            "type": "Microsoft.RecoveryServices/vaults",
-            "apiVersion": "2021-01-01",
-            "name": "[parameters('recoveryServicesVaultName')]",
-            "location": "[parameters('location')]",
-            "properties": {
-                "sku": {
-                    "name": "RS0"
-                }
             }
         },
         {
@@ -77,8 +86,7 @@
                 ]
             },
             "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]",
-                "[resourceId('Microsoft.RecoveryServices/vaults', parameters('recoveryServicesVaultName'))]"
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
             ]
         },
         {
@@ -107,16 +115,34 @@
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
             ]
+        },
+        {
+            "type": "Microsoft.RecoveryServices/vaults",
+            "apiVersion": "[parameters('apiVersion')]",
+            "name": "[parameters('recoveryServicesVaultName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "RS0",
+                "tier": "Standard"
+            },
+            "properties": {
+                "publicNetworkAccess": "[parameters('publicNetworkAccess')]",
+                "securitySettings": {
+                    "immutabilitySettings": {
+                        "state": "[parameters('immutabilityState')]"
+                    }
+                },
+                "redundancySettings": {
+                    "standardTierStorageRedundancy": "[parameters('standardTierStorageRedundancy')]",
+                    "crossRegionRestore": "[parameters('crossRegionRestore')]"
+                }
+            }
         }
     ],
     "outputs": {
         "keyVaultName": {
             "type": "string",
             "value": "[parameters('keyVaultName')]"
-        },
-        "recoveryServicesVaultName": {
-            "type": "string",
-            "value": "[parameters('recoveryServicesVaultName')]"
         },
         "vnetName": {
             "type": "string",
@@ -129,6 +155,10 @@
         "nsgName": {
             "type": "string",
             "value": "[parameters('nsgName')]"
+        },
+        "recoveryServicesVaultName": {
+            "type": "string",
+            "value": "[parameters('recoveryServicesVaultName')]"
         }
     }
 }
