@@ -1,0 +1,114 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2021-09-09/uiFormDefinition.schema.json#",
+    "view": {
+        "kind": "Form",
+        "properties": {
+            "title": "Recovery Services Vault Deployment",
+            "steps": [
+                {
+                    "name": "recoveryServicesVaultResources",
+                    "label": "Recovery Services Vault Resources",
+                    "elements": [
+                        {
+                            "name": "recoveryServicesVaultDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A Recovery Services vault is an Azure Resource Manager resource used to manage backup and disaster recovery of applications and data."
+                            }
+                        },
+                        {
+                            "name": "resourceScope",
+                            "type": "Microsoft.Common.ResourceScope",
+                            "subscription": {
+                                "constraints": {
+                                    "resourceProviders": [
+                                        "Microsoft.RecoveryServices"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "recoveryServicesVaultName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Recovery Services Vault Name",
+                            "toolTip": "The name of the Recovery Services Vault.",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Recovery Services Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "recoveryServicesVaultApiVersion",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "API Version",
+                            "defaultValue": "2021-08-01",
+                            "toolTip": "The API version to use for the Recovery Services Vault.",
+                            "constraints": {
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "recoveryServicesVaultPublicNetworkAccess",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Public Network Access",
+                            "defaultValue": "Enabled",
+                            "toolTip": "Specifies whether the vault will accept traffic from public networks.",
+                            "constraints": {
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "recoveryServicesVaultImmutabilityState",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Immutability State",
+                            "defaultValue": "Unlocked",
+                            "toolTip": "Specifies the immutability state of the vault.",
+                            "constraints": {
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "recoveryServicesVaultStandardTierStorageRedundancy",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Standard Tier Storage Redundancy",
+                            "defaultValue": "LocallyRedundant",
+                            "toolTip": "Specifies the storage redundancy for the vault.",
+                            "constraints": {
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "recoveryServicesVaultCrossRegionRestore",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Cross Region Restore",
+                            "defaultValue": "Disabled",
+                            "toolTip": "Specifies whether cross region restore is enabled for the vault.",
+                            "constraints": {
+                                "required": true
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "outputs": {
+            "parameters": {
+                "name": "[steps('recoveryServicesVaultResources').recoveryServicesVaultName]",
+                "location": "[steps('recoveryServicesVaultResources').resourceScope.location.name]",
+                "apiVersion": "[steps('recoveryServicesVaultResources').recoveryServicesVaultApiVersion]",
+                "publicNetworkAccess": "[steps('recoveryServicesVaultResources').recoveryServicesVaultPublicNetworkAccess]",
+                "immutabilityState": "[steps('recoveryServicesVaultResources').recoveryServicesVaultImmutabilityState]",
+                "standardTierStorageRedundancy": "[steps('recoveryServicesVaultResources').recoveryServicesVaultStandardTierStorageRedundancy]",
+                "crossRegionRestore": "[steps('recoveryServicesVaultResources').recoveryServicesVaultCrossRegionRestore]"
+            },
+            "kind": "ResourceGroup",
+            "location": "[steps('recoveryServicesVaultResources').resourceScope.location.name]",
+            "resourceGroupId": "[steps('recoveryServicesVaultResources').resourceScope.resourceGroup.id]"
+        }
+    }
+}
