@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Custom Deployment",
+            "title": "NFP - Identity, Management and Connectivity subscription deployment",
             "steps": [
                 {
                     "name": "basics",
@@ -63,6 +63,28 @@
                                     {
                                         "regex": "^[a-zA-Z0-9-]{3,24}$",
                                         "message": "The Key Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "recoveryServicesVaultDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A Recovery Services vault is an Azure Resource Manager resource used to manage backup and disaster recovery of applications and data."
+                            }
+                        },
+                        {
+                            "name": "recoveryServicesVaultName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Recovery Services Vault Name",
+                            "toolTip": "The name of the Recovery Services Vault.",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Recovery Services Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
                                     }
                                 ]
                             }
@@ -385,7 +407,8 @@
                 "vpnGatewaySku": "[steps('connectivity').vpnGatewaySku]",
                 "vpnGatewaySubnetAddress": "[steps('connectivity').vpnGatewaySubnetAddress]",
                 "dnsResolverName": "[steps('connectivity').dnsResolverName]",
-                "dnsResolverSku": "[steps('connectivity').dnsResolverSku]"
+                "dnsResolverSku": "[steps('connectivity').dnsResolverSku]",
+                "recoveryServicesVaultName": "[steps('identityAndAccess').recoveryServicesVaultName]"
             },
             "kind": "ResourceGroup",
             "location": "[steps('basics').resourceScope.location.name]",
