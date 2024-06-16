@@ -79,6 +79,97 @@
                                     }
                                 ]
                             }
+                        },
+                        {
+                            "name": "vnetDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A Virtual Network (VNet) is the fundamental building block for your private network in Azure."
+                            }
+                        },
+                        {
+                            "name": "vnetName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Virtual Network Name",
+                            "toolTip": "The name of the Virtual Network.",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Virtual Network name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "vnetAddressSpace",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Virtual Network Address Space",
+                            "toolTip": "Address space for the Virtual Network (e.g., 10.0.0.0/16).",
+                            "constraints": {
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "vnetNote",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "**Must establish a peering connection between this Virtual Network and the one defined at the previous step.**"
+                            }
+                        },
+                        {
+                            "name": "subnetDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A subnet is a range of IP addresses in your VNet."
+                            }
+                        },
+                        {
+                            "name": "subnetName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Subnet Name",
+                            "toolTip": "The name of the Subnet.",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The Subnet name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "subnetAddressSpace",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Subnet Address Space",
+                            "toolTip": "Address space for the Subnet (e.g., 10.0.0.0/24).",
+                            "constraints": {
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "nsgDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A Network Security Group (NSG) contains a list of security rules that allow or deny network traffic to resources connected to Azure Virtual Networks."
+                            }
+                        },
+                        {
+                            "name": "nsgName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Network Security Group Name",
+                            "toolTip": "The name of the Network Security Group.",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The NSG name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
                         }
                     ]
                 }
@@ -86,6 +177,8 @@
         },
         "outputs": {
             "parameters": {
+                "subscriptionId": "[steps('landingZoneResources').resourceScope.subscription.subscriptionId]",
+                "location": "[steps('landingZoneResources').resourceScope.location.name]",
                 "keyVaultName": "[steps('landingZoneResources').keyVaultName]",
                 "vnetName": "[steps('landingZoneResources').vnetName]",
                 "vnetAddressSpace": "[steps('landingZoneResources').vnetAddressSpace]",
