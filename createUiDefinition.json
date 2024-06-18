@@ -1,5 +1,5 @@
 {
-  "schema": "https://schema.management.azure.com/schemas/2019-04-01/createUIDefinition.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/createUIDefinition.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "basics": [
@@ -10,9 +10,10 @@
         "defaultValue": "",
         "constraints": {
           "required": true,
-          "regex": "^[0-9a-fA-F]{32}$",
+          "regex": "^[0-9a-fA-F-]{36}$",
           "validationMessage": "The subscription ID should be a valid GUID."
-        }
+        },
+        "visible": true
       },
       {
         "name": "subscription2Id",
@@ -21,15 +22,17 @@
         "defaultValue": "",
         "constraints": {
           "required": true,
-          "regex": "^[0-9a-fA-F]{32}$",
+          "regex": "^[0-9a-fA-F-]{36}$",
           "validationMessage": "The subscription ID should be a valid GUID."
-        }
+        },
+        "visible": true
       },
       {
         "name": "location",
         "type": "Microsoft.Common.Location",
         "label": "Location",
-        "defaultValue": "East US"
+        "defaultValue": "East US",
+        "visible": true
       }
     ]
   },
@@ -46,5 +49,6 @@
       "type": "string",
       "value": "[basics('location')]"
     }
-  }
+  },
+  "resources": []
 }
