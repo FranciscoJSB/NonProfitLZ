@@ -1,0 +1,50 @@
+{
+  "schema": "https://schema.management.azure.com/schemas/2019-04-01/createUIDefinition.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "basics": [
+      {
+        "name": "subscription1Id",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Subscription 1 ID",
+        "defaultValue": "",
+        "constraints": {
+          "required": true,
+          "regex": "^[0-9a-fA-F]{32}$",
+          "validationMessage": "The subscription ID should be a valid GUID."
+        }
+      },
+      {
+        "name": "subscription2Id",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Subscription 2 ID",
+        "defaultValue": "",
+        "constraints": {
+          "required": true,
+          "regex": "^[0-9a-fA-F]{32}$",
+          "validationMessage": "The subscription ID should be a valid GUID."
+        }
+      },
+      {
+        "name": "location",
+        "type": "Microsoft.Common.Location",
+        "label": "Location",
+        "defaultValue": "East US"
+      }
+    ]
+  },
+  "outputs": {
+    "subscription1Id": {
+      "type": "string",
+      "value": "[basics('subscription1Id')]"
+    },
+    "subscription2Id": {
+      "type": "string",
+      "value": "[basics('subscription2Id')]"
+    },
+    "location": {
+      "type": "string",
+      "value": "[basics('location')]"
+    }
+  }
+}
