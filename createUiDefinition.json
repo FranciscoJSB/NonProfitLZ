@@ -11,30 +11,16 @@
                     "elements": [
                         {
                             "name": "resourceScope1",
-                            "type": "Microsoft.Common.ResourceScope",
+                            "type": "Microsoft.Common.ResourceGroup",
                             "label": "Subscription and Resource Group for VNet 1",
                             "toolTip": "Select the subscription and resource group for VNet 1"
                         },
                         {
                             "name": "location1",
-                            "type": "Microsoft.Common.DropDown",
+                            "type": "Microsoft.Common.Location",
                             "label": "Region for VNet 1",
                             "toolTip": "Select the Azure region for VNet 1",
                             "constraints": {
-                                "allowedValues": [
-                                    {
-                                        "label": "East US",
-                                        "value": "eastus"
-                                    },
-                                    {
-                                        "label": "West US",
-                                        "value": "westus"
-                                    },
-                                    {
-                                        "label": "Central US",
-                                        "value": "centralus"
-                                    }
-                                ],
                                 "required": true
                             }
                         }
@@ -87,30 +73,16 @@
                     "elements": [
                         {
                             "name": "resourceScope2",
-                            "type": "Microsoft.Common.ResourceScope",
+                            "type": "Microsoft.Common.ResourceGroup",
                             "label": "Subscription and Resource Group for VNet 2",
                             "toolTip": "Select the subscription and resource group for VNet 2"
                         },
                         {
                             "name": "location2",
-                            "type": "Microsoft.Common.DropDown",
+                            "type": "Microsoft.Common.Location",
                             "label": "Region for VNet 2",
                             "toolTip": "Select the Azure region for VNet 2",
                             "constraints": {
-                                "allowedValues": [
-                                    {
-                                        "label": "East US",
-                                        "value": "eastus"
-                                    },
-                                    {
-                                        "label": "West US",
-                                        "value": "westus"
-                                    },
-                                    {
-                                        "label": "Central US",
-                                        "value": "centralus"
-                                    }
-                                ],
                                 "required": true
                             }
                         }
