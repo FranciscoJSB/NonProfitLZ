@@ -1,54 +1,144 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/createUIDefinition.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "basics": [
-      {
-        "name": "subscription1Id",
-        "type": "Microsoft.Common.TextBox",
-        "label": "Subscription 1 ID",
-        "defaultValue": "",
-        "constraints": {
-          "required": true,
-          "regex": "^[0-9a-fA-F-]{36}$",
-          "validationMessage": "The subscription ID should be a valid GUID."
+    "$schema": "http://schema.management.azure.com/schemas/2021-09-09/uiFormDefinition.schema.json#",
+    "view": {
+        "kind": "Form",
+        "properties": {
+            "title": "VNet Deployment",
+            "steps": [
+                {
+                    "name": "basics",
+                    "label": "Basics",
+                    "elements": [
+                        {
+                            "name": "resourceScope1",
+                            "type": "Microsoft.Common.ResourceScope",
+                            "label": "Subscription 1",
+                            "subscription": {
+                                "constraints": {
+                                    "validations": [
+                                        {
+                                            "isValid": "[not(contains(toLower(steps('basics').resourceScope1.subscription.displayName),'test'))]",
+                                            "message": "Can't use test subscription."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "resourceScope2",
+                            "type": "Microsoft.Common.ResourceScope",
+                            "label": "Subscription 2",
+                            "subscription": {
+                                "constraints": {
+                                    "validations": [
+                                        {
+                                            "isValid": "[not(contains(toLower(steps('basics').resourceScope2.subscription.displayName),'test'))]",
+                                            "message": "Can't use test subscription."
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "vnet1",
+                    "label": "VNet 1",
+                    "elements": [
+                        {
+                            "name": "vnetName1",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "VNet 1 Name",
+                            "toolTip": "The name of the first Virtual Network.",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The VNet name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "vnetAddressSpace1",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "VNet 1 Address Space",
+                            "toolTip": "Address space for the first Virtual Network (e.g., 10.0.0.0/16).",
+                            "defaultValue": "10.0.0.0/16",
+                            "constraints": {
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "subnetAddressSpace1",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Subnet 1 Address Space",
+                            "toolTip": "Address space for the first subnet (e.g., 10.0.0.0/24).",
+                            "defaultValue": "10.0.0.0/24",
+                            "constraints": {
+                                "required": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "vnet2",
+                    "label": "VNet 2",
+                    "elements": [
+                        {
+                            "name": "vnetName2",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "VNet 2 Name",
+                            "toolTip": "The name of the second Virtual Network.",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The VNet name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "vnetAddressSpace2",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "VNet 2 Address Space",
+                            "toolTip": "Address space for the second Virtual Network (e.g., 10.1.0.0/16).",
+                            "defaultValue": "10.1.0.0/16",
+                            "constraints": {
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "subnetAddressSpace2",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Subnet 2 Address Space",
+                            "toolTip": "Address space for the second subnet (e.g., 10.1.0.0/24).",
+                            "defaultValue": "10.1.0.0/24",
+                            "constraints": {
+                                "required": true
+                            }
+                        }
+                    ]
+                }
+            ]
         },
-        "visible": true
-      },
-      {
-        "name": "subscription2Id",
-        "type": "Microsoft.Common.TextBox",
-        "label": "Subscription 2 ID",
-        "defaultValue": "",
-        "constraints": {
-          "required": true,
-          "regex": "^[0-9a-fA-F-]{36}$",
-          "validationMessage": "The subscription ID should be a valid GUID."
-        },
-        "visible": true
-      },
-      {
-        "name": "location",
-        "type": "Microsoft.Common.Location",
-        "label": "Location",
-        "defaultValue": "East US",
-        "visible": true
-      }
-    ]
-  },
-  "outputs": {
-    "subscription1Id": {
-      "type": "string",
-      "value": "[basics('subscription1Id')]"
-    },
-    "subscription2Id": {
-      "type": "string",
-      "value": "[basics('subscription2Id')]"
-    },
-    "location": {
-      "type": "string",
-      "value": "[basics('location')]"
+        "outputs": {
+            "parameters": {
+                "location1": "[steps('basics').resourceScope1.location.name]",
+                "vnetName1": "[steps('vnet1').vnetName1]",
+                "vnetAddressSpace1": "[steps('vnet1').vnetAddressSpace1]",
+                "subnetAddressSpace1": "[steps('vnet1').subnetAddressSpace1]",
+                "location2": "[steps('basics').resourceScope2.location.name]",
+                "vnetName2": "[steps('vnet2').vnetName2]",
+                "vnetAddressSpace2": "[steps('vnet2').vnetAddressSpace2]",
+                "subnetAddressSpace2": "[steps('vnet2').subnetAddressSpace2]"
+            },
+            "kind": "ResourceGroup",
+            "location": "[steps('basics').resourceScope1.location.name]",
+            "resourceGroupId": "[steps('basics').resourceScope1.resourceGroup.id]"
+        }
     }
-  },
-  "resources": []
 }
