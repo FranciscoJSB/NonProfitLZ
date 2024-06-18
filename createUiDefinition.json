@@ -13,14 +13,17 @@
                             "name": "resourceScope1",
                             "type": "Microsoft.Common.ResourceScope",
                             "label": "Subscription and Resource Group for VNet 1",
-                            "subscription": {
-                                "constraints": {
-                                    "validations": [
-                                        {
-                                            "isValid": "[not(contains(toLower(steps('basics').resourceScope1.subscription.displayName),'test'))]",
-                                            "message": "Can't use test subscription."
-                                        }
-                                    ]
+                            "toolTip": "Select the subscription and resource group for VNet 1",
+                            "constraints": {
+                                "subscription": {
+                                    "constraints": {
+                                        "validations": [
+                                            {
+                                                "isValid": "[not(contains(toLower(steps('basics').resourceScope1.subscription.displayName),'test'))]",
+                                                "message": "Can't use test subscription."
+                                            }
+                                        ]
+                                    }
                                 }
                             }
                         },
@@ -51,14 +54,17 @@
                             "name": "resourceScope2",
                             "type": "Microsoft.Common.ResourceScope",
                             "label": "Subscription and Resource Group for VNet 2",
-                            "subscription": {
-                                "constraints": {
-                                    "validations": [
-                                        {
-                                            "isValid": "[not(contains(toLower(steps('basics').resourceScope2.subscription.displayName),'test'))]",
-                                            "message": "Can't use test subscription."
-                                        }
-                                    ]
+                            "toolTip": "Select the subscription and resource group for VNet 2",
+                            "constraints": {
+                                "subscription": {
+                                    "constraints": {
+                                        "validations": [
+                                            {
+                                                "isValid": "[not(contains(toLower(steps('basics').resourceScope2.subscription.displayName),'test'))]",
+                                                "message": "Can't use test subscription."
+                                            }
+                                        ]
+                                    }
                                 }
                             }
                         },
