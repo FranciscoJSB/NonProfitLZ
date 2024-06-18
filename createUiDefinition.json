@@ -26,9 +26,26 @@
                         },
                         {
                             "name": "location1",
-                            "type": "Microsoft.Common.Location",
+                            "type": "Microsoft.Common.DropDown",
                             "label": "Region for VNet 1",
-                            "toolTip": "Select the Azure region for VNet 1"
+                            "toolTip": "Select the Azure region for VNet 1",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "East US",
+                                        "value": "eastus"
+                                    },
+                                    {
+                                        "label": "West US",
+                                        "value": "westus"
+                                    },
+                                    {
+                                        "label": "Central US",
+                                        "value": "centralus"
+                                    }
+                                ],
+                                "required": true
+                            }
                         },
                         {
                             "name": "resourceScope2",
@@ -47,9 +64,26 @@
                         },
                         {
                             "name": "location2",
-                            "type": "Microsoft.Common.Location",
+                            "type": "Microsoft.Common.DropDown",
                             "label": "Region for VNet 2",
-                            "toolTip": "Select the Azure region for VNet 2"
+                            "toolTip": "Select the Azure region for VNet 2",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "East US",
+                                        "value": "eastus"
+                                    },
+                                    {
+                                        "label": "West US",
+                                        "value": "westus"
+                                    },
+                                    {
+                                        "label": "Central US",
+                                        "value": "centralus"
+                                    }
+                                ],
+                                "required": true
+                            }
                         }
                     ]
                 },
