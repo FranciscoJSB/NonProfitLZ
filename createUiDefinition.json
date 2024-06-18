@@ -25,6 +25,12 @@
                             }
                         },
                         {
+                            "name": "location1",
+                            "type": "Microsoft.Common.Location",
+                            "label": "Region for VNet 1",
+                            "toolTip": "Select the Azure region for VNet 1"
+                        },
+                        {
                             "name": "resourceScope2",
                             "type": "Microsoft.Common.ResourceScope",
                             "label": "Subscription and Resource Group for VNet 2",
@@ -38,6 +44,12 @@
                                     ]
                                 }
                             }
+                        },
+                        {
+                            "name": "location2",
+                            "type": "Microsoft.Common.Location",
+                            "label": "Region for VNet 2",
+                            "toolTip": "Select the Azure region for VNet 2"
                         }
                     ]
                 },
@@ -129,13 +141,13 @@
             "parameters": {
                 "subscriptionId1": "[steps('basics').resourceScope1.subscription.id]",
                 "resourceGroup1": "[steps('basics').resourceScope1.resourceGroup.name]",
-                "location1": "[steps('basics').resourceScope1.location.name]",
+                "location1": "[steps('basics').location1]",
                 "vnetName1": "[steps('vnet1').vnetName1]",
                 "vnetAddressSpace1": "[steps('vnet1').vnetAddressSpace1]",
                 "subnetAddressSpace1": "[steps('vnet1').subnetAddressSpace1]",
                 "subscriptionId2": "[steps('basics').resourceScope2.subscription.id]",
                 "resourceGroup2": "[steps('basics').resourceScope2.resourceGroup.name]",
-                "location2": "[steps('basics').resourceScope2.location.name]",
+                "location2": "[steps('basics').location2]",
                 "vnetName2": "[steps('vnet2').vnetName2]",
                 "vnetAddressSpace2": "[steps('vnet2').vnetAddressSpace2]",
                 "subnetAddressSpace2": "[steps('vnet2').subnetAddressSpace2]"
