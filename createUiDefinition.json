@@ -20,9 +20,10 @@
                         },
                         {
                             "name": "resourceGroup1",
-                            "type": "Microsoft.Common.TextBox",
+                            "type": "Microsoft.Common.ResourceGroup",
                             "label": "Resource Group for VNet 1",
-                            "toolTip": "Enter the resource group for VNet 1",
+                            "toolTip": "Select the resource group for VNet 1",
+                            "subscriptionId": "[subscription1]",
                             "constraints": {
                                 "required": true
                             }
@@ -32,6 +33,7 @@
                             "type": "Microsoft.Common.Location",
                             "label": "Region for VNet 1",
                             "toolTip": "Select the Azure region for VNet 1",
+                            "subscriptionId": "[subscription1]",
                             "constraints": {
                                 "required": true
                             }
@@ -94,9 +96,10 @@
                         },
                         {
                             "name": "resourceGroup2",
-                            "type": "Microsoft.Common.TextBox",
+                            "type": "Microsoft.Common.ResourceGroup",
                             "label": "Resource Group for VNet 2",
-                            "toolTip": "Enter the resource group for VNet 2",
+                            "toolTip": "Select the resource group for VNet 2",
+                            "subscriptionId": "[subscription2]",
                             "constraints": {
                                 "required": true
                             }
@@ -106,6 +109,7 @@
                             "type": "Microsoft.Common.Location",
                             "label": "Region for VNet 2",
                             "toolTip": "Select the Azure region for VNet 2",
+                            "subscriptionId": "[subscription2]",
                             "constraints": {
                                 "required": true
                             }
@@ -165,157 +169,6 @@
                 "subnetAddressSpace1": "[steps('vnet1').subnetAddressSpace1]",
                 "subscriptionId2": "[steps('vnet2Basics').subscription2]",
                 "resourceGroup2": "[steps('vnet2Basics').resourceGroup2]",
-                "location2": "[steps('vnet2Basics').location2]",
-                "vnetName2": "[steps('vnet2').vnetName2]",
-                "vnetAddressSpace2": "[steps('vnet2').vnetAddressSpace2]",
-                "subnetAddressSpace2": "[steps('vnet2').subnetAddressSpace2]"
-            }
-        }
-    }
-}
-{
-    "$schema": "http://schema.management.azure.com/schemas/2021-09-09/uiFormDefinition.schema.json#",
-    "view": {
-        "kind": "Form",
-        "properties": {
-            "title": "VNet Deployment",
-            "steps": [
-                {
-                    "name": "vnet1Basics",
-                    "label": "VNet 1 Basics",
-                    "elements": [
-                        {
-                            "name": "resourceScope1",
-                            "type": "Microsoft.Common.ResourceGroup",
-                            "label": "Subscription and Resource Group for VNet 1",
-                            "toolTip": "Select the subscription and resource group for VNet 1"
-                        },
-                        {
-                            "name": "location1",
-                            "type": "Microsoft.Common.Location",
-                            "label": "Region for VNet 1",
-                            "toolTip": "Select the Azure region for VNet 1",
-                            "constraints": {
-                                "required": true
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "vnet1",
-                    "label": "VNet 1 Configuration",
-                    "elements": [
-                        {
-                            "name": "vnetName1",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "VNet 1 Name",
-                            "toolTip": "The name of the first Virtual Network.",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The VNet name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "vnetAddressSpace1",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "VNet 1 Address Space",
-                            "toolTip": "Address space for the first Virtual Network (e.g., 10.0.0.0/16).",
-                            "defaultValue": "10.0.0.0/16",
-                            "constraints": {
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "subnetAddressSpace1",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Subnet 1 Address Space",
-                            "toolTip": "Address space for the first subnet (e.g., 10.0.0.0/24).",
-                            "defaultValue": "10.0.0.0/24",
-                            "constraints": {
-                                "required": true
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "vnet2Basics",
-                    "label": "VNet 2 Basics",
-                    "elements": [
-                        {
-                            "name": "resourceScope2",
-                            "type": "Microsoft.Common.ResourceGroup",
-                            "label": "Subscription and Resource Group for VNet 2",
-                            "toolTip": "Select the subscription and resource group for VNet 2"
-                        },
-                        {
-                            "name": "location2",
-                            "type": "Microsoft.Common.Location",
-                            "label": "Region for VNet 2",
-                            "toolTip": "Select the Azure region for VNet 2",
-                            "constraints": {
-                                "required": true
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "vnet2",
-                    "label": "VNet 2 Configuration",
-                    "elements": [
-                        {
-                            "name": "vnetName2",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "VNet 2 Name",
-                            "toolTip": "The name of the second Virtual Network.",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The VNet name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "vnetAddressSpace2",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "VNet 2 Address Space",
-                            "toolTip": "Address space for the second Virtual Network (e.g., 10.1.0.0/16).",
-                            "defaultValue": "10.1.0.0/16",
-                            "constraints": {
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "subnetAddressSpace2",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Subnet 2 Address Space",
-                            "toolTip": "Address space for the second subnet (e.g., 10.1.0.0/24).",
-                            "defaultValue": "10.1.0.0/24",
-                            "constraints": {
-                                "required": true
-                            }
-                        }
-                    ]
-                }
-            ]
-        },
-        "outputs": {
-            "parameters": {
-                "subscriptionId1": "[steps('vnet1Basics').resourceScope1.subscription.id]",
-                "resourceGroup1": "[steps('vnet1Basics').resourceScope1.resourceGroup.name]",
-                "location1": "[steps('vnet1Basics').location1]",
-                "vnetName1": "[steps('vnet1').vnetName1]",
-                "vnetAddressSpace1": "[steps('vnet1').vnetAddressSpace1]",
-                "subnetAddressSpace1": "[steps('vnet1').subnetAddressSpace1]",
-                "subscriptionId2": "[steps('vnet2Basics').resourceScope2.subscription.id]",
-                "resourceGroup2": "[steps('vnet2Basics').resourceScope2.resourceGroup.name]",
                 "location2": "[steps('vnet2Basics').location2]",
                 "vnetName2": "[steps('vnet2').vnetName2]",
                 "vnetAddressSpace2": "[steps('vnet2').vnetAddressSpace2]",
