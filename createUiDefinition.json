@@ -6,8 +6,8 @@
             "title": "VNet Deployment",
             "steps": [
                 {
-                    "name": "basics",
-                    "label": "Basics",
+                    "name": "vnet1Basics",
+                    "label": "VNet 1 Basics",
                     "elements": [
                         {
                             "name": "resourceScope1",
@@ -19,7 +19,7 @@
                                     "constraints": {
                                         "validations": [
                                             {
-                                                "isValid": "[not(contains(toLower(steps('basics').resourceScope1.subscription.displayName),'test'))]",
+                                                "isValid": "[not(contains(toLower(steps('vnet1Basics').resourceScope1.subscription.displayName),'test'))]",
                                                 "message": "Can't use test subscription."
                                             }
                                         ]
@@ -49,53 +49,12 @@
                                 ],
                                 "required": true
                             }
-                        },
-                        {
-                            "name": "resourceScope2",
-                            "type": "Microsoft.Common.ResourceScope",
-                            "label": "Subscription and Resource Group for VNet 2",
-                            "toolTip": "Select the subscription and resource group for VNet 2",
-                            "constraints": {
-                                "subscription": {
-                                    "constraints": {
-                                        "validations": [
-                                            {
-                                                "isValid": "[not(contains(toLower(steps('basics').resourceScope2.subscription.displayName),'test'))]",
-                                                "message": "Can't use test subscription."
-                                            }
-                                        ]
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            "name": "location2",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Region for VNet 2",
-                            "toolTip": "Select the Azure region for VNet 2",
-                            "constraints": {
-                                "allowedValues": [
-                                    {
-                                        "label": "East US",
-                                        "value": "eastus"
-                                    },
-                                    {
-                                        "label": "West US",
-                                        "value": "westus"
-                                    },
-                                    {
-                                        "label": "Central US",
-                                        "value": "centralus"
-                                    }
-                                ],
-                                "required": true
-                            }
                         }
                     ]
                 },
                 {
                     "name": "vnet1",
-                    "label": "VNet 1",
+                    "label": "VNet 1 Configuration",
                     "elements": [
                         {
                             "name": "vnetName1",
@@ -135,8 +94,55 @@
                     ]
                 },
                 {
+                    "name": "vnet2Basics",
+                    "label": "VNet 2 Basics",
+                    "elements": [
+                        {
+                            "name": "resourceScope2",
+                            "type": "Microsoft.Common.ResourceScope",
+                            "label": "Subscription and Resource Group for VNet 2",
+                            "toolTip": "Select the subscription and resource group for VNet 2",
+                            "constraints": {
+                                "subscription": {
+                                    "constraints": {
+                                        "validations": [
+                                            {
+                                                "isValid": "[not(contains(toLower(steps('vnet2Basics').resourceScope2.subscription.displayName),'test'))]",
+                                                "message": "Can't use test subscription."
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "location2",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Region for VNet 2",
+                            "toolTip": "Select the Azure region for VNet 2",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "East US",
+                                        "value": "eastus"
+                                    },
+                                    {
+                                        "label": "West US",
+                                        "value": "westus"
+                                    },
+                                    {
+                                        "label": "Central US",
+                                        "value": "centralus"
+                                    }
+                                ],
+                                "required": true
+                            }
+                        }
+                    ]
+                },
+                {
                     "name": "vnet2",
-                    "label": "VNet 2",
+                    "label": "VNet 2 Configuration",
                     "elements": [
                         {
                             "name": "vnetName2",
@@ -179,15 +185,15 @@
         },
         "outputs": {
             "parameters": {
-                "subscriptionId1": "[steps('basics').resourceScope1.subscription.id]",
-                "resourceGroup1": "[steps('basics').resourceScope1.resourceGroup.name]",
-                "location1": "[steps('basics').location1]",
+                "subscriptionId1": "[steps('vnet1Basics').resourceScope1.subscription.id]",
+                "resourceGroup1": "[steps('vnet1Basics').resourceScope1.resourceGroup.name]",
+                "location1": "[steps('vnet1Basics').location1]",
                 "vnetName1": "[steps('vnet1').vnetName1]",
                 "vnetAddressSpace1": "[steps('vnet1').vnetAddressSpace1]",
                 "subnetAddressSpace1": "[steps('vnet1').subnetAddressSpace1]",
-                "subscriptionId2": "[steps('basics').resourceScope2.subscription.id]",
-                "resourceGroup2": "[steps('basics').resourceScope2.resourceGroup.name]",
-                "location2": "[steps('basics').location2]",
+                "subscriptionId2": "[steps('vnet2Basics').resourceScope2.subscription.id]",
+                "resourceGroup2": "[steps('vnet2Basics').resourceScope2.resourceGroup.name]",
+                "location2": "[steps('vnet2Basics').location2]",
                 "vnetName2": "[steps('vnet2').vnetName2]",
                 "vnetAddressSpace2": "[steps('vnet2').vnetAddressSpace2]",
                 "subnetAddressSpace2": "[steps('vnet2').subnetAddressSpace2]"
