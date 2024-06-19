@@ -3,306 +3,76 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Custom Deployment",
+            "title": "VNet Deployment",
             "steps": [
                 {
-                    "name": "basics",
-                    "label": "Basics",
-                    "elements": [
-                        {
-                            "name": "resourceScope",
-                            "type": "Microsoft.Common.ResourceScope",
-                            "subscription": {
-                                "constraints": {
-                                    "validations": [
-                                        {
-                                            "isValid": "[not(contains(toLower(steps('basics').resourceScope.subscription.displayName),'test'))]",
-                                            "message": "Can't use test subscription."
-                                        }
-                                    ]
-                                },
-                                "resourceProviders": [
-                                    "Microsoft.KeyVault",
-                                    "Microsoft.Storage"
-                                ]
-                            },
-                            "location": {
-                                "label": "Region",
-                                "toolTip": "Azure region",
-                                "resourceTypes": [
-                                    "Microsoft.KeyVault/vaults",
-                                    "Microsoft.Storage/storageAccounts"
-                                ],
-                                "allowedValues": [
-                                    "eastus",
-                                    "westus2"
-                                ]
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "subscriptions",
-                    "label": "Subscriptions",
+                    "name": "vnet1Basics",
+                    "label": "VNet 1 Basics",
                     "elements": [
                         {
                             "name": "subscription1",
                             "type": "Microsoft.Common.TextBox",
-                            "label": "Subscription 1 ID",
-                            "toolTip": "The subscription ID for the first subscription.",
+                            "label": "Subscription ID for VNet 1",
+                            "toolTip": "Enter the subscription ID for VNet 1",
                             "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-z0-9-]{36}$",
-                                        "message": "The subscription ID must be a valid GUID."
-                                    }
-                                ]
+                                "required": true
                             }
                         },
                         {
-                            "name": "subscription2",
+                            "name": "resourceGroup1",
                             "type": "Microsoft.Common.TextBox",
-                            "label": "Subscription 2 ID",
-                            "toolTip": "The subscription ID for the second subscription.",
+                            "label": "Resource Group for VNet 1",
+                            "toolTip": "Enter the resource group for VNet 1",
                             "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-z0-9-]{36}$",
-                                        "message": "The subscription ID must be a valid GUID."
-                                    }
-                                ]
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "location1",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Region for VNet 1",
+                            "toolTip": "Enter the Azure region for VNet 1",
+                            "constraints": {
+                                "required": true
                             }
                         }
                     ]
                 },
                 {
-                    "name": "identityAndAccess",
-                    "label": "Identity and Access",
+                    "name": "vnet1",
+                    "label": "VNet 1 Configuration",
                     "elements": [
                         {
-                            "name": "keyVaultDescription",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "A Key Vault is a cloud service for securely storing and accessing secrets. Secrets are application passwords, database connection strings, API keys, and other sensitive data."
-                            }
-                        },
-                        {
-                            "name": "keyVaultName",
+                            "name": "vnetName1",
                             "type": "Microsoft.Common.TextBox",
-                            "label": "Key Vault Name",
-                            "toolTip": "The name of the Key Vault.",
+                            "label": "VNet 1 Name",
+                            "toolTip": "The name of the first Virtual Network.",
                             "constraints": {
                                 "required": true,
                                 "validations": [
                                     {
                                         "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The Key Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "connectivity",
-                    "label": "Connectivity",
-                    "elements": [
-                        {
-                            "name": "vnetDescription",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "Configure your Virtual Network (VNet) and its subnets."
-                            }
-                        },
-                        {
-                            "name": "vnetName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Virtual Network Name",
-                            "toolTip": "The name of the Virtual Network.",
-                            "defaultValue": "my-vnet",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The Virtual Network name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                        "message": "The VNet name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
                                     }
                                 ]
                             }
                         },
                         {
-                            "name": "vnetAddressSpace",
+                            "name": "vnetAddressSpace1",
                             "type": "Microsoft.Common.TextBox",
-                            "label": "Virtual Network Address Space",
-                            "toolTip": "Address space for the Virtual Network (e.g., 10.0.0.0/16).",
+                            "label": "VNet 1 Address Space",
+                            "toolTip": "Address space for the first Virtual Network (e.g., 10.0.0.0/16).",
                             "defaultValue": "10.0.0.0/16",
                             "constraints": {
                                 "required": true
                             }
                         },
                         {
-                            "name": "nsgName",
+                            "name": "subnetAddressSpace1",
                             "type": "Microsoft.Common.TextBox",
-                            "label": "Network Security Group Name",
-                            "toolTip": "The name of the Network Security Group.",
-                            "defaultValue": "my-nsg",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The Network Security Group name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "additionalSubnetDescription",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "The Additional Subnet can be used for other resources you may want to deploy."
-                            }
-                        },
-                        {
-                            "name": "additionalSubnetName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Additional Subnet Name",
-                            "toolTip": "The name of the Additional Subnet.",
-                            "defaultValue": "additional-subnet",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The Additional Subnet name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "additionalSubnetAddress",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Additional Subnet Address",
-                            "toolTip": "Address space for the Additional Subnet.",
-                            "defaultValue": "10.0.3.0/24",
-                            "constraints": {
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "vpnGatewayName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "VPN Gateway Name",
-                            "toolTip": "The name of the VPN Gateway.",
-                            "defaultValue": "my-vpn-gateway",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The VPN Gateway name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "vpnGatewaySku",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "VPN Gateway SKU",
-                            "defaultValue": "VpnGw1",
-                            "constraints": {
-                                "allowedValues": [
-                                    { "label": "Basic", "value": "Basic" },
-                                    { "label": "VpnGw1", "value": "VpnGw1" }
-                                ],
-                                "required": true
-                            },
-                            "toolTip": "The SKU for the VPN Gateway."
-                        },
-                        {
-                            "name": "vpnGatewaySubnetAddress",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "VPN Gateway Subnet Address",
-                            "toolTip": "Address space for the VPN Gateway Subnet.",
-                            "defaultValue": "10.0.255.0/27",
-                            "constraints": {
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "dnsResolverDescription",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "A DNS Resolver is a managed DNS service for your VNet, allowing you to use DNS forwarding and conditional forwarding rules."
-                            }
-                        },
-                        {
-                            "name": "dnsResolverName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "DNS Resolver Name",
-                            "toolTip": "The name of the DNS Resolver.",
-                            "defaultValue": "my-dns-resolver",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The DNS Resolver name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "dnsResolverSku",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "DNS Resolver SKU",
-                            "defaultValue": "Standard",
-                            "constraints": {
-                                "allowedValues": [
-                                    { "label": "Standard", "value": "Standard" }
-                                ],
-                                "required": true
-                            },
-                            "toolTip": "The SKU for the DNS Resolver."
-                        }
-                    ]
-                },
-                {
-                    "name": "monitoring",
-                    "label": "Monitoring",
-                    "elements": [
-                        {
-                            "name": "logAnalyticsDescription",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "A Log Analytics Workspace is a unique environment for monitoring data sent to Azure Monitor Logs. It provides a way to aggregate and analyze log data from different sources."
-                            }
-                        },
-                        {
-                            "name": "logAnalyticsWorkspaceName",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Log Analytics Workspace Name",
-                            "toolTip": "The name of the Log Analytics Workspace.",
-                            "defaultValue": "my-log-analytics-workspace",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{4,50}$",
-                                        "message": "The Log Analytics Workspace name must be between 4 and 50 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "logRetentionDays",
-                            "type": "Microsoft.Common.Slider",
-                            "label": "Log Analytics Data Retention (days)",
-                            "defaultValue": 30,
-                            "min": 30,
-                            "max": 730,
+                            "label": "Subnet 1 Address Space",
+                            "toolTip": "Address space for the first subnet (e.g., 10.0.0.0/24).",
+                            "defaultValue": "10.0.0.0/24",
                             "constraints": {
                                 "required": true
                             }
@@ -310,67 +80,76 @@
                     ]
                 },
                 {
-                    "name": "securityAndCompliance",
-                    "label": "Security and Compliance",
+                    "name": "vnet2Basics",
+                    "label": "VNet 2 Basics",
                     "elements": [
                         {
-                            "name": "defenderForCloud",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Defender for Cloud",
-                            "toolTip": "Select the pricing tier for Defender for Cloud.",
-                            "defaultValue": "Free",
+                            "name": "subscription2",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Subscription ID for VNet 2",
+                            "toolTip": "Enter the subscription ID for VNet 2",
                             "constraints": {
-                                "allowedValues": [
-                                    { "label": "Free", "value": "Free" },
-                                    { "label": "Standard", "value": "Standard" }
-                                ],
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "resourceGroup2",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Resource Group for VNet 2",
+                            "toolTip": "Enter the resource group for VNet 2",
+                            "constraints": {
+                                "required": true
+                            }
+                        },
+                        {
+                            "name": "location2",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Region for VNet 2",
+                            "toolTip": "Enter the Azure region for VNet 2",
+                            "constraints": {
                                 "required": true
                             }
                         }
                     ]
                 },
                 {
-                    "name": "storage",
-                    "label": "Storage",
+                    "name": "vnet2",
+                    "label": "VNet 2 Configuration",
                     "elements": [
                         {
-                            "name": "storageDescription",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "A Storage Account is a Microsoft Azure service that provides storage that can be accessed from anywhere in the world over HTTP or HTTPS."
-                            }
-                        },
-                        {
-                            "name": "storageAccountName",
+                            "name": "vnetName2",
                             "type": "Microsoft.Common.TextBox",
-                            "label": "Storage Account Name",
-                            "toolTip": "The name of the Storage Account.",
-                            "defaultValue": "mystorageaccount",
+                            "label": "VNet 2 Name",
+                            "toolTip": "The name of the second Virtual Network.",
                             "constraints": {
                                 "required": true,
                                 "validations": [
                                     {
-                                        "regex": "^[a-z0-9]{3,24}$",
-                                        "message": "The Storage Account name must be between 3 and 24 characters long and contain only lowercase letters and numbers."
+                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
+                                        "message": "The VNet name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
                                     }
                                 ]
                             }
                         },
                         {
-                            "name": "storageAccountSku",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Storage Account SKU",
-                            "defaultValue": "Standard_LRS",
+                            "name": "vnetAddressSpace2",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "VNet 2 Address Space",
+                            "toolTip": "Address space for the second Virtual Network (e.g., 10.1.0.0/16).",
+                            "defaultValue": "10.1.0.0/16",
                             "constraints": {
-                                "allowedValues": [
-                                    { "label": "Standard_LRS", "value": "Standard_LRS" },
-                                    { "label": "Standard_GRS", "value": "Standard_GRS" },
-                                    { "label": "Standard_ZRS", "value": "Standard_ZRS" },
-                                    { "label": "Premium_LRS", "value": "Premium_LRS" }
-                                ],
                                 "required": true
-                            },
-                            "toolTip": "The SKU for the Storage Account."
+                            }
+                        },
+                        {
+                            "name": "subnetAddressSpace2",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Subnet 2 Address Space",
+                            "toolTip": "Address space for the second subnet (e.g., 10.1.0.0/24).",
+                            "defaultValue": "10.1.0.0/24",
+                            "constraints": {
+                                "required": true
+                            }
                         }
                     ]
                 }
@@ -378,29 +157,19 @@
         },
         "outputs": {
             "parameters": {
-                "location": "[steps('basics').resourceScope.location.name]",
-                "keyVaultName": "[steps('identityAndAccess').keyVaultName]",
-                "vnetName": "[steps('connectivity').vnetName]",
-                "vnetAddressSpace": "[steps('connectivity').vnetAddressSpace]",
-                "nsgName": "[steps('connectivity').nsgName]",
-                "additionalSubnetName": "[steps('connectivity').additionalSubnetName]",
-                "additionalSubnetAddress": "[steps('connectivity').additionalSubnetAddress]",
-                "logAnalyticsWorkspaceName": "[steps('monitoring').logAnalyticsWorkspaceName]",
-                "logRetentionDays": "[steps('monitoring').logRetentionDays]",
-                "storageAccountName": "[steps('storage').storageAccountName]",
-                "storageAccountSku": "[steps('storage').storageAccountSku]",
-                "defenderForCloud": "[steps('securityAndCompliance').defenderForCloud]",
-                "vpnGatewayName": "[steps('connectivity').vpnGatewayName]",
-                "vpnGatewaySku": "[steps('connectivity').vpnGatewaySku]",
-                "vpnGatewaySubnetAddress": "[steps('connectivity').vpnGatewaySubnetAddress]",
-                "dnsResolverName": "[steps('connectivity').dnsResolverName]",
-                "dnsResolverSku": "[steps('connectivity').dnsResolverSku]",
-                "subscription1": "[steps('subscriptions').subscription1]",
-                "subscription2": "[steps('subscriptions').subscription2]"
-            },
-            "kind": "ResourceGroup",
-            "location": "[steps('basics').resourceScope.location.name]",
-            "resourceGroupId": "[steps('basics').resourceScope.resourceGroup.id]"
+                "subscriptionId1": "[steps('vnet1Basics').subscription1]",
+                "resourceGroup1": "[steps('vnet1Basics').resourceGroup1]",
+                "location1": "[steps('vnet1Basics').location1]",
+                "vnetName1": "[steps('vnet1').vnetName1]",
+                "vnetAddressSpace1": "[steps('vnet1').vnetAddressSpace1]",
+                "subnetAddressSpace1": "[steps('vnet1').subnetAddressSpace1]",
+                "subscriptionId2": "[steps('vnet2Basics').subscription2]",
+                "resourceGroup2": "[steps('vnet2Basics').resourceGroup2]",
+                "location2": "[steps('vnet2Basics').location2]",
+                "vnetName2": "[steps('vnet2').vnetName2]",
+                "vnetAddressSpace2": "[steps('vnet2').vnetAddressSpace2]",
+                "subnetAddressSpace2": "[steps('vnet2').subnetAddressSpace2]"
+            }
         }
     }
 }
