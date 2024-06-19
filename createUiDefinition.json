@@ -71,11 +71,13 @@
             ]
         },
         "outputs": {
-            "subscription1": "[steps('basics').subscription1]",
-            "resourceGroup1": "[steps('basics').resourceGroup1]",
-            "subscription2": "[steps('basics').subscription2]",
-            "resourceGroup2": "[steps('basics').resourceGroup2]",
-            "location": "[steps('basics').location]"
+            "parameters": {
+                "subscription1": "[steps('basics').subscription1]",
+                "resourceGroup1": "[steps('basics').resourceGroup1]",
+                "subscription2": "[steps('basics').subscription2]",
+                "resourceGroup2": "[steps('basics').resourceGroup2]",
+                "location": "[steps('basics').location]"
+            }
         }
     }
 }
