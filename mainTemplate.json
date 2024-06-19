@@ -1,49 +1,37 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "subscription1": {
-            "type": "string"
+    "$schema": "http://schema.management.azure.com/schemas/2021-09-09/uiFormDefinition.schema.json#",
+    "view": {
+        "kind": "Form",
+        "properties": {
+            "title": "Subscription Test",
+            "steps": [
+                {
+                    "name": "subscriptionStep",
+                    "label": "Select Subscriptions",
+                    "elements": [
+                        {
+                            "name": "subscription1",
+                            "type": "Microsoft.Common.SubscriptionSelector",
+                            "label": "Subscription 1",
+                            "toolTip": "Select the first subscription",
+                            "required": true
+                        },
+                        {
+                            "name": "subscription2",
+                            "type": "Microsoft.Common.SubscriptionSelector",
+                            "label": "Subscription 2",
+                            "toolTip": "Select the second subscription",
+                            "required": true
+                        }
+                    ]
+                }
+            ]
         },
-        "subscription2": {
-            "type": "string"
-        }
-    },
-    "variables": {},
-    "resources": [
-        {
-            "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2019-06-01",
-            "name": "[concat('storagetest1', uniqueString(resourceGroup().id))]",
-            "location": "eastus",
-            "sku": {
-                "name": "Standard_LRS"
-            },
-            "kind": "StorageV2",
-            "properties": {},
-            "subscriptionId": "[parameters('subscription1')]"
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2019-06-01",
-            "name": "[concat('storagetest2', uniqueString(resourceGroup().id))]",
-            "location": "westus2",
-            "sku": {
-                "name": "Standard_LRS"
-            },
-            "kind": "StorageV2",
-            "properties": {},
-            "subscriptionId": "[parameters('subscription2')]"
-        }
-    ],
-    "outputs": {
-        "subscription1Output": {
-            "type": "string",
-            "value": "[parameters('subscription1')]"
-        },
-        "subscription2Output": {
-            "type": "string",
-            "value": "[parameters('subscription2')]"
+        "outputs": {
+            "parameters": {
+                "subscription1": "[steps('subscriptionStep').subscription1]",
+                "subscription2": "[steps('subscriptionStep').subscription2]"
+            }
         }
     }
 }
