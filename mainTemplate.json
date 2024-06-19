@@ -2,13 +2,16 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "subscription1": {
+        "networkingTopology": {
             "type": "string"
         },
-        "subscription2": {
+        "connectivitySubscription": {
             "type": "string"
         },
         "resourceGroup1": {
+            "type": "string"
+        },
+        "subscription2": {
             "type": "string"
         },
         "resourceGroup2": {
@@ -22,7 +25,7 @@
         {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2019-06-01",
-            "subscriptionId": "[parameters('subscription1')]",
+            "subscriptionId": "[parameters('connectivitySubscription')]",
             "resourceGroup": "[parameters('resourceGroup1')]",
             "name": "[concat('storage', uniqueString(resourceGroup().id))]",
             "location": "[parameters('location')]",
@@ -47,7 +50,8 @@
             "kind": "StorageV2",
             "properties": {
                 "accessTier": "Hot"
-            }
+            },
+            "condition": "[equals(parameters('networkingTopology'), 'virtualWan')]"
         }
     ]
 }
