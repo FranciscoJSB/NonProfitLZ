@@ -10,22 +10,40 @@
                     "label": "Basics",
                     "elements": [
                         {
-                            "name": "subscription1",
+                            "name": "networkingTopology",
+                            "type": "Microsoft.Common.RadioButtons",
+                            "label": "Deploy networking topology",
+                            "toolTip": "Select the networking topology",
+                            "options": [
+                                {
+                                    "label": "Hub and spoke with Azure Firewall",
+                                    "value": "azureFirewall"
+                                },
+                                {
+                                    "label": "Hub and spoke with your own third-party NVA",
+                                    "value": "thirdPartyNva"
+                                },
+                                {
+                                    "label": "Virtual WAN (Microsoft managed)",
+                                    "value": "virtualWan"
+                                },
+                                {
+                                    "label": "No",
+                                    "value": "no"
+                                }
+                            ],
+                            "defaultValue": "no",
+                            "required": true
+                        },
+                        {
+                            "name": "connectivitySubscription",
                             "type": "Microsoft.Common.DropDown",
-                            "label": "Subscription 1",
-                            "toolTip": "Select the first subscription",
+                            "label": "Connectivity subscription",
+                            "toolTip": "Select the subscription for connectivity",
                             "constraints": {
-                                "allowedValues": [
-                                    {
-                                        "label": "Subscription A",
-                                        "value": "subA"
-                                    },
-                                    {
-                                        "label": "Subscription B",
-                                        "value": "subB"
-                                    }
-                                ]
+                                "allowedValues": "[listSubscriptions()]"
                             },
+                            "visible": "[equals(steps('basics').networkingTopology, 'virtualWan')]",
                             "required": true
                         },
                         {
@@ -43,17 +61,9 @@
                             "label": "Subscription 2",
                             "toolTip": "Select the second subscription",
                             "constraints": {
-                                "allowedValues": [
-                                    {
-                                        "label": "Subscription A",
-                                        "value": "subA"
-                                    },
-                                    {
-                                        "label": "Subscription B",
-                                        "value": "subB"
-                                    }
-                                ]
+                                "allowedValues": "[listSubscriptions()]"
                             },
+                            "visible": "[equals(steps('basics').networkingTopology, 'virtualWan')]",
                             "required": true
                         },
                         {
@@ -63,7 +73,8 @@
                             "toolTip": "Enter the resource group for the second subscription",
                             "constraints": {
                                 "required": true
-                            }
+                            },
+                            "visible": "[equals(steps('basics').networkingTopology, 'virtualWan')]"
                         },
                         {
                             "name": "location",
@@ -94,7 +105,8 @@
         },
         "outputs": {
             "parameters": {
-                "subscription1": "[steps('basics').subscription1]",
+                "networkingTopology": "[steps('basics').networkingTopology]",
+                "connectivitySubscription": "[steps('basics').connectivitySubscription]",
                 "resourceGroup1": "[steps('basics').resourceGroup1]",
                 "subscription2": "[steps('basics').subscription2]",
                 "resourceGroup2": "[steps('basics').resourceGroup2]",
