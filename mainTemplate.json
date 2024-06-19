@@ -1,42 +1,52 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-08-01/tenantDeploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "enterpriseScaleCompanyPrefix": {
-            "type": "string",
-            "metadata": {
-                "description": "Provide a prefix (max 10 characters, unique at tenant-scope) for the Management Group hierarchy and other resources created as part of Enterprise-scale."
-            }
+        "subscription1": {
+            "type": "string"
         },
-        "selectedSubscription": {
-            "type": "string",
-            "metadata": {
-                "description": "Select the subscription to be used dynamically."
-            }
+        "subscription2": {
+            "type": "string"
+        },
+        "resourceGroup1": {
+            "type": "string"
+        },
+        "resourceGroup2": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
         }
-    },
-    "variables": {
-        "deploymentSuffix": "[concat('-', deployment().location, '-', guid(parameters('enterpriseScaleCompanyPrefix'), utcNow()))]",
-        "deploymentName": "[concat('dynamic-sub-deployment', variables('deploymentSuffix'))]",
-        "templateUri": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-subscription-simple/azuredeploy.json"
     },
     "resources": [
         {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2019-10-01",
-            "name": "[variables('deploymentName')]",
-            "location": "[deployment().location]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "subscriptionId": "[parameters('subscription1')]",
+            "resourceGroup": "[parameters('resourceGroup1')]",
+            "name": "[concat('storage', uniqueString(resourceGroup().id))]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "StorageV2",
             "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('templateUri')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "subscriptionId": {
-                        "value": "[parameters('selectedSubscription')]"
-                    }
-                }
+                "accessTier": "Hot"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "subscriptionId": "[parameters('subscription2')]",
+            "resourceGroup": "[parameters('resourceGroup2')]",
+            "name": "[concat('storage', uniqueString(resourceGroup().id))]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "accessTier": "Hot"
             }
         }
     ]
