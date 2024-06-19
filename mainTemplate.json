@@ -10,7 +10,32 @@
         }
     },
     "variables": {},
-    "resources": [],
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[concat('storagetest1', uniqueString(resourceGroup().id))]",
+            "location": "eastus",
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "StorageV2",
+            "properties": {},
+            "subscriptionId": "[parameters('subscription1')]"
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[concat('storagetest2', uniqueString(resourceGroup().id))]",
+            "location": "westus2",
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "StorageV2",
+            "properties": {},
+            "subscriptionId": "[parameters('subscription2')]"
+        }
+    ],
     "outputs": {
         "subscription1Output": {
             "type": "string",
