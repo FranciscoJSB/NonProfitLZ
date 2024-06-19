@@ -11,12 +11,10 @@
                     "elements": [
                         {
                             "name": "subscription1",
-                            "type": "Microsoft.Common.DropDown",
+                            "type": "Microsoft.Common.ResourcePicker",
                             "label": "Subscription 1",
                             "toolTip": "Select the first subscription",
-                            "constraints": {
-                                "allowedValues": "[listSubscription()]"
-                            },
+                            "pickerType": "Subscription",
                             "required": true
                         },
                         {
@@ -30,12 +28,10 @@
                         },
                         {
                             "name": "subscription2",
-                            "type": "Microsoft.Common.DropDown",
+                            "type": "Microsoft.Common.ResourcePicker",
                             "label": "Subscription 2",
                             "toolTip": "Select the second subscription",
-                            "constraints": {
-                                "allowedValues": "[listSubscription()]"
-                            },
+                            "pickerType": "Subscription",
                             "required": true
                         },
                         {
