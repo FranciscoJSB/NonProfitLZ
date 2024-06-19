@@ -1,197 +1,30 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2021-09-09/uiFormDefinition.schema.json#",
-    "view": {
-        "kind": "Form",
-        "properties": {
-            "title": "VNet Deployment",
-            "steps": [
-                {
-                    "name": "vnet1Basics",
-                    "label": "VNet 1 Basics",
-                    "elements": [
-                        {
-                            "name": "subscription1",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Subscription for VNet 1",
-                            "toolTip": "Select the subscription for VNet 1",
-                            "constraints": {
-                                "allowedValues": [
-                                    {
-                                        "label": "Subscription 1",
-                                        "value": "your-subscription-id-1"
-                                    },
-                                    {
-                                        "label": "Subscription 2",
-                                        "value": "your-subscription-id-2"
-                                    }
-                                    // Add more subscriptions as needed
-                                ],
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "resourceGroup1",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Resource Group for VNet 1",
-                            "toolTip": "Enter the resource group for VNet 1",
-                            "constraints": {
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "location1",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Region for VNet 1",
-                            "toolTip": "Enter the Azure region for VNet 1",
-                            "constraints": {
-                                "required": true
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "vnet1",
-                    "label": "VNet 1 Configuration",
-                    "elements": [
-                        {
-                            "name": "vnetName1",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "VNet 1 Name",
-                            "toolTip": "The name of the first Virtual Network.",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The VNet name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "vnetAddressSpace1",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "VNet 1 Address Space",
-                            "toolTip": "Address space for the first Virtual Network (e.g., 10.0.0.0/16).",
-                            "defaultValue": "10.0.0.0/16",
-                            "constraints": {
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "subnetAddressSpace1",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Subnet 1 Address Space",
-                            "toolTip": "Address space for the first subnet (e.g., 10.0.0.0/24).",
-                            "defaultValue": "10.0.0.0/24",
-                            "constraints": {
-                                "required": true
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "vnet2Basics",
-                    "label": "VNet 2 Basics",
-                    "elements": [
-                        {
-                            "name": "subscription2",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Subscription for VNet 2",
-                            "toolTip": "Select the subscription for VNet 2",
-                            "constraints": {
-                                "allowedValues": [
-                                    {
-                                        "label": "Subscription 1",
-                                        "value": "your-subscription-id-1"
-                                    },
-                                    {
-                                        "label": "Subscription 2",
-                                        "value": "your-subscription-id-2"
-                                    }
-                                    // Add more subscriptions as needed
-                                ],
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "resourceGroup2",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Resource Group for VNet 2",
-                            "toolTip": "Enter the resource group for VNet 2",
-                            "constraints": {
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "location2",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Region for VNet 2",
-                            "toolTip": "Enter the Azure region for VNet 2",
-                            "constraints": {
-                                "required": true
-                            }
-                        }
-                    ]
-                },
-                {
-                    "name": "vnet2",
-                    "label": "VNet 2 Configuration",
-                    "elements": [
-                        {
-                            "name": "vnetName2",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "VNet 2 Name",
-                            "toolTip": "The name of the second Virtual Network.",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The VNet name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "vnetAddressSpace2",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "VNet 2 Address Space",
-                            "toolTip": "Address space for the second Virtual Network (e.g., 10.1.0.0/16).",
-                            "defaultValue": "10.1.0.0/16",
-                            "constraints": {
-                                "required": true
-                            }
-                        },
-                        {
-                            "name": "subnetAddressSpace2",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Subnet 2 Address Space",
-                            "toolTip": "Address space for the second subnet (e.g., 10.1.0.0/24).",
-                            "defaultValue": "10.1.0.0/24",
-                            "constraints": {
-                                "required": true
-                            }
-                        }
-                    ]
-                }
-            ]
-        },
-        "outputs": {
-            "parameters": {
-                "subscriptionId1": "[steps('vnet1Basics').subscription1]",
-                "resourceGroup1": "[steps('vnet1Basics').resourceGroup1]",
-                "location1": "[steps('vnet1Basics').location1]",
-                "vnetName1": "[steps('vnet1').vnetName1]",
-                "vnetAddressSpace1": "[steps('vnet1').vnetAddressSpace1]",
-                "subnetAddressSpace1": "[steps('vnet1').subnetAddressSpace1]",
-                "subscriptionId2": "[steps('vnet2Basics').subscription2]",
-                "resourceGroup2": "[steps('vnet2Basics').resourceGroup2]",
-                "location2": "[steps('vnet2Basics').location2]",
-                "vnetName2": "[steps('vnet2').vnetName2]",
-                "vnetAddressSpace2": "[steps('vnet2').vnetAddressSpace2]",
-                "subnetAddressSpace2": "[steps('vnet2').subnetAddressSpace2]"
+    "handler": "Microsoft.Compute.MultiVm",
+    "version": "1.0",
+    "parameters": {
+        "enterpriseScaleCompanyPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Provide a prefix (max 10 characters, unique at tenant-scope) for the Management Group hierarchy and other resources created as part of Enterprise-scale.",
+                "displayName": "Company Prefix"
             }
+        },
+        "selectedSubscription": {
+            "type": "Microsoft.Common.Subscription",
+            "metadata": {
+                "description": "Select the subscription to be used dynamically.",
+                "displayName": "Select Subscription"
+            }
+        }
+    },
+    "outputs": {
+        "enterpriseScaleCompanyPrefix": {
+            "type": "string",
+            "value": "[parameters('enterpriseScaleCompanyPrefix')]"
+        },
+        "selectedSubscription": {
+            "type": "string",
+            "value": "[parameters('selectedSubscription')]"
         }
     }
 }
