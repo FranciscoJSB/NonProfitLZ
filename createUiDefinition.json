@@ -11,10 +11,21 @@
                     "elements": [
                         {
                             "name": "subscription1",
-                            "type": "Microsoft.Common.ResourcePicker",
+                            "type": "Microsoft.Common.DropDown",
                             "label": "Subscription 1",
                             "toolTip": "Select the first subscription",
-                            "pickerType": "Subscription",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Subscription A",
+                                        "value": "subA"
+                                    },
+                                    {
+                                        "label": "Subscription B",
+                                        "value": "subB"
+                                    }
+                                ]
+                            },
                             "required": true
                         },
                         {
@@ -28,10 +39,21 @@
                         },
                         {
                             "name": "subscription2",
-                            "type": "Microsoft.Common.ResourcePicker",
+                            "type": "Microsoft.Common.DropDown",
                             "label": "Subscription 2",
                             "toolTip": "Select the second subscription",
-                            "pickerType": "Subscription",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Subscription A",
+                                        "value": "subA"
+                                    },
+                                    {
+                                        "label": "Subscription B",
+                                        "value": "subB"
+                                    }
+                                ]
+                            },
                             "required": true
                         },
                         {
