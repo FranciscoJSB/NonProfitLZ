@@ -2,56 +2,41 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "networkingTopology": {
-            "type": "string"
-        },
-        "connectivitySubscription": {
-            "type": "string"
-        },
-        "resourceGroup1": {
+        "subscription1": {
             "type": "string"
         },
         "subscription2": {
-            "type": "string"
-        },
-        "resourceGroup2": {
-            "type": "string"
-        },
-        "location": {
             "type": "string"
         }
     },
     "resources": [
         {
-            "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2019-06-01",
-            "subscriptionId": "[parameters('connectivitySubscription')]",
-            "resourceGroup": "[parameters('resourceGroup1')]",
-            "name": "[concat('storage', uniqueString(resourceGroup().id))]",
-            "location": "[parameters('location')]",
-            "sku": {
-                "name": "Standard_LRS"
-            },
-            "kind": "StorageV2",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "subscriptionId": "[parameters('subscription1')]",
+            "name": "testDeployment1",
             "properties": {
-                "accessTier": "Hot"
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": []
+                }
             }
         },
         {
-            "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2019-06-01",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
             "subscriptionId": "[parameters('subscription2')]",
-            "resourceGroup": "[parameters('resourceGroup2')]",
-            "name": "[concat('storage', uniqueString(resourceGroup().id))]",
-            "location": "[parameters('location')]",
-            "sku": {
-                "name": "Standard_LRS"
-            },
-            "kind": "StorageV2",
+            "name": "testDeployment2",
             "properties": {
-                "accessTier": "Hot"
-            },
-            "condition": "[equals(parameters('networkingTopology'), 'virtualWan')]"
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": []
+                }
+            }
         }
     ]
 }
