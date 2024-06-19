@@ -11,10 +11,20 @@
                     "elements": [
                         {
                             "name": "subscription1",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Subscription ID for VNet 1",
-                            "toolTip": "Enter the subscription ID for VNet 1",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Subscription for VNet 1",
+                            "toolTip": "Select the subscription for VNet 1",
                             "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Subscription 1",
+                                        "value": "subscription-id-1"
+                                    },
+                                    {
+                                        "label": "Subscription 2",
+                                        "value": "subscription-id-2"
+                                    }
+                                ],
                                 "required": true
                             }
                         },
@@ -85,10 +95,20 @@
                     "elements": [
                         {
                             "name": "subscription2",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Subscription ID for VNet 2",
-                            "toolTip": "Enter the subscription ID for VNet 2",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Subscription for VNet 2",
+                            "toolTip": "Select the subscription for VNet 2",
                             "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Subscription 1",
+                                        "value": "subscription-id-1"
+                                    },
+                                    {
+                                        "label": "Subscription 2",
+                                        "value": "subscription-id-2"
+                                    }
+                                ],
                                 "required": true
                             }
                         },
