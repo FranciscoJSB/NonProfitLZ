@@ -21,10 +21,12 @@
                         },
                         {
                             "name": "resourceGroup1",
-                            "type": "Microsoft.Common.ResourceGroupPicker",
+                            "type": "Microsoft.Common.TextBox",
                             "label": "Resource Group 1",
-                            "toolTip": "Select the resource group for the first subscription",
-                            "required": true
+                            "toolTip": "Enter the resource group for the first subscription",
+                            "constraints": {
+                                "required": true
+                            }
                         },
                         {
                             "name": "subscription2",
@@ -38,10 +40,12 @@
                         },
                         {
                             "name": "resourceGroup2",
-                            "type": "Microsoft.Common.ResourceGroupPicker",
+                            "type": "Microsoft.Common.TextBox",
                             "label": "Resource Group 2",
-                            "toolTip": "Select the resource group for the second subscription",
-                            "required": true
+                            "toolTip": "Enter the resource group for the second subscription",
+                            "constraints": {
+                                "required": true
+                            }
                         },
                         {
                             "name": "location",
