@@ -11,7 +11,7 @@
                     "elements": [
                         {
                             "name": "networkingTopology",
-                            "type": "Microsoft.Common.ChoiceGroup",
+                            "type": "Microsoft.Common.DropDown",
                             "label": "Deploy networking topology",
                             "toolTip": "Select the networking topology",
                             "constraints": {
@@ -39,9 +39,12 @@
                         },
                         {
                             "name": "connectivitySubscription",
-                            "type": "Microsoft.Common.SubscriptionSelector",
+                            "type": "Microsoft.Common.DropDown",
                             "label": "Connectivity subscription",
                             "toolTip": "Select the subscription for connectivity",
+                            "constraints": {
+                                "allowedValues": "[listSubscriptions()]"
+                            },
                             "visible": "[equals(steps('basics').networkingTopology, 'virtualWan')]",
                             "required": true
                         },
@@ -56,9 +59,12 @@
                         },
                         {
                             "name": "subscription2",
-                            "type": "Microsoft.Common.SubscriptionSelector",
+                            "type": "Microsoft.Common.DropDown",
                             "label": "Subscription 2",
                             "toolTip": "Select the second subscription",
+                            "constraints": {
+                                "allowedValues": "[listSubscriptions()]"
+                            },
                             "visible": "[equals(steps('basics').networkingTopology, 'virtualWan')]",
                             "required": true
                         },
