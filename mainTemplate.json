@@ -9,7 +9,6 @@
             "type": "string"
         }
     },
-    "variables": {},
     "resources": [],
     "outputs": {
         "subscription1Output": {
