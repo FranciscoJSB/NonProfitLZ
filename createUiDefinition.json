@@ -3,102 +3,24 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Test Deployment",
+            "title": "Subscription Test",
             "steps": [
                 {
-                    "name": "basics",
-                    "label": "Basics",
+                    "name": "subscriptionStep",
+                    "label": "Select Subscriptions",
                     "elements": [
                         {
-                            "name": "networkingTopology",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Deploy networking topology",
-                            "toolTip": "Select the networking topology",
-                            "constraints": {
-                                "allowedValues": [
-                                    {
-                                        "label": "Hub and spoke with Azure Firewall",
-                                        "value": "azureFirewall"
-                                    },
-                                    {
-                                        "label": "Hub and spoke with your own third-party NVA",
-                                        "value": "thirdPartyNva"
-                                    },
-                                    {
-                                        "label": "Virtual WAN (Microsoft managed)",
-                                        "value": "virtualWan"
-                                    },
-                                    {
-                                        "label": "No",
-                                        "value": "no"
-                                    }
-                                ]
-                            },
-                            "defaultValue": "no",
+                            "name": "subscription1",
+                            "type": "Microsoft.Common.SubscriptionSelector",
+                            "label": "Subscription 1",
+                            "toolTip": "Select the first subscription",
                             "required": true
-                        },
-                        {
-                            "name": "connectivitySubscription",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Connectivity subscription",
-                            "toolTip": "Select the subscription for connectivity",
-                            "constraints": {
-                                "allowedValues": "[listSubscriptions()]"
-                            },
-                            "visible": "[equals(steps('basics').networkingTopology, 'virtualWan')]",
-                            "required": true
-                        },
-                        {
-                            "name": "resourceGroup1",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Resource Group 1",
-                            "toolTip": "Enter the resource group for the first subscription",
-                            "constraints": {
-                                "required": true
-                            }
                         },
                         {
                             "name": "subscription2",
-                            "type": "Microsoft.Common.DropDown",
+                            "type": "Microsoft.Common.SubscriptionSelector",
                             "label": "Subscription 2",
                             "toolTip": "Select the second subscription",
-                            "constraints": {
-                                "allowedValues": "[listSubscriptions()]"
-                            },
-                            "visible": "[equals(steps('basics').networkingTopology, 'virtualWan')]",
-                            "required": true
-                        },
-                        {
-                            "name": "resourceGroup2",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Resource Group 2",
-                            "toolTip": "Enter the resource group for the second subscription",
-                            "constraints": {
-                                "required": true
-                            },
-                            "visible": "[equals(steps('basics').networkingTopology, 'virtualWan')]"
-                        },
-                        {
-                            "name": "location",
-                            "type": "Microsoft.Common.DropDown",
-                            "label": "Region",
-                            "toolTip": "Select the region",
-                            "constraints": {
-                                "allowedValues": [
-                                    {
-                                        "label": "East US",
-                                        "value": "eastus"
-                                    },
-                                    {
-                                        "label": "West US 2",
-                                        "value": "westus2"
-                                    },
-                                    {
-                                        "label": "Central US",
-                                        "value": "centralus"
-                                    }
-                                ]
-                            },
                             "required": true
                         }
                     ]
@@ -107,12 +29,8 @@
         },
         "outputs": {
             "parameters": {
-                "networkingTopology": "[steps('basics').networkingTopology]",
-                "connectivitySubscription": "[steps('basics').connectivitySubscription]",
-                "resourceGroup1": "[steps('basics').resourceGroup1]",
-                "subscription2": "[steps('basics').subscription2]",
-                "resourceGroup2": "[steps('basics').resourceGroup2]",
-                "location": "[steps('basics').location]"
+                "subscription1": "[steps('subscriptionStep').subscription1]",
+                "subscription2": "[steps('subscriptionStep').subscription2]"
             }
         }
     }
