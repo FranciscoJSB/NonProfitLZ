@@ -1,146 +1,43 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-08-01/tenantDeploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
+    "parameters": {
+        "enterpriseScaleCompanyPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Provide a prefix (max 10 characters, unique at tenant-scope) for the Management Group hierarchy and other resources created as part of Enterprise-scale."
+            }
+        },
+        "selectedSubscription": {
+            "type": "string",
+            "metadata": {
+                "description": "Select the subscription to be used dynamically."
+            }
+        }
+    },
+    "variables": {
+        "deploymentSuffix": "[concat('-', deployment().location, '-', guid(parameters('enterpriseScaleCompanyPrefix'), utcNow()))]",
+        "deploymentName": "[concat('dynamic-sub-deployment', variables('deploymentSuffix'))]",
+        "templateUri": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-subscription-simple/azuredeploy.json"
+    },
     "resources": [
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
-            "name": "nestedVnetDeployment1",
-            "subscriptionId": "[parameters('subscriptionId1')]",
-            "resourceGroup": "[parameters('resourceGroup1')]",
+            "name": "[variables('deploymentName')]",
+            "location": "[deployment().location]",
             "properties": {
                 "mode": "Incremental",
-                "template": {
-                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-                    "contentVersion": "1.0.0.0",
-                    "resources": [
-                        {
-                            "type": "Microsoft.Network/virtualNetworks",
-                            "apiVersion": "2020-11-01",
-                            "name": "[parameters('vnetName1')]",
-                            "location": "[parameters('location1')]",
-                            "properties": {
-                                "addressSpace": {
-                                    "addressPrefixes": [
-                                        "[parameters('vnetAddressSpace1')]"
-                                    ]
-                                },
-                                "subnets": [
-                                    {
-                                        "name": "default",
-                                        "properties": {
-                                            "addressPrefix": "[parameters('subnetAddressSpace1')]"
-                                        }
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "parameters": {
-                        "location1": {
-                            "type": "string"
-                        },
-                        "vnetName1": {
-                            "type": "string"
-                        },
-                        "vnetAddressSpace1": {
-                            "type": "string"
-                        },
-                        "subnetAddressSpace1": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2019-10-01",
-            "name": "nestedVnetDeployment2",
-            "subscriptionId": "[parameters('subscriptionId2')]",
-            "resourceGroup": "[parameters('resourceGroup2')]",
-            "properties": {
-                "mode": "Incremental",
-                "template": {
-                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-                    "contentVersion": "1.0.0.0",
-                    "resources": [
-                        {
-                            "type": "Microsoft.Network/virtualNetworks",
-                            "apiVersion": "2020-11-01",
-                            "name": "[parameters('vnetName2')]",
-                            "location": "[parameters('location2')]",
-                            "properties": {
-                                "addressSpace": {
-                                    "addressPrefixes": [
-                                        "[parameters('vnetAddressSpace2')]"
-                                    ]
-                                },
-                                "subnets": [
-                                    {
-                                        "name": "default",
-                                        "properties": {
-                                            "addressPrefix": "[parameters('subnetAddressSpace2')]"
-                                        }
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "parameters": {
-                        "location2": {
-                            "type": "string"
-                        },
-                        "vnetName2": {
-                            "type": "string"
-                        },
-                        "vnetAddressSpace2": {
-                            "type": "string"
-                        },
-                        "subnetAddressSpace2": {
-                            "type": "string"
-                        }
+                "templateLink": {
+                    "uri": "[variables('templateUri')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "subscriptionId": {
+                        "value": "[parameters('selectedSubscription')]"
                     }
                 }
             }
         }
-    ],
-    "parameters": {
-        "subscriptionId1": {
-            "type": "string"
-        },
-        "resourceGroup1": {
-            "type": "string"
-        },
-        "location1": {
-            "type": "string"
-        },
-        "vnetName1": {
-            "type": "string"
-        },
-        "vnetAddressSpace1": {
-            "type": "string"
-        },
-        "subnetAddressSpace1": {
-            "type": "string"
-        },
-        "subscriptionId2": {
-            "type": "string"
-        },
-        "resourceGroup2": {
-            "type": "string"
-        },
-        "location2": {
-            "type": "string"
-        },
-        "vnetName2": {
-            "type": "string"
-        },
-        "vnetAddressSpace2": {
-            "type": "string"
-        },
-        "subnetAddressSpace2": {
-            "type": "string"
-        }
-    }
+    ]
 }
