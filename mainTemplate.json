@@ -1,6 +1,116 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
+    "parameters": {
+        "keyVaultName": { "type": "string" },
+        "location": { "type": "string" },
+        "vnetName": { "type": "string" },
+        "additionalSubnetName": { "type": "string" },
+        "additionalSubnetAddress": { "type": "string" },
+        "logAnalyticsWorkspaceName": { "type": "string" },
+        "logRetentionDays": { "type": "int" },
+        "storageAccountName": { "type": "string" },
+        "nsgName": { "type": "string" },
+        "vpnGatewayName": { "type": "string" },
+        "vpnGatewaySku": { "type": "string", "defaultValue": "VpnGw1" },
+        "vpnGatewaySubnetAddress": { "type": "string" },
+        "defenderForCloud": { "type": "string", "defaultValue": "Standard" },
+        "dnsResolverName": { "type": "string" },
+        "dnsResolverSku": { "type": "string", "defaultValue": "Standard" },
+        "subscription1": { "type": "string" },
+        "subscription2": { "type": "string" }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2021-06-01-preview",
+            "name": "[parameters('keyVaultName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "sku": { "family": "A", "name": "standard" },
+                "tenantId": "[subscription().tenantId]",
+                "accessPolicies": []
+            },
+            "subscriptionId": "[parameters('subscription1')]"
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-06-01",
+            "name": "[parameters('vnetName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "addressSpace": { "addressPrefixes": ["10.0.0.0/16"] },
+                "subnets": [
+                    { "name": "default", "properties": { "addressPrefix": "10.0.0.0/24" } },
+                    { "name": "[parameters('additionalSubnetName')]", "properties": { "addressPrefix": "[parameters('additionalSubnetAddress')]" } },
+                    { "name": "GatewaySubnet", "properties": { "addressPrefix": "[parameters('vpnGatewaySubnetAddress')]" } }
+                ]
+            },
+            "dependsOn": [],
+            "subscriptionId": "[parameters('subscription2')]"
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[parameters('nsgName')]",
+            "location": "[parameters('location')]",
+            "properties": { "securityRules": [] },
+            "dependsOn": ["[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"],
+            "subscriptionId": "[parameters('subscription1')]"
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworkGateways",
+            "apiVersion": "2020-05-01",
+            "name": "[parameters('vpnGatewayName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "vpngatewayconfig",
+                        "properties": {
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vpnGatewayName'), '-pip'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), 'GatewaySubnet')]"
+                            }
+                        }
+                    }
+                ],
+                "gatewayType": "Vpn",
+                "vpnType": "RouteBased",
+                "enableBgp": false,
+                "sku": { "name": "[parameters('vpnGatewaySku')]" }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('vpnGatewayName'), '-pip'))]"
+            ],
+            "subscriptionId": "[parameters('subscription2')]"
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "apiVersion": "2020-08-01",
+            "name": "[parameters('logAnalyticsWorkspaceName')]",
+            "location": "[parameters('location')]",
+            "properties": { "sku": { "name": "PerGB2018" }, "retentionInDays": "[parameters('logRetentionDays')]" },
+            "dependsOn": ["[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"],
+            "subscriptionId": "[parameters('subscription1')]"
+        }
+    ],
+    "outputs": {
+        "keyVaultName": { "type": "string", "value": "[parameters('keyVaultName')]" },
+        "vnetName": { "type": "string", "value": "[parameters('vnetName')]" },
+        "nsgName": { "type": "string", "value": "[parameters('nsgName')]" },
+        "logAnalyticsWorkspaceName": { "type": "string", "value": "[parameters('logAnalyticsWorkspaceName')]" },
+        "storageAccountName": { "type": "string", "value": "[parameters('storageAccountName')]" },
+        "vpnGatewayName": { "type": "string", "value": "[parameters('vpnGatewayName')]" },
+        "dnsResolverName": { "type": "string", "value": "[parameters('dnsResolverName')]" }
+    }
+}
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
     "resources": [
         {
             "type": "Microsoft.Resources/deployments",
