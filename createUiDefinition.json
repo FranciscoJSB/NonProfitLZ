@@ -11,38 +11,37 @@
                     "elements": [
                         {
                             "name": "networkingTopology",
-                            "type": "Microsoft.Common.RadioButtons",
+                            "type": "Microsoft.Common.ChoiceGroup",
                             "label": "Deploy networking topology",
                             "toolTip": "Select the networking topology",
-                            "options": [
-                                {
-                                    "label": "Hub and spoke with Azure Firewall",
-                                    "value": "azureFirewall"
-                                },
-                                {
-                                    "label": "Hub and spoke with your own third-party NVA",
-                                    "value": "thirdPartyNva"
-                                },
-                                {
-                                    "label": "Virtual WAN (Microsoft managed)",
-                                    "value": "virtualWan"
-                                },
-                                {
-                                    "label": "No",
-                                    "value": "no"
-                                }
-                            ],
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "Hub and spoke with Azure Firewall",
+                                        "value": "azureFirewall"
+                                    },
+                                    {
+                                        "label": "Hub and spoke with your own third-party NVA",
+                                        "value": "thirdPartyNva"
+                                    },
+                                    {
+                                        "label": "Virtual WAN (Microsoft managed)",
+                                        "value": "virtualWan"
+                                    },
+                                    {
+                                        "label": "No",
+                                        "value": "no"
+                                    }
+                                ]
+                            },
                             "defaultValue": "no",
                             "required": true
                         },
                         {
                             "name": "connectivitySubscription",
-                            "type": "Microsoft.Common.DropDown",
+                            "type": "Microsoft.Common.SubscriptionSelector",
                             "label": "Connectivity subscription",
                             "toolTip": "Select the subscription for connectivity",
-                            "constraints": {
-                                "allowedValues": "[listSubscriptions()]"
-                            },
                             "visible": "[equals(steps('basics').networkingTopology, 'virtualWan')]",
                             "required": true
                         },
@@ -57,12 +56,9 @@
                         },
                         {
                             "name": "subscription2",
-                            "type": "Microsoft.Common.DropDown",
+                            "type": "Microsoft.Common.SubscriptionSelector",
                             "label": "Subscription 2",
                             "toolTip": "Select the second subscription",
-                            "constraints": {
-                                "allowedValues": "[listSubscriptions()]"
-                            },
                             "visible": "[equals(steps('basics').networkingTopology, 'virtualWan')]",
                             "required": true
                         },
