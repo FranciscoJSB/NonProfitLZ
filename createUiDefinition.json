@@ -11,29 +11,27 @@
                     "elements": [
                         {
                             "name": "subscription1",
-                            "type": "Microsoft.Common.Subscription",
-                            "label": "Subscription for VNet 1",
-                            "toolTip": "Select the subscription for VNet 1",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Subscription ID for VNet 1",
+                            "toolTip": "Enter the subscription ID for VNet 1",
                             "constraints": {
                                 "required": true
                             }
                         },
                         {
                             "name": "resourceGroup1",
-                            "type": "Microsoft.Common.ResourceGroup",
+                            "type": "Microsoft.Common.TextBox",
                             "label": "Resource Group for VNet 1",
-                            "toolTip": "Select the resource group for VNet 1",
-                            "subscriptionId": "[subscription1]",
+                            "toolTip": "Enter the resource group for VNet 1",
                             "constraints": {
                                 "required": true
                             }
                         },
                         {
                             "name": "location1",
-                            "type": "Microsoft.Common.Location",
+                            "type": "Microsoft.Common.TextBox",
                             "label": "Region for VNet 1",
-                            "toolTip": "Select the Azure region for VNet 1",
-                            "subscriptionId": "[subscription1]",
+                            "toolTip": "Enter the Azure region for VNet 1",
                             "constraints": {
                                 "required": true
                             }
@@ -87,29 +85,27 @@
                     "elements": [
                         {
                             "name": "subscription2",
-                            "type": "Microsoft.Common.Subscription",
-                            "label": "Subscription for VNet 2",
-                            "toolTip": "Select the subscription for VNet 2",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Subscription ID for VNet 2",
+                            "toolTip": "Enter the subscription ID for VNet 2",
                             "constraints": {
                                 "required": true
                             }
                         },
                         {
                             "name": "resourceGroup2",
-                            "type": "Microsoft.Common.ResourceGroup",
+                            "type": "Microsoft.Common.TextBox",
                             "label": "Resource Group for VNet 2",
-                            "toolTip": "Select the resource group for VNet 2",
-                            "subscriptionId": "[subscription2]",
+                            "toolTip": "Enter the resource group for VNet 2",
                             "constraints": {
                                 "required": true
                             }
                         },
                         {
                             "name": "location2",
-                            "type": "Microsoft.Common.Location",
+                            "type": "Microsoft.Common.TextBox",
                             "label": "Region for VNet 2",
-                            "toolTip": "Select the Azure region for VNet 2",
-                            "subscriptionId": "[subscription2]",
+                            "toolTip": "Enter the Azure region for VNet 2",
                             "constraints": {
                                 "required": true
                             }
