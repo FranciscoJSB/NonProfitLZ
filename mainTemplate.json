@@ -12,32 +12,28 @@
     "variables": {},
     "resources": [
         {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-06-01",
-            "subscriptionId": "[parameters('subscription1')]",
-            "name": "testDeployment1",
-            "properties": {
-                "mode": "Incremental",
-                "template": {
-                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-                    "contentVersion": "1.0.0.0",
-                    "resources": []
-                }
-            }
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[concat('storagetest1', uniqueString(resourceGroup().id))]",
+            "location": "eastus",
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "StorageV2",
+            "properties": {},
+            "subscriptionId": "[parameters('subscription1')]"
         },
         {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-06-01",
-            "subscriptionId": "[parameters('subscription2')]",
-            "name": "testDeployment2",
-            "properties": {
-                "mode": "Incremental",
-                "template": {
-                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-                    "contentVersion": "1.0.0.0",
-                    "resources": []
-                }
-            }
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[concat('storagetest2', uniqueString(resourceGroup().id))]",
+            "location": "westus2",
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "StorageV2",
+            "properties": {},
+            "subscriptionId": "[parameters('subscription2')]"
         }
     ]
 }
