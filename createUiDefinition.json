@@ -1,30 +1,74 @@
 {
-    "handler": "Microsoft.Compute.MultiVm",
-    "version": "1.0",
-    "parameters": {
-        "enterpriseScaleCompanyPrefix": {
-            "type": "string",
-            "metadata": {
-                "description": "Provide a prefix (max 10 characters, unique at tenant-scope) for the Management Group hierarchy and other resources created as part of Enterprise-scale.",
-                "displayName": "Company Prefix"
-            }
-        },
-        "selectedSubscription": {
-            "type": "Microsoft.Common.Subscription",
-            "metadata": {
-                "description": "Select the subscription to be used dynamically.",
-                "displayName": "Select Subscription"
-            }
-        }
-    },
-    "outputs": {
-        "enterpriseScaleCompanyPrefix": {
-            "type": "string",
-            "value": "[parameters('enterpriseScaleCompanyPrefix')]"
-        },
-        "selectedSubscription": {
-            "type": "string",
-            "value": "[parameters('selectedSubscription')]"
+    "$schema": "http://schema.management.azure.com/schemas/2021-09-09/uiFormDefinition.schema.json#",
+    "view": {
+        "kind": "Form",
+        "properties": {
+            "title": "Test Deployment",
+            "steps": [
+                {
+                    "name": "basics",
+                    "label": "Basics",
+                    "elements": [
+                        {
+                            "name": "subscription1",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Subscription 1",
+                            "toolTip": "Select the first subscription",
+                            "constraints": {
+                                "allowedValues": "[listSubscription()]"
+                            },
+                            "required": true
+                        },
+                        {
+                            "name": "resourceGroup1",
+                            "type": "Microsoft.Common.ResourceGroupPicker",
+                            "label": "Resource Group 1",
+                            "toolTip": "Select the resource group for the first subscription",
+                            "required": true
+                        },
+                        {
+                            "name": "subscription2",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Subscription 2",
+                            "toolTip": "Select the second subscription",
+                            "constraints": {
+                                "allowedValues": "[listSubscription()]"
+                            },
+                            "required": true
+                        },
+                        {
+                            "name": "resourceGroup2",
+                            "type": "Microsoft.Common.ResourceGroupPicker",
+                            "label": "Resource Group 2",
+                            "toolTip": "Select the resource group for the second subscription",
+                            "required": true
+                        },
+                        {
+                            "name": "location",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Region",
+                            "toolTip": "Select the region",
+                            "constraints": {
+                                "allowedValues": [
+                                    {
+                                        "label": "East US",
+                                        "value": "eastus"
+                                    },
+                                    {
+                                        "label": "West US 2",
+                                        "value": "westus2"
+                                    },
+                                    {
+                                        "label": "Central US",
+                                        "value": "centralus"
+                                    }
+                                ]
+                            },
+                            "required": true
+                        }
+                    ]
+                }
+            ]
         }
     }
 }
