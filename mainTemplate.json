@@ -9,6 +9,7 @@
             "type": "string"
         }
     },
+    "variables": {},
     "resources": [
         {
             "type": "Microsoft.Resources/deployments",
