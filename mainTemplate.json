@@ -9,7 +9,40 @@
             "type": "string"
         }
     },
-    "resources": [],
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2021-04-01",
+            "name": "subscription1Deployment",
+            "subscriptionId": "[parameters('subscription1')]",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        // Define resources to be deployed in subscription1
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2021-04-01",
+            "name": "subscription2Deployment",
+            "subscriptionId": "[parameters('subscription2')]",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        // Define resources to be deployed in subscription2
+                    ]
+                }
+            }
+        }
+    ],
     "outputs": {
         "subscription1Output": {
             "type": "string",
