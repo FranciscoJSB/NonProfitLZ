@@ -29,8 +29,8 @@
         },
         "outputs": {
             "parameters": {
-                "subscription1": "[steps('subscriptionStep').subscription1]",
-                "subscription2": "[steps('subscriptionStep').subscription2]"
+                "subscription1": "[steps('subscriptionStep').subscription1.subscriptionId]",
+                "subscription2": "[steps('subscriptionStep').subscription2.subscriptionId]"
             }
         }
     }
