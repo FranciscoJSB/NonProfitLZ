@@ -16,102 +16,91 @@
     },
     "vnetName": {
       "type": "string",
-      "value": "[steps('basicInfo').vnetName]"
+      "value": "[steps('basics').vnetName]"
     },
     "addressPrefix": {
       "type": "string",
-      "value": "[steps('basicInfo').addressPrefix]"
+      "value": "[steps('basics').addressPrefix]"
     },
     "subnetName": {
       "type": "string",
-      "value": "[steps('basicInfo').subnetName]"
+      "value": "[steps('basics').subnetName]"
     },
     "subnetPrefix": {
       "type": "string",
-      "value": "[steps('basicInfo').subnetPrefix]"
+      "value": "[steps('basics').subnetPrefix]"
     }
   },
   "resources": [
     {
-      "type": "Microsoft.Common.Wizard",
-      "name": "createVNetWizard",
-      "label": "Create Virtual Network",
-      "categories": [
-        "Network"
-      ],
-      "wizardType": "MultiStepForm",
-      "steps": [
+      "type": "Microsoft.Common.Section",
+      "label": "Basics",
+      "elements": [
         {
-          "name": "basicInfo",
-          "label": "Basic Information",
-          "elements": [
-            {
-              "name": "subscriptionId",
-              "type": "Microsoft.Common.SubscriptionSelector",
-              "label": "Subscription",
-              "toolTip": "Select the subscription to use."
-            },
-            {
-              "name": "resourceGroupName",
-              "type": "Microsoft.Common.ResourceGroupSelector",
-              "label": "Resource Group",
-              "toolTip": "Select the resource group to use."
-            },
-            {
-              "name": "location",
-              "type": "Microsoft.Common.Location",
-              "label": "Location",
-              "toolTip": "Select the location for the resources."
-            },
-            {
-              "name": "vnetName",
-              "type": "Microsoft.Common.TextBox",
-              "label": "Virtual Network Name",
-              "toolTip": "Enter the name of the virtual network.",
-              "defaultValue": "myVNet",
-              "constraints": {
-                "required": true,
-                "regex": "^[a-zA-Z0-9_-]{1,64}$",
-                "validationMessage": "The name must be between 1 and 64 characters."
-              }
-            },
-            {
-              "name": "addressPrefix",
-              "type": "Microsoft.Common.TextBox",
-              "label": "Address Prefix",
-              "toolTip": "Enter the address prefix for the virtual network.",
-              "defaultValue": "10.0.0.0/16",
-              "constraints": {
-                "required": true,
-                "regex": "^([0-9]{1,3}\\.){3}[0-9]{1,3}\\/[0-9]{1,2}$",
-                "validationMessage": "The address prefix must be in CIDR format."
-              }
-            },
-            {
-              "name": "subnetName",
-              "type": "Microsoft.Common.TextBox",
-              "label": "Subnet Name",
-              "toolTip": "Enter the name of the subnet.",
-              "defaultValue": "mySubnet",
-              "constraints": {
-                "required": true,
-                "regex": "^[a-zA-Z0-9_-]{1,64}$",
-                "validationMessage": "The name must be between 1 and 64 characters."
-              }
-            },
-            {
-              "name": "subnetPrefix",
-              "type": "Microsoft.Common.TextBox",
-              "label": "Subnet Prefix",
-              "toolTip": "Enter the address prefix for the subnet.",
-              "defaultValue": "10.0.0.0/24",
-              "constraints": {
-                "required": true,
-                "regex": "^([0-9]{1,3}\\.){3}[0-9]{1,3}\\/[0-9]{1,2}$",
-                "validationMessage": "The address prefix must be in CIDR format."
-              }
-            }
-          ]
+          "name": "subscriptionId",
+          "type": "Microsoft.Common.SubscriptionSelector",
+          "label": "Subscription",
+          "toolTip": "Select the subscription to use."
+        },
+        {
+          "name": "resourceGroupName",
+          "type": "Microsoft.Common.ResourceGroupSelector",
+          "label": "Resource Group",
+          "toolTip": "Select the resource group to use."
+        },
+        {
+          "name": "location",
+          "type": "Microsoft.Common.Location",
+          "label": "Location",
+          "toolTip": "Select the location for the resources."
+        },
+        {
+          "name": "vnetName",
+          "type": "Microsoft.Common.TextBox",
+          "label": "Virtual Network Name",
+          "toolTip": "Enter the name of the virtual network.",
+          "defaultValue": "myVNet",
+          "constraints": {
+            "required": true,
+            "regex": "^[a-zA-Z0-9_-]{1,64}$",
+            "validationMessage": "The name must be between 1 and 64 characters."
+          }
+        },
+        {
+          "name": "addressPrefix",
+          "type": "Microsoft.Common.TextBox",
+          "label": "Address Prefix",
+          "toolTip": "Enter the address prefix for the virtual network.",
+          "defaultValue": "10.0.0.0/16",
+          "constraints": {
+            "required": true,
+            "regex": "^([0-9]{1,3}\\.){3}[0-9]{1,3}\\/[0-9]{1,2}$",
+            "validationMessage": "The address prefix must be in CIDR format."
+          }
+        },
+        {
+          "name": "subnetName",
+          "type": "Microsoft.Common.TextBox",
+          "label": "Subnet Name",
+          "toolTip": "Enter the name of the subnet.",
+          "defaultValue": "mySubnet",
+          "constraints": {
+            "required": true,
+            "regex": "^[a-zA-Z0-9_-]{1,64}$",
+            "validationMessage": "The name must be between 1 and 64 characters."
+          }
+        },
+        {
+          "name": "subnetPrefix",
+          "type": "Microsoft.Common.TextBox",
+          "label": "Subnet Prefix",
+          "toolTip": "Enter the address prefix for the subnet.",
+          "defaultValue": "10.0.0.0/24",
+          "constraints": {
+            "required": true,
+            "regex": "^([0-9]{1,3}\\.){3}[0-9]{1,3}\\/[0-9]{1,2}$",
+            "validationMessage": "The address prefix must be in CIDR format."
+          }
         }
       ]
     }
