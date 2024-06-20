@@ -1,37 +1,87 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2021-09-09/uiFormDefinition.schema.json#",
-    "view": {
-        "kind": "Form",
-        "properties": {
-            "title": "Subscription Test",
-            "steps": [
-                {
-                    "name": "subscriptionStep",
-                    "label": "Select Subscriptions",
-                    "elements": [
-                        {
-                            "name": "subscription1",
-                            "type": "Microsoft.Common.SubscriptionSelector",
-                            "label": "Subscription 1",
-                            "toolTip": "Select the first subscription",
-                            "required": true
-                        },
-                        {
-                            "name": "subscription2",
-                            "type": "Microsoft.Common.SubscriptionSelector",
-                            "label": "Subscription 2",
-                            "toolTip": "Select the second subscription",
-                            "required": true
-                        }
-                    ]
-                }
-            ]
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/createUIDefinition.json#",
+  "contentVersion": "1.0.0.0",
+  "resources": [
+    {
+      "type": "Microsoft.Common.Section",
+      "label": "Basic Settings",
+      "elements": [
+        {
+          "name": "subscription",
+          "type": "Microsoft.Common.SubscriptionSelector",
+          "label": "Subscription",
+          "toolTip": "Select the subscription to use."
         },
-        "outputs": {
-            "parameters": {
-                "subscription1": "[steps('subscriptionStep').subscription1.subscriptionId]",
-                "subscription2": "[steps('subscriptionStep').subscription2.subscriptionId]"
-            }
+        {
+          "name": "resourceGroup",
+          "type": "Microsoft.Common.ResourceGroupSelector",
+          "label": "Resource Group",
+          "toolTip": "Select the resource group to use."
+        },
+        {
+          "name": "location",
+          "type": "Microsoft.Common.Location",
+          "label": "Location",
+          "toolTip": "Select the location for the resources."
+        },
+        {
+          "name": "vnetName",
+          "type": "Microsoft.Common.TextBox",
+          "label": "Virtual Network Name",
+          "toolTip": "Enter the name of the virtual network.",
+          "defaultValue": "myVNet",
+          "constraints": {
+            "required": true,
+            "regex": "^[a-zA-Z0-9_-]{1,64}$",
+            "validationMessage": "The name must be between 1 and 64 characters."
+          }
+        },
+        {
+          "name": "addressPrefix",
+          "type": "Microsoft.Common.TextBox",
+          "label": "Address Prefix",
+          "toolTip": "Enter the address prefix for the virtual network.",
+          "defaultValue": "10.0.0.0/16",
+          "constraints": {
+            "required": true,
+            "regex": "^([0-9]{1,3}\\.){3}[0-9]{1,3}\\/[0-9]{1,2}$",
+            "validationMessage": "The address prefix must be in CIDR format."
+          }
+        },
+        {
+          "name": "subnetName",
+          "type": "Microsoft.Common.TextBox",
+          "label": "Subnet Name",
+          "toolTip": "Enter the name of the subnet.",
+          "defaultValue": "mySubnet",
+          "constraints": {
+            "required": true,
+            "regex": "^[a-zA-Z0-9_-]{1,64}$",
+            "validationMessage": "The name must be between 1 and 64 characters."
+          }
+        },
+        {
+          "name": "subnetPrefix",
+          "type": "Microsoft.Common.TextBox",
+          "label": "Subnet Prefix",
+          "toolTip": "Enter the address prefix for the subnet.",
+          "defaultValue": "10.0.0.0/24",
+          "constraints": {
+            "required": true,
+            "regex": "^([0-9]{1,3}\\.){3}[0-9]{1,3}\\/[0-9]{1,2}$",
+            "validationMessage": "The address prefix must be in CIDR format."
+          }
         }
+      ]
     }
+  ],
+  "outputs": {
+    "subscriptionId": "[steps('subscription').subscription]",
+    "resourceGroupName": "[steps('resourceGroup').resourceGroup]",
+    "location": "[steps('location').location]",
+    "vnetName": "[steps('vnetName').vnetName]",
+    "addressPrefix": "[steps('addressPrefix').addressPrefix]",
+    "subnetName": "[steps('subnetName').subnetName]",
+    "subnetPrefix": "[steps('subnetPrefix').subnetPrefix]"
+  }
 }
