@@ -7,6 +7,13 @@
         },
         "subscription2": {
             "type": "string"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "West US",
+            "metadata": {
+                "description": "Location for resources"
+            }
         }
     },
     "resources": [
@@ -21,7 +28,13 @@
                     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
                     "contentVersion": "1.0.0.0",
                     "resources": [
-                        // Define resources to be deployed in subscription1
+                        {
+                            "type": "Microsoft.Resources/resourceGroups",
+                            "apiVersion": "2021-04-01",
+                            "location": "[parameters('location')]",
+                            "properties": {},
+                            "name": "[concat('rg-', uniqueString(subscription().subscriptionId))]"
+                        }
                     ]
                 }
             }
@@ -37,7 +50,13 @@
                     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
                     "contentVersion": "1.0.0.0",
                     "resources": [
-                        // Define resources to be deployed in subscription2
+                        {
+                            "type": "Microsoft.Resources/resourceGroups",
+                            "apiVersion": "2021-04-01",
+                            "location": "[parameters('location')]",
+                            "properties": {},
+                            "name": "[concat('rg-', uniqueString(subscription().subscriptionId))]"
+                        }
                     ]
                 }
             }
