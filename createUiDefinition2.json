@@ -1335,8 +1335,6 @@
                 "addressPrefix": "[coalesce(steps('esConnectivityGoalState').esAddressHubVWAN, steps('esConnectivityGoalState').esAddressHubHS, '')]",
                 "location": "[steps('esConnectivityGoalState').esNwLocation]",
                 "managementSubscriptionId": "[steps('esGoalState').esMgmtSubSection.esMgmtSub.subscriptionId]",
-                "onlineLzSubscriptionId": "[if(or(not(contains(steps('lzGoalState').onlineLz.esOnlineLzSub,steps('esGoalState').esMgmtSubSection.esMgmtSub.subscriptionId)),not(contains(steps('lzGoalState').onlineLz.esOnlineLzSub,steps('esConnectivityGoalState').esNwSubSection.esNwSub.subscriptionId))),steps('lzGoalState').onlineLz.esOnlineLzSub,'')]",
-                "corpLzSubscriptionId": "[if(or(not(contains(steps('lzGoalState').corpLz.esCorpLzSub,steps('esGoalState').esMgmtSubSection.esMgmtSub.subscriptionId)),not(contains(steps('lzGoalState').corpLz.esCorpLzSub,steps('esConnectivityGoalState').esNwSubSection.esNwSub.subscriptionId))),steps('lzGoalState').corpLz.esCorpLzSub,'')]",
                 "enableLogAnalytics": "[steps('esGoalState').azMonSection.esLogAnalytics]",
                 "enableMcsbPolicy": "[steps('esGovState').mcsbPolicy]",
                 "enableDefenderEndpoint": "[steps('esGovState').defenderEndpoint]",
@@ -1402,8 +1400,7 @@
                 "firewallSkuIngress": "[steps('esConnectivityGoalState').esAzFwSkuIngress]",
                 "firewallSkuEgress": "[steps('esConnectivityGoalState').esAzFwSkuEgress]",
                 "firewallZonesIngress": "[steps('esConnectivityGoalState').esFwAzIngress]",
-                "bgpString": "[steps('esConnectivityGoalState').esBgpString]",
-                "corpConnectedLzSubscriptionId": "[if(or(not(contains(steps('lzGoalState').corpLz.esCorpLzSub,steps('esGoalState').esMgmtSubSection.esMgmtSub.subscriptionId)),not(contains(steps('lzGoalState').corpLz.esCorpLzSub,steps('esConnectivityGoalState').esNwSubSection.esNwSub.subscriptionId))),steps('lzGoalState').corpLz.lzConnectedSubs,'')]"
+                "bgpString": "[steps('esConnectivityGoalState').esBgpString]"
             },
             "kind": "Tenant",
             "location": "[steps('basics').resourceScope.location.name]"
