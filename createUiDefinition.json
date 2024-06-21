@@ -309,7 +309,7 @@
         },
         "outputs": {
             "parameters": {
-                "selectedSubscription": "[steps('basics').resourceScope.subscription]"
+                "selectedSubscription": "[steps('basics').resourceScope.value.subscription]"
             }
         }
     }
