@@ -306,6 +306,9 @@
                     "visible": true
                 }
             ]
+        },
+        "outputs": {
+            "selectedSubscription": "[steps('lzSettings').esSingleSub]"
         }
     }
 }
