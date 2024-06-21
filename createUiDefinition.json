@@ -308,7 +308,9 @@
             ]
         },
         "outputs": {
-            "selectedSubscription": "[steps('lzSettings').esSingleSub]"
+            "parameters": {
+                "selectedSubscription": "[steps('lzSettings').esSingleSub]"
+            }
         }
     }
 }
