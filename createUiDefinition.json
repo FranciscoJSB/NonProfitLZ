@@ -309,7 +309,7 @@
         },
         "outputs": {
             "parameters": {
-                "selectedSubscription": "[steps('lzSettings').esSingleSub.value]"
+                "selectedSubscription": "[steps('basics').resourceScope.subscription]"
             }
         }
     }
