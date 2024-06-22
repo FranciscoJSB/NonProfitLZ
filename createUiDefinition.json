@@ -5,6 +5,13 @@
         "properties": {
             "title": "FSI Landing Zones on Microsoft Azure",
             "isWizard": false,
+            "outputs": [
+                {
+                    "name": "selectedSubscription",
+                    "type": "string",
+                    "value": "[steps('basics').resourceScope.subscription.subscriptionId]"
+                }
+            ],
             "steps": [
                 {
                     "name": "basics",
@@ -12,10 +19,7 @@
                     "elements": [
                         {
                             "name": "resourceScope",
-                            "type": "Microsoft.Common.ResourceScope",
-                            "outputs": {
-                                "subscriptionId": "[resourceScope.subscription.subscriptionId]"
-                            }
+                            "type": "Microsoft.Common.ResourceScope"
                         }
                     ]
                 },
@@ -309,14 +313,6 @@
                     "visible": true
                 }
             ]
-        }
-    },
-    "outputs": {
-        "parameters": {
-            "selectedSubscription": {
-                "type": "string",
-                "value": "[steps('basics').resourceScope.subscription.subscriptionId]"
-            }
         }
     }
 }
