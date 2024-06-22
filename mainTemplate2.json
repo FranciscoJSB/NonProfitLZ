@@ -1,3 +1,4 @@
+
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-08-01/tenantDeploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
@@ -304,16 +305,16 @@
         },
         "mgmtGeo": "[variables('geoMap')[parameters('location')]]",
         "mgmtGroups": {
-            "platform": "[concat(parameters('industryPrefix'), '-', 'Platform')]",
-            "lzs": "[concat(parameters('industryPrefix'), '-', 'Landing-Zones')]",
-            "geo": "[concat(parameters('industryPrefix'), '-', variables('mgmtGeo'))]",
-            "decommissioned": "[concat(parameters('industryPrefix'), '-', 'Decommissioned')]",
-            "playground": "[concat(parameters('industryPrefix'), '-', 'Playground')]",
-            "corp": "[concat(parameters('industryPrefix'), '-', 'Corp')]",
-            "online": "[concat(parameters('industryPrefix'), '-', 'Cloud-Native')]",
-            "identity": "[concat(parameters('industryPrefix'), '-', 'Identity')]",
-            "management": "[concat(parameters('industryPrefix'), '-', 'Management')]",
-            "connectivity": "[concat(parameters('industryPrefix'), '-', 'Connectivity')]",
+            "platform": "[parameters('industryPrefix')]",
+            "lzs": "[parameters('industryPrefix')]",
+            "geo": "[parameters('industryPrefix')]",
+            "decommissioned": "[parameters('industryPrefix')]",
+            "playground": "[parameters('industryPrefix')]",
+            "corp": "[parameters('industryPrefix')]",
+            "online": "[parameters('industryPrefix')]",
+            "identity": "[parameters('industryPrefix')]",
+            "management": "[parameters('industryPrefix')]",
+            "connectivity": "[parameters('industryPrefix')]",
             "industryRoot": "[parameters('industryPrefix')]"
         },
         "scopes": {
