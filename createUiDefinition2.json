@@ -1326,7 +1326,6 @@
                 "location": "[steps('esConnectivityGoalState').esNwLocation]",
                 "managementSubscriptionId": "[steps('esGoalState').esMgmtSubSection.esMgmtSub.subscriptionId]",
                 "enableLogAnalytics": "[steps('esGoalState').azMonSection.esLogAnalytics]",
-                "enableSecuritySolution": "[steps('esGovState').esSecuritySolution]",
                 "enableAgentHealth": "[steps('esGoalState').azMonSection.esAgentSolution]",
                 "enableChangeTracking": "[steps('esGoalState').azMonSection.esChangeTracking]",
                 "enableUpdateMgmt": "[steps('esGoalState').azMonSection.esUpdateMgmt]",
