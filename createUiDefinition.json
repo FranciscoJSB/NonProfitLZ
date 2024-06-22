@@ -5,6 +5,9 @@
         "properties": {
             "title": "FSI Landing Zones on Microsoft Azure",
             "isWizard": false,
+            "outputs": {
+                "selectedSubscription": "[steps('basics').resourceScope.subscription]"
+            },
             "steps": [
                 {
                     "name": "basics",
@@ -12,10 +15,7 @@
                     "elements": [
                         {
                             "name": "resourceScope",
-                            "type": "Microsoft.Common.ResourceScope",
-                            "outputs": {
-                                "selectedSubscription": "[resourceScope.subscription.subscriptionId]"
-                            }
+                            "type": "Microsoft.Common.ResourceScope"
                         }
                     ]
                 },
