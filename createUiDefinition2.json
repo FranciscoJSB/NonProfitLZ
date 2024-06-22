@@ -1326,7 +1326,6 @@
                 "location": "[steps('esConnectivityGoalState').esNwLocation]",
                 "managementSubscriptionId": "[steps('esGoalState').esMgmtSubSection.esMgmtSub.subscriptionId]",
                 "enableLogAnalytics": "[steps('esGoalState').azMonSection.esLogAnalytics]",
-                "enableDefenderEndpoint": "[steps('esGovState').defenderEndpoint]",
                 "enableAsc": "[steps('esGovState').esAsc]",
                 "emailContactAsc": "[steps('esGovState').esAscEmail]",
                 "enableAscForServers": "[steps('esGovState').esAscVms]",
