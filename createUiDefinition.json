@@ -307,12 +307,13 @@
                 }
             ]
         },
-        "outputs": [
-            {
-                "name": "selectedSubscription",
-                "type": "string",
-                "value": "[steps('basics').resourceScope.subscription]"
-            }
-        ]
+        "outputs": {
+            "parameters": [
+                {
+                    "name": "selectedSubscription",
+                    "value": "[steps('basics').resourceScope.subscription]"
+                }
+            ]
+        }
     }
 }
