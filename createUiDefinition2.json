@@ -1344,7 +1344,6 @@
                 "enableNetworkWatcher": "[steps('esConnectivityGoalState').nwSecurity.esNetworkWatcher]",
                 "enableNsgFlowLogs": "[steps('esConnectivityGoalState').nwSecurity.esNsgFlowLogs]",
                 "enableAvnm": "[steps('esConnectivityGoalState').anmSection.anmOption]",
-                "compliantAzureServices": "[steps('esGovState').secureSvc]",
                 "enablePrivateDnsResolver": "[steps('esConnectivityGoalState').esPrivateDnsResolver]",
                 "subnetMaskForDnsResolverInbound": "[steps('esConnectivityGoalState').subnetMaskPrivateDnsResolverInbound]",
                 "subnetMaskForDnsResolverOutbound": "[steps('esConnectivityGoalState').subnetMaskPrivateDnsResolverOutbound]",
