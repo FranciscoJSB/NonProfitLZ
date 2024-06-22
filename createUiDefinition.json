@@ -12,7 +12,10 @@
                     "elements": [
                         {
                             "name": "resourceScope",
-                            "type": "Microsoft.Common.ResourceScope"
+                            "type": "Microsoft.Common.ResourceScope",
+                            "outputs": {
+                                "subscriptionId": "[resourceScope.subscription.subscriptionId]"
+                            }
                         }
                     ]
                 },
@@ -308,11 +311,12 @@
             ]
         }
     },
-    "outputs": [
-        {
-            "name": "selectedSubscription",
-            "type": "string",
-            "value": "[steps('basics').resourceScope.subscription.subscriptionId]"
+    "outputs": {
+        "parameters": {
+            "selectedSubscription": {
+                "type": "string",
+                "value": "[steps('basics').resourceScope.subscription.subscriptionId]"
+            }
         }
-    ]
+    }
 }
