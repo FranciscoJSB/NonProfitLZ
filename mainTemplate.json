@@ -25,7 +25,11 @@
             "defaultValue": ""
         },
         "industry": {
-            "type": "string"
+            "type": "string",
+            "allowedValues": [
+                "fsi",
+                "telco"
+            ]
         },
         "managementSubscriptionId": {
             "type": "string",
