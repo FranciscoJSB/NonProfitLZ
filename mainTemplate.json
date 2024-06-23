@@ -22,12 +22,20 @@
                 "template": {
                     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
                     "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "location": {
+                            "type": "string"
+                        },
+                        "resourceGroupName": {
+                            "type": "string"
+                        }
+                    },
                     "resources": [
                         {
                             "type": "Microsoft.Resources/resourceGroups",
                             "apiVersion": "2021-04-01",
                             "location": "[parameters('location')]",
-                            "name": "[concat(parameters('mgmtGroupPrefix'), '-patito')]"
+                            "name": "[parameters('resourceGroupName')]"
                         }
                     ]
                 },
@@ -35,8 +43,8 @@
                     "location": {
                         "value": "[parameters('location')]"
                     },
-                    "mgmtGroupPrefix": {
-                        "value": "[parameters('mgmtGroupPrefix')]"
+                    "resourceGroupName": {
+                        "value": "[concat(parameters('mgmtGroupPrefix'), '-patito')]"
                     }
                 }
             }
