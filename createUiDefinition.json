@@ -1,48 +1,82 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "keyVaultName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the Key Vault."
-      }
-    },
-    "location": {
-      "type": "string",
-      "defaultValue": "eastus",
-      "metadata": {
-        "description": "Location for the Key Vault."
-      }
-    },
-    "managementSubscriptionId": {
-      "type": "string",
-      "metadata": {
-        "description": "Subscription ID for management resources."
-      }
-    }
-  },
-  "resources": [
-    {
-      "type": "Microsoft.KeyVault/vaults",
-      "apiVersion": "2021-06-01-preview",
-      "name": "[parameters('keyVaultName')]",
-      "location": "[parameters('location')]",
-      "properties": {
-        "sku": {
-          "family": "A",
-          "name": "standard"
+  "$schema": "http://schema.management.azure.com/schemas/2021-09-09/uiFormDefinition.schema.json#",
+  "view": {
+    "kind": "Form",
+    "properties": {
+      "title": "Key Vault Deployment",
+      "steps": [
+        {
+          "name": "basics",
+          "label": "Basics",
+          "elements": [
+            {
+              "name": "resourceScope",
+              "type": "Microsoft.Common.ResourceScope",
+              "subscription": {
+                "constraints": {
+                  "validations": [
+                    {
+                      "isValid": "[not(contains(toLower(steps('basics').resourceScope.subscription.displayName),'test'))]",
+                      "message": "Can't use test subscription."
+                    }
+                  ]
+                },
+                "resourceProviders": [
+                  "Microsoft.KeyVault"
+                ]
+              },
+              "location": {
+                "label": "Region",
+                "toolTip": "Azure region",
+                "resourceTypes": [
+                  "Microsoft.KeyVault/vaults"
+                ],
+                "allowedValues": [
+                  "eastus",
+                  "westus2"
+                ]
+              }
+            }
+          ]
         },
-        "tenantId": "[subscription().tenantId]",
-        "accessPolicies": []
+        {
+          "name": "identityAndAccess",
+          "label": "Identity and Access",
+          "elements": [
+            {
+              "name": "keyVaultDescription",
+              "type": "Microsoft.Common.TextBlock",
+              "options": {
+                "text": "A Key Vault is a cloud service for securely storing and accessing secrets. Secrets are application passwords, database connection strings, API keys, and other sensitive data."
+              }
+            },
+            {
+              "name": "keyVaultName",
+              "type": "Microsoft.Common.TextBox",
+              "label": "Key Vault Name",
+              "toolTip": "The name of the Key Vault.",
+              "constraints": {
+                "required": true,
+                "validations": [
+                  {
+                    "regex": "^[a-zA-Z0-9-]{3,24}$",
+                    "message": "The Key Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "outputs": {
+      "parameters": {
+        "location": "[steps('basics').resourceScope.location.name]",
+        "keyVaultName": "[steps('identityAndAccess').keyVaultName]"
       },
-      "dependsOn": []
-    }
-  ],
-  "outputs": {
-    "keyVaultName": {
-      "type": "string",
-      "value": "[parameters('keyVaultName')]"
+      "kind": "ResourceGroup",
+      "location": "[steps('basics').resourceScope.location.name]",
+      "resourceGroupId": "[steps('basics').resourceScope.resourceGroup.id]"
     }
   }
 }
