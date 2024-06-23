@@ -2,7 +2,13 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "keyVaultName": {
+        "location": {
+            "type": "string"
+        },
+        "mgmtGroupPrefix": {
+            "type": "string"
+        },
+        "subscriptionId": {
             "type": "string"
         }
     },
@@ -10,7 +16,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2021-04-01",
-            "name": "keyVaultDeployment",
+            "name": "resourceGroupDeployment",
             "properties": {
                 "mode": "Incremental",
                 "template": {
@@ -20,48 +26,26 @@
                         {
                             "type": "Microsoft.Resources/resourceGroups",
                             "apiVersion": "2021-04-01",
-                            "location": "[resourceGroup().location]",
-                            "name": "patito-test"
-                        },
-                        {
-                            "type": "Microsoft.KeyVault/vaults",
-                            "apiVersion": "2021-06-01-preview",
-                            "name": "[parameters('keyVaultName')]",
-                            "location": "[resourceGroup().location]",
-                            "properties": {
-                                "sku": {
-                                    "family": "A",
-                                    "name": "standard"
-                                },
-                                "tenantId": "[subscription().tenantId]",
-                                "accessPolicies": [],
-                                "enabledForDeployment": false,
-                                "enabledForTemplateDeployment": true,
-                                "enabledForDiskEncryption": true,
-                                "enableRbacAuthorization": true,
-                                "publicNetworkAccess": "Enabled",
-                                "networkAcls": {
-                                    "bypass": "AzureServices",
-                                    "defaultAction": "Allow"
-                                },
-                                "properties": {
-                                    "enableSoftDelete": true,
-                                    "softDeleteRetentionInDays": 90
-                                }
-                            },
-                            "dependsOn": [
-                                "[resourceId('Microsoft.Resources/resourceGroups', 'patito-test')]"
-                            ]
+                            "location": "[parameters('location')]",
+                            "name": "[concat(parameters('mgmtGroupPrefix'), '-patito')]"
                         }
                     ]
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "mgmtGroupPrefix": {
+                        "value": "[parameters('mgmtGroupPrefix')]"
+                    }
                 }
             }
         }
     ],
     "outputs": {
-        "keyVaultName": {
+        "resourceGroupName": {
             "type": "string",
-            "value": "[parameters('keyVaultName')]"
+            "value": "[concat(parameters('mgmtGroupPrefix'), '-patito')]"
         }
     }
 }
