@@ -1,5 +1,5 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/createUIDefinition.json#",
     "view": {
         "kind": "Form",
         "properties": {
@@ -52,9 +52,13 @@
             ]
         },
         "outputs": {
-            "location": "[steps('deploymentLocation').location]",
-            "mgmtGroupPrefix": "[steps('mgmtGroupSettings').mgmtGroupPrefix]",
-            "subscriptionId": "[steps('mgmtGroupSettings').subscriptionSelector.subscriptionId]"
+            "parameters": {
+                "location": "[steps('deploymentLocation').location.name]",
+                "mgmtGroupPrefix": "[steps('mgmtGroupSettings').mgmtGroupPrefix]",
+                "subscriptionId": "[steps('mgmtGroupSettings').subscriptionSelector.subscriptionId]"
+            },
+            "kind": "Tenant",
+            "location": "[steps('deploymentLocation').location.name]"
         }
     }
 }
