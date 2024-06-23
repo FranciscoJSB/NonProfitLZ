@@ -12,6 +12,9 @@
             "type": "string"
         }
     },
+    "variables": {
+        "resourceGroupName": "[concat(parameters('mgmtGroupPrefix'), '-patito')]"
+    },
     "resources": [
         {
             "type": "Microsoft.Resources/deployments",
@@ -44,7 +47,7 @@
                         "value": "[parameters('location')]"
                     },
                     "resourceGroupName": {
-                        "value": "[concat(parameters('mgmtGroupPrefix'), '-patito')]"
+                        "value": "[variables('resourceGroupName')]"
                     }
                 }
             }
@@ -53,7 +56,7 @@
     "outputs": {
         "resourceGroupName": {
             "type": "string",
-            "value": "[concat(parameters('mgmtGroupPrefix'), '-patito')]"
+            "value": "[variables('resourceGroupName')]"
         }
     }
 }
