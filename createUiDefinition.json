@@ -57,7 +57,7 @@
                 "mgmtGroupPrefix": "[steps('mgmtGroupSettings').mgmtGroupPrefix]",
                 "subscriptionId": "[steps('mgmtGroupSettings').subscriptionSelector.subscriptionId]"
             },
-            "kind": "ResourceGroup",
+            "kind": "Tenant",
             "location": "[steps('deploymentLocation').location]"
         }
     }
