@@ -37,7 +37,7 @@
             "location": "[deployment().location]",
             "scope": "[concat('Microsoft.Management/managementGroups/', parameters('topLevelManagementGroupPrefix'))]",
             "dependsOn": [
-                "[resourceId('Microsoft.Management/managementGroups']"
+                "[resourceId('Microsoft.Management/managementGroups')]"
             ],
             "copy": {
                 "batchSize": 1,
