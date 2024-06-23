@@ -1,0 +1,290 @@
+
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-08-01/tenantDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "topLevelManagementGroupPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Provide prefix for the management group structure."
+            }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[deployment().location]",
+            "metadata": {
+                "description": "Provide location for the management group structure."
+            }
+        },
+        "platformMgs": {
+            "type": "array",
+            "defaultValue": [
+                "Management",
+                "Connectivity",
+                "Identity"
+            ],
+            "metadata": {
+                "description": "Management groups for platform specific purposes, such as management, networking, identity etc."
+            }
+        },
+        "landingZoneMgs": {
+            "type": "array",
+            "defaultValue": [
+                "Cloud-Native",
+                "Corp"
+            ],
+            "metadata": {
+                "description": "These are the landing zone management groups."
+            }
+        }
+    },
+    "variables": {
+        // Logic to map selected location (or deployment().location) to map to geographical management group under LZ
+        "geoMap": {
+            "eastus": "North-America",
+            "eastus2": "North-America",
+            "southcentralus": "North-America",
+            "westus2": "North-America",
+            "westus3": "North-America",
+            "australiaeast": "APAC",
+            "southeastasia": "APAC",
+            "northeurope": "EMEA",
+            "swedencentral": "EMEA",
+            "uksouth": "EMEA",
+            "westeurope": "EMEA",
+            "centralus": "North-America",
+            "southafricanorth": "EMEA",
+            "centralindia": "APAC",
+            "eastasia": "APAC",
+            "japaneast": "APAC",
+            "koreacentral": "APAC",
+            "canadacentral": "North-America",
+            "francecentral": "EMEA",
+            "germanywestcentral": "EMEA",
+            "norwayeast": "EMEA",
+            "switzerlandnorth": "EMEA",
+            "uaenorth": "EMEA",
+            "brazilsouth": "South-America",
+            "eastus2euap": "North-America",
+            "qatarcentral": "EMEA",
+            "asia": "APAC",
+            "asiapacific": "APAC",
+            "australia": "APAC",
+            "brazil": "South-America",
+            "canada": "North-America",
+            "europe": "EMEA",
+            "france": "EMEA",
+            "germany": "EMEA",
+            "india": "APAC",
+            "japan": "APAC",
+            "korea": "APAC",
+            "norway": "EMEA",
+            "singapore": "APAC",
+            "southafrica": "EMEA",
+            "switzerland": "EMEA",
+            "unitedstates": "North-America",
+            "northcentralus": "North-America",
+            "westus": "North-America",
+            "centraluseuap": "North-America",
+            "westcentralus": "North-America",
+            "southafricawest": "EMEA",
+            "australiacentral": "APAC",
+            "australiacentral2": "APAC",
+            "australiasoutheast": "APAC",
+            "japanwest": "APAC",
+            "koreasouth": "APAC",
+            "southindia": "APAC",
+            "westindia": "APAC",
+            "canadaeast": "North-America",
+            "francesouth": "EMEA",
+            "germanynorth": "EMEA",
+            "norwaywest": "EMEA",
+            "switzerlandwest": "EMEA",
+            "ukwest": "EMEA",
+            "uaecentral": "EMEA",
+            "brazilsoutheast": "South-America"
+        },
+        "mgmtGeo": "[variables('geoMap')[parameters('location')]]",
+        "managementGroups": {
+            "platform": "[concat(parameters('topLevelManagementGroupPrefix'), '-', 'Platform')]",
+            "landingZone": "[concat(parameters('topLevelManagementGroupPrefix'), '-', 'Landing-Zones')]",
+            "geo": "[concat(parameters('topLevelManagementGroupPrefix'), '-', variables('mgmtGeo'))]",
+            "decommissioned": "[concat(parameters('topLevelManagementGroupPrefix'), '-', 'Decommissioned')]",
+            "playground": "[concat(parameters('topLevelManagementGroupPrefix'), '-', 'Playground')]"
+        }
+    },
+    "resources": [
+        {
+            // Create top level management group under tenant root
+            "type": "Microsoft.Management/managementGroups",
+            "scope": "/",
+            "apiVersion": "2020-05-01",
+            "name": "[parameters('topLevelManagementGroupPrefix')]",
+            "properties": {}
+        },
+        {
+            // Create management group for platform management groups
+            "type": "Microsoft.Management/managementGroups",
+            "apiVersion": "2020-05-01",
+            "scope": "/",
+            "name": "[variables('managementGroups').platform]",
+            "dependsOn": [
+                "[tenantResourceId('Microsoft.Management/managementGroups/', parameters('topLevelManagementGroupPrefix'))]"
+            ],
+            "properties": {
+                "displayName": "[variables('managementGroups').platform]",
+                "details": {
+                    "parent": {
+                        "id": "[tenantResourceId('Microsoft.Management/managementGroups/', parameters('topLevelManagementGroupPrefix'))]"
+                    }
+                }
+            }
+        },
+        {
+            // Create management group for landing zones
+            "type": "Microsoft.Management/managementGroups",
+            "apiVersion": "2020-05-01",
+            "scope": "/",
+            "name": "[variables('managementGroups').landingZone]",
+            "dependsOn": [
+                "[tenantResourceId('Microsoft.Management/managementGroups/', parameters('topLevelManagementGroupPrefix'))]"
+            ],
+            "properties": {
+                "displayName": "[variables('managementGroups').landingZone]",
+                "details": {
+                    "parent": {
+                        "id": "[tenantResourceId('Microsoft.Management/managementGroups/', parameters('topLevelManagementGroupPrefix'))]"
+                    }
+                }
+            }
+        },
+        {
+            // Create management group for Geo
+            "type": "Microsoft.Management/managementGroups",
+            "apiVersion": "2020-05-01",
+            "scope": "/",
+            "name": "[variables('managementGroups').geo]",
+            "dependsOn": [
+                "[tenantResourceId('Microsoft.Management/managementGroups/', variables('managementGroups').landingZone)]"
+            ],
+            "properties": {
+                "displayName": "[variables('managementGroups').geo]",
+                "details": {
+                    "parent": {
+                        "id": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('managementGroups').landingZone)]"
+                    }
+                }
+            }
+        },
+        {
+            // Create management group for playground subscriptions
+            "type": "Microsoft.Management/managementGroups",
+            "apiVersion": "2020-05-01",
+            "scope": "/",
+            "name": "[variables('managementGroups').playground]",
+            "dependsOn": [
+                "[tenantResourceId('Microsoft.Management/managementGroups/', parameters('topLevelManagementGroupPrefix'))]"
+            ],
+            "properties": {
+                "displayName": "[variables('managementGroups').playground]",
+                "details": {
+                    "parent": {
+                        "id": "[tenantResourceId('Microsoft.Management/managementGroups/', parameters('topLevelManagementGroupPrefix'))]"
+                    }
+                }
+            }
+        },
+        {
+            // Create management group for decommissioned subscriptions
+            "type": "Microsoft.Management/managementGroups",
+            "apiVersion": "2020-05-01",
+            "scope": "/",
+            "name": "[variables('managementGroups').decommissioned]",
+            "dependsOn": [
+                "[tenantResourceId('Microsoft.Management/managementGroups/', parameters('topLevelManagementGroupPrefix'))]"
+            ],
+            "properties": {
+                "displayName": "[variables('managementGroups').decommissioned]",
+                "details": {
+                    "parent": {
+                        "id": "[tenantResourceId('Microsoft.Management/managementGroups/', parameters('topLevelManagementGroupPrefix'))]"
+                    }
+                }
+            }
+        },
+        {
+            // Create child management groups for platform resources
+            "condition": "[not(empty(parameters('platformMgs')))]",
+            "type": "Microsoft.Management/managementGroups",
+            "apiVersion": "2020-05-01",
+            "scope": "/",
+            "name": "[concat(parameters('topLevelManagementGroupPrefix'), '-', parameters('platformMgs')[copyIndex()])]",
+            "dependsOn": [
+                "[tenantResourceId('Microsoft.Management/managementGroups', variables('managementGroups').platform)]"
+            ],
+            "copy": {
+                "name": "platformMgCopy",
+                "count": "[length(parameters('platformMgs'))]"
+            },
+            "properties": {
+                "displayName": "[concat(parameters('topLevelManagementGroupPrefix'), '-', parameters('platformMgs')[copyIndex()])]",
+                "details": {
+                    "parent": {
+                        "id": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('managementGroups').platform)]"
+                    }
+                }
+            }
+        },
+        {
+            // Create child management groups for landing zones
+            "condition": "[not(empty(parameters('landingZoneMgs')))]",
+            "type": "Microsoft.Management/managementGroups",
+            "apiVersion": "2020-05-01",
+            "scope": "/",
+            "name": "[concat(parameters('topLevelManagementGroupPrefix'), '-', parameters('landingZoneMgs')[copyIndex()])]",
+            "dependsOn": [
+                "[tenantResourceId('Microsoft.Management/managementGroups/', variables('managementGroups').geo)]"
+            ],
+            "copy": {
+                "name": "lzMgCopy",
+                "count": "[length(parameters('landingZoneMgs'))]"
+            },
+            "properties": {
+                "displayName": "[concat(parameters('topLevelManagementGroupPrefix'), '-', parameters('landingZoneMgs')[copyIndex()])]",
+                "details": {
+                    "parent": {
+                        "id": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('managementGroups').geo)]"
+                    }
+                }
+            }
+        },
+        {
+            // One of Azure's untold stories.....
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-10-01",
+            "name": "[concat('Consistency-', copyIndex())]",
+            "location": "[deployment().location]",
+            "scope": "[concat('Microsoft.Management/managementGroups/', parameters('topLevelManagementGroupPrefix'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Management/managementGroups', variables('managementGroups').landingZone)]"
+            ],
+            "copy": {
+                "batchSize": 1,
+                "count": 21,
+                "mode": "Serial",
+                "name": "Consistency"
+            },
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-08-01/managementGroupDeploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "resources": [],
+                    "outputs": {}
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
