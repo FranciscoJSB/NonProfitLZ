@@ -456,8 +456,7 @@
             "location": "[deployment().location]",
             "subscriptionId": "[parameters('managementSubscriptionId')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').mgmtSubscriptionPlacement)]",
-                "policyCompletion"
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').mgmtSubscriptionPlacement)]"
             ],
             "properties": {
                 "mode": "Incremental",
