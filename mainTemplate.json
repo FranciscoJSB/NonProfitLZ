@@ -1,89 +1,88 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "resources": [
-        {
-            "type": "Microsoft.Resources/deploymentScripts",
-            "apiVersion": "2019-10-01-preview",
-            "location": "[parameters('location')]",
-            "name": "myScript",
-            "properties": {
-                "azCliVersion": "2.0.80",
-                "scriptContent": "[base64(parameters('scriptContent'))]",
-                "timeout": "PT1H",
-                "retentionInterval": "P1D",
-                "forceUpdateTag": "[parameters('forceUpdateTag')]"
-            }
-        },
-        {
-            "type": "Microsoft.Network/virtualNetworks",
-            "apiVersion": "2020-06-01",
-            "location": "[parameters('location')]",
-            "name": "[parameters('virtualNetworkName')]",
-            "properties": {
-                "addressSpace": {
-                    "addressPrefixes": "[parameters('addressPrefixes')]"
-                },
-                "subnets": [
-                    {
-                        "name": "[parameters('subnet1Name')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('subnet1Prefix')]"
-                        }
-                    },
-                    {
-                        "name": "[parameters('subnet2Name')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('subnet2Prefix')]"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "type": "Microsoft.Network/publicIPAddresses",
-            "apiVersion": "2020-06-01",
-            "location": "[parameters('location')]",
-            "name": "[parameters('publicIpName')]",
-            "properties": {
-                "publicIPAllocationMethod": "[parameters('publicIPAllocationMethod')]",
-                "dnsSettings": {
-                    "domainNameLabel": "[parameters('domainNameLabel')]"
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Network/virtualNetworkGateways",
-            "apiVersion": "2020-06-01",
-            "location": "[parameters('location')]",
-            "name": "[parameters('virtualNetworkGatewayName')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIpName'))]"
-            ],
-            "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "[parameters('ipConfigName')]",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "subnet": {
-                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName')), '/subnets/', parameters('gatewaySubnetName'))]"
-                            },
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIpName'))]"
-                            }
-                        }
-                    }
-                ],
-                "gatewayType": "Vpn",
-                "vpnType": "RouteBased",
-                "enableBgp": false,
-                "sku": {
-                    "name": "[parameters('gatewaySku')]",
-                    "tier": "[parameters('gatewaySku')]"
-                }
-            }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "industryPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Prefix for all resources."
+      }
+    },
+    "managementGroupPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Prefix for the single management group."
+      }
+    },
+    "managementSubscriptionId": {
+      "type": "string",
+      "metadata": {
+        "description": "Subscription ID for management resources."
+      }
+    },
+    "connectivitySubscriptionId": {
+      "type": "string",
+      "metadata": {
+        "description": "Subscription ID for connectivity resources."
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "eastus",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Management/managementGroups",
+      "apiVersion": "2020-05-01",
+      "name": "[parameters('managementGroupPrefix')]",
+      "properties": {
+        "displayName": "[parameters('managementGroupPrefix')]",
+        "details": {
+          "parent": {
+            "id": "/providers/Microsoft.Management/managementGroups/[tenant().tenantId]"
+          }
         }
-    ]
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "[concat(parameters('industryPrefix'), '-management-resources-deployment')]",
+      "location": "[deployment().location]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "https://path/to/management/resources/deployment/template.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "managementSubscriptionId": {
+            "value": "[parameters('managementSubscriptionId')]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "[concat(parameters('industryPrefix'), '-connectivity-resources-deployment')]",
+      "location": "[deployment().location]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "https://path/to/connectivity/resources/deployment/template.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "connectivitySubscriptionId": {
+            "value": "[parameters('connectivitySubscriptionId')]"
+          }
+        }
+      }
+    }
+  ]
 }
