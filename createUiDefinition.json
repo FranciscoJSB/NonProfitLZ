@@ -1,9 +1,10 @@
 {
-    "$schema": "<relative path to createFormUI.schema.json>",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/createUIDefinition.json#",
     "view": {
         "kind": "Form",
         "properties": {
             "title": "Resource Group Deployment",
+            "description": "This form will collect details to create a resource group with a specified prefix.",
             "isWizard": false,
             "steps": [
                 {
@@ -53,12 +54,12 @@
         },
         "outputs": {
             "parameters": {
-                "location": "[steps('deploymentLocation').location.name]",
+                "location": "[steps('deploymentLocation').location]",
                 "mgmtGroupPrefix": "[steps('mgmtGroupSettings').mgmtGroupPrefix]",
                 "subscriptionId": "[steps('mgmtGroupSettings').subscriptionSelector.subscriptionId]"
             },
             "kind": "Tenant",
-            "location": "[steps('deploymentLocation').location.name]"
+            "location": "[steps('deploymentLocation').location]"
         }
     }
 }
