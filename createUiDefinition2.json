@@ -308,6 +308,26 @@
                                 }
                             ],
                             "visible": true
+                        },
+                        {
+                            "name": "esLocationsApi",
+                            "type": "Microsoft.Solutions.ArmApiControl",
+                            "request": {
+                                "method": "GET",
+                                "path": "locations?api-version=2019-11-01"
+                            }
+                        },
+                        {
+                            "name": "esNwLocation",
+                            "type": "Microsoft.Common.DropDown",
+                            "label": "Region for the first networking hub",
+                            "filter": true,
+                            "toolTip": "Select the target region for you connectivity deployment (requires you to provide a subscriptionId for connectivity)",
+                            "constraints": {
+                                "allowedValues": "[map(steps('esConnectivityGoalState').esLocationsApi.value,(item) => parse(concat('{\"label\":\"',item.displayName,'\",\"value\":\"',item.name,'\"}')))]",
+                                "required": true
+                            },
+                            "visible":true
                         }
                     ]
                 }
@@ -320,7 +340,8 @@
                 "managementSubscriptionId": "[steps('esGoalState').esMgmtSubSection.esMgmtSub.subscriptionId]",
                 "enableLogAnalytics": "[steps('esGoalState').azMonSection.esLogAnalytics]",
                 "industryPrefix": "[steps('lzSettings').mgSection.esMgmtGroup]",
-                "retentionInDays": "[string(steps('esGoalState').azMonSection.esLogRetention)]"
+                "retentionInDays": "[string(steps('esGoalState').azMonSection.esLogRetention)]",
+                "location": "[steps('esConnectivityGoalState').esNwLocation]"
             },
             "kind": "Tenant",
             "location": "[steps('basics').resourceScope.location.name]"
