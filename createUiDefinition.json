@@ -1,79 +1,15 @@
-
 {
     "$schema": "<relative path to createFormUI.schema.json>",
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "NFP - Landing Zone deployment",
+            "title": "Key Vault Deployment",
             "isWizard": false,
             "steps": [
                 {
-                    "name": "landingZoneResources",
-                    "label": "Landing Zone Resources",
+                    "name": "keyVaultDetails",
+                    "label": "Key Vault Details",
                     "elements": [
-                        {
-                            "name": "esSingleSubSection",
-                            "type": "Microsoft.Common.Section",
-                            "label": "Single platform subscription",
-                            "elements": [
-                                {
-                                    "name": "subWarning",
-                                    "type": "Microsoft.Common.InfoBox",
-                                    "visible": true,
-                                    "options": {
-                                        "icon": "Warning",
-                                        "text": "Dedicated subscriptions are recommended for the various platform components to ensure scale, sustainability, and segregation of duties, and especially around networking. However, a single subscription can also be used in case this is not a concern (e.g., small organizations, or testing purposes).",
-                                        "uri": "https://docs.microsoft.com/azure/cloud-adoption-framework/ready/enterprise-scale/management-group-and-subscription-organization"
-                                    }
-                                },
-                                {
-                                    "name": "singleSubText",
-                                    "type": "Microsoft.Common.TextBlock",
-                                    "visible": true,
-                                    "options": {
-                                        "text": "Select the single subscription that will be used for all platform resources during deployment, for security, logging, connectivity, and identity."
-                                    }
-                                },
-                                {
-                                    "type": "Microsoft.Common.SubscriptionSelector",
-                                    "name": "esSingleSub",
-                                    "label": "Single platform subscription"
-                                }
-                            ],
-                            "visible": true
-                        },
-                        {
-                            "name": "landingZoneDescription",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "A landing zone in Azure provides a secure, scalable, and compliant foundation for your cloud environment."
-                            }
-                        },
-                        {
-                            "name": "subscriptionLabel",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "Please select the subscription for the Landing Zone deployment (make sure it's a different subscription than the one used in the previous step)."
-                            }
-                        },
-                        {
-                            "name": "resourceScope",
-                            "type": "Microsoft.Common.ResourceScope",
-                            "subscription": {
-                                "constraints": {
-                                    "resourceProviders": [
-                                        "Microsoft.KeyVault"
-                                    ]
-                                }
-                            }
-                        },
-                        {
-                            "name": "keyVaultDescription",
-                            "type": "Microsoft.Common.TextBlock",
-                            "options": {
-                                "text": "A Key Vault is a cloud service for securely storing and accessing secrets. Secrets are application passwords, database connection strings, API keys, and other sensitive data."
-                            }
-                        },
                         {
                             "name": "keyVaultName",
                             "type": "Microsoft.Common.TextBox",
@@ -95,21 +31,10 @@
         },
         "outputs": {
             "parameters": {
-                "connectivitySubscriptionId": "[steps('landingZoneResources').esSingleSubSection.esSingleSub.subscriptionId]",
-                "location": "[steps('landingZoneResources').resourceScope.location.name]",
-                "keyVaultName": "[steps('landingZoneResources').keyVaultName]",
-                "sku": "Standard",
-                "accessPolicies": [],
-                "enabledForDeployment": false,
-                "enabledForTemplateDeployment": true,
-                "enabledForDiskEncryption": true,
-                "enableRbacAuthorization": true,
-                "publicNetworkAccess": "Enabled",
-                "enableSoftDelete": true,
-                "softDeleteRetentionInDays": 90
+                "keyVaultName": "[steps('keyVaultDetails').keyVaultName]"
             },
-            "kind": "Tenant",
-            "location": "[steps('landingZoneResources').resourceScope.location.name]"
+            "kind": "ResourceGroup",
+            "location": "eastus"
         }
     }
 }
