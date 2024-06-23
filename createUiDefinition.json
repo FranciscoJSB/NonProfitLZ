@@ -3,49 +3,162 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Resource Group Deployment",
+            "title": "NFP - Landing Zone Configuration",
             "isWizard": false,
             "steps": [
                 {
-                    "name": "deploymentLocation",
-                    "label": "Deployment Location",
+                    "name": "basics",
+                    "label": "Deployment location",
                     "elements": [
                         {
-                            "name": "location",
-                            "type": "Microsoft.Common.LocationSelector",
-                            "label": "Region",
-                            "constraints": {
-                                "required": true
+                            "name": "resourceScope",
+                            "type": "Microsoft.Common.ResourceScope"
+                        }
+                    ]
+                },
+                {
+                    "name": "lzSettings",
+                    "label": "Management Group and Subscription Organization",
+                    "subLabel": {
+                        "preValidation": "Provide a prefix for the management group structure that will be created.",
+                        "postValidation": "Done"
+                    },
+                    "bladeTitle": "Company prefix",
+                    "elements": [
+                        {
+                            "name": "info",
+                            "type": "Microsoft.Common.InfoBox",
+                            "visible": true,
+                            "options": {
+                                "text": "NFP - Landing Zone Configuration requires access at the tenant root (/) scope. Visit this link to ensure you have the appropriate RBAC permission to complete the deployment",
+                                "uri": "https://docs.microsoft.com/azure/role-based-access-control/elevate-access-global-admin",
+                                "style": "Info"
+                            }
+                        },
+                        {
+                            "name": "mgSection",
+                            "type": "Microsoft.Common.Section",
+                            "label": "Management Groups",
+                            "elements": [
+                                {
+                                    "name": "mgmtGroup",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "NFP - Landing Zone Configuration will create the management group hierarchy under the Tenant Root Group with the prefix provided at this step, which will be used to establish a proven architecture for subscription organization and policy driven governance at scale."
+                                    }
+                                },
+                                {
+                                    "name": "esMgmtGroup",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Management Group prefix",
+                                    "toolTip": "Provide a prefix (max 10 characters, unique at tenant-scope) for the Management Group hierarchy and other resources created as part of FSI Landing Zones.",
+                                    "defaultValue": "",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^[a-z0-9A-Z-]{1,10}$",
+                                        "validationMessage": "The prefix must be 1-10 characters."
+                                    }
+                                }
+                            ],
+                            "visible": true
+                        },
+                        {
+                            "name": "rpRegistrationApi",
+                            "type": "Microsoft.Solutions.ArmApiControl",
+                            "request": {
+                                "method": "POST",
+                                "path": "[concat('/providers/Microsoft.Management/managementGroups/',steps('basics').resourceScope.tenant.tenantId, '/providers/Microsoft.PolicyInsights/register?api-version=2021-04-01')]"
                             }
                         }
                     ]
                 },
                 {
-                    "name": "mgmtGroupSettings",
-                    "label": "Management Group Settings",
+                    "name": "esGoalState",
+                    "label": "Management and Monitoring",
+                    "subLabel": {
+                        "preValidation": "",
+                        "postValidation": ""
+                    },
+                    "bladeTitle": "lzGs",
                     "elements": [
                         {
-                            "name": "mgmtGroupPrefix",
-                            "type": "Microsoft.Common.TextBox",
-                            "label": "Management Group Prefix",
-                            "toolTip": "Enter the prefix for the Management Group.",
-                            "constraints": {
-                                "required": true,
-                                "validations": [
-                                    {
-                                        "regex": "^[a-zA-Z0-9-]{1,10}$",
-                                        "message": "The prefix must be between 1 and 10 characters long and contain only letters, numbers, and hyphens."
-                                    }
-                                ]
+                            "name": "multiPlatformMgmtSub",
+                            "type": "Microsoft.Common.InfoBox",
+                            "visible": "[not(equals(steps('lzSettings').subSection.subOrgsOption, 'Single'))]",
+                            "options": {
+                                "text": "To enable platform management and monitoring, you must allocate a dedicated Azure Subscription. Please note, this Subscription will be moved to the platform Management Group, and ARM will deploy a Log Analytics workspace and requisite settings. We recommend using a new Subscription with no existing resources.",
+                                "uri": "https://docs.microsoft.com/azure/cloud-adoption-framework/ready/enterprise-scale/management-and-monitoring",
+                                "style": "Info"
                             }
                         },
                         {
-                            "name": "subscriptionSelector",
-                            "type": "Microsoft.Common.SubscriptionSelector",
-                            "label": "Subscription",
-                            "constraints": {
-                                "required": true
-                            }
+                            "name": "esMgmtSubSection",
+                            "type": "Microsoft.Common.Section",
+                            "label": "Management subscription",
+                            "elements": [
+                                {
+                                    "type": "Microsoft.Common.SubscriptionSelector",
+                                    "name": "esMgmtSub",
+                                    "label": "Management subscription"
+                                }
+                            ],
+                            "visible": "[and(equals(steps('esGoalState').azMonSection.esLogAnalytics, 'Yes'), not(equals(steps('lzSettings').subSection.subOrgsOption, 'Single')))]"
+                        },
+                        {
+                            "name": "azMonSection",
+                            "type": "Microsoft.Common.Section",
+                            "label": "Azure Monitor",
+                            "elements": [
+                                {
+                                    "name": "azMonText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Azure Monitor with Log Analytics provides the core infrastructure to enable platform observability, security, and log retention for the FSI Landing Zones. You can create a dedicated Log Analytics workspace and enable curated analytical solutions, that will also intersect with Microsoft Defender for Cloud and Microsoft Sentinel.",
+                                        "link": {
+                                            "label": "Learn more",
+                                            "uri": "https://learn.microsoft.com/azure/azure-monitor/logs/log-analytics-overview"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "esLogAnalytics",
+                                    "type": "Microsoft.Common.OptionsGroup",
+                                    "label": "Deploy Log Analytics workspace and enable monitoring for your platform and resources",
+                                    "defaultValue": "Yes (recommended)",
+                                    "toolTip": "If 'Yes' is selected when also adding a subscription for management, Log Analytics workspace will be created in the dedicated subscription and enable additional configuration options in the deployment wizard.",
+                                    "constraints": {
+                                        "allowedValues": [
+                                            {
+                                                "label": "Yes (recommended)",
+                                                "value": "Yes"
+                                            },
+                                            {
+                                                "label": "No",
+                                                "value": "No"
+                                            }
+                                        ]
+                                    },
+                                    "visible": true
+                                },
+                                {
+                                    "name": "esLogRetention",
+                                    "type": "Microsoft.Common.Slider",
+                                    "min": 30,
+                                    "max": 730,
+                                    "label": "Log Analytics Data Retention (days)",
+                                    "subLabel": "Days",
+                                    "defaultValue": 30,
+                                    "showStepMarkers": false,
+                                    "toolTip": "Select retention days for Azure logs. Default is 30 days. If longer retention is required, you can optionally configure Log Analytics data export to a Storage Account or an Event Hub namespace.",
+                                    "constraints": {
+                                        "required": false
+                                    },
+                                    "visible": "[equals(steps('esGoalState').azMonSection.esLogAnalytics,'Yes')]"
+                                }
+                            ],
+                            "visible": true
                         }
                     ]
                 }
@@ -53,12 +166,14 @@
         },
         "outputs": {
             "parameters": {
-                "location": "[steps('deploymentLocation').location.name]",
+                "industry": "nfp",
                 "mgmtGroupPrefix": "[steps('mgmtGroupSettings').mgmtGroupPrefix]",
-                "subscriptionId": "[steps('mgmtGroupSettings').subscriptionSelector.subscriptionId]"
+                "managementSubscriptionId": "[steps('esGoalState').esMgmtSubSection.esMgmtSub.subscriptionId]",
+                "enableLogAnalytics": "[steps('esGoalState').azMonSection.esLogAnalytics]",
+                "retentionInDays": "[string(steps('esGoalState').azMonSection.esLogRetention)]"
             },
             "kind": "Tenant",
-            "location": "[steps('deploymentLocation').location.name]"
+            "location": "[steps('basics').resourceScope.location.name]"
         }
     }
 }
