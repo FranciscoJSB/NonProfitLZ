@@ -3,26 +3,48 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Key Vault Deployment",
+            "title": "Resource Group Deployment",
             "isWizard": false,
             "steps": [
                 {
-                    "name": "keyVaultDetails",
-                    "label": "Key Vault Details",
+                    "name": "deploymentLocation",
+                    "label": "Deployment Location",
                     "elements": [
                         {
-                            "name": "keyVaultName",
+                            "name": "location",
+                            "type": "Microsoft.Common.LocationSelector",
+                            "label": "Region",
+                            "constraints": {
+                                "required": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "mgmtGroupSettings",
+                    "label": "Management Group Settings",
+                    "elements": [
+                        {
+                            "name": "mgmtGroupPrefix",
                             "type": "Microsoft.Common.TextBox",
-                            "label": "Key Vault Name",
-                            "toolTip": "The name of the Key Vault.",
+                            "label": "Management Group Prefix",
+                            "toolTip": "Enter the prefix for the Management Group.",
                             "constraints": {
                                 "required": true,
                                 "validations": [
                                     {
-                                        "regex": "^[a-zA-Z0-9-]{3,24}$",
-                                        "message": "The Key Vault name must be between 3 and 24 characters long and contain only letters, numbers, and hyphens."
+                                        "regex": "^[a-zA-Z0-9-]{1,10}$",
+                                        "message": "The prefix must be between 1 and 10 characters long and contain only letters, numbers, and hyphens."
                                     }
                                 ]
+                            }
+                        },
+                        {
+                            "name": "subscriptionSelector",
+                            "type": "Microsoft.Common.SubscriptionSelector",
+                            "label": "Subscription",
+                            "constraints": {
+                                "required": true
                             }
                         }
                     ]
@@ -31,10 +53,12 @@
         },
         "outputs": {
             "parameters": {
-                "keyVaultName": "[steps('keyVaultDetails').keyVaultName]"
+                "location": "[steps('deploymentLocation').location]",
+                "mgmtGroupPrefix": "[steps('mgmtGroupSettings').mgmtGroupPrefix]",
+                "subscriptionId": "[steps('mgmtGroupSettings').subscriptionSelector.subscriptionId]"
             },
             "kind": "ResourceGroup",
-            "location": "eastus"
+            "location": "[steps('deploymentLocation').location]"
         }
     }
 }
