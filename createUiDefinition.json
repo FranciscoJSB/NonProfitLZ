@@ -167,7 +167,7 @@
         "outputs": {
             "parameters": {
                 "industry": "nfp",
-                "mgmtGroupPrefix": "[steps('mgmtGroupSettings').mgmtGroupPrefix]",
+                "industryPrefix": "[steps('lzSettings').mgSection.esMgmtGroup]",
                 "managementSubscriptionId": "[steps('esGoalState').esMgmtSubSection.esMgmtSub.subscriptionId]",
                 "enableLogAnalytics": "[steps('esGoalState').azMonSection.esLogAnalytics]",
                 "retentionInDays": "[string(steps('esGoalState').azMonSection.esLogRetention)]"
