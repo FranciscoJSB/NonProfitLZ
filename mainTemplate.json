@@ -2,16 +2,17 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "industryPrefix": {
+    "keyVaultName": {
       "type": "string",
       "metadata": {
-        "description": "Prefix for all resources."
+        "description": "The name of the Key Vault."
       }
     },
-    "managementGroupPrefix": {
+    "location": {
       "type": "string",
+      "defaultValue": "eastus",
       "metadata": {
-        "description": "Prefix for the single management group."
+        "description": "Location for the Key Vault."
       }
     },
     "managementSubscriptionId": {
@@ -19,70 +20,29 @@
       "metadata": {
         "description": "Subscription ID for management resources."
       }
-    },
-    "connectivitySubscriptionId": {
-      "type": "string",
-      "metadata": {
-        "description": "Subscription ID for connectivity resources."
-      }
-    },
-    "location": {
-      "type": "string",
-      "defaultValue": "eastus",
-      "metadata": {
-        "description": "Location for all resources."
-      }
     }
   },
   "resources": [
     {
-      "type": "Microsoft.Management/managementGroups",
-      "apiVersion": "2020-05-01",
-      "name": "[parameters('managementGroupPrefix')]",
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2021-06-01-preview",
+      "name": "[parameters('keyVaultName')]",
+      "location": "[parameters('location')]",
       "properties": {
-        "displayName": "[parameters('managementGroupPrefix')]",
-        "details": {
-          "parent": {
-            "id": "/providers/Microsoft.Management/managementGroups/[tenant().tenantId]"
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
-      "name": "[concat(parameters('industryPrefix'), '-management-resources-deployment')]",
-      "location": "[deployment().location]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "https://path/to/management/resources/deployment/template.json",
-          "contentVersion": "1.0.0.0"
+        "sku": {
+          "family": "A",
+          "name": "standard"
         },
-        "parameters": {
-          "managementSubscriptionId": {
-            "value": "[parameters('managementSubscriptionId')]"
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
-      "name": "[concat(parameters('industryPrefix'), '-connectivity-resources-deployment')]",
-      "location": "[deployment().location]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "https://path/to/connectivity/resources/deployment/template.json",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "connectivitySubscriptionId": {
-            "value": "[parameters('connectivitySubscriptionId')]"
-          }
-        }
-      }
+        "tenantId": "[subscription().tenantId]",
+        "accessPolicies": []
+      },
+      "dependsOn": []
     }
-  ]
+  ],
+  "outputs": {
+    "keyVaultName": {
+      "type": "string",
+      "value": "[parameters('keyVaultName')]"
+    }
+  }
 }
