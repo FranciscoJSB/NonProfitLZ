@@ -1,98 +1,59 @@
-
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "location": {
-            "type": "string"
-        },
         "keyVaultName": {
             "type": "string"
-        },
-        "apiVersion": {
-            "type": "string",
-            "defaultValue": "2021-08-01"
-        },
-        "publicNetworkAccess": {
-            "type": "string",
-            "defaultValue": "Enabled"
-        },
-        "immutabilityState": {
-            "type": "string",
-            "defaultValue": "Unlocked"
-        },
-        "standardTierStorageRedundancy": {
-            "type": "string",
-            "defaultValue": "LocallyRedundant"
-        },
-        "crossRegionRestore": {
-            "type": "string",
-            "defaultValue": "Disabled"
-        },
-        "sku": {
-            "type": "string",
-            "defaultValue": "Standard"
-        },
-        "accessPolicies": {
-            "type": "array",
-            "defaultValue": []
-        },
-        "enabledForDeployment": {
-            "type": "bool",
-            "defaultValue": false
-        },
-        "enabledForTemplateDeployment": {
-            "type": "bool",
-            "defaultValue": true
-        },
-        "enabledForDiskEncryption": {
-            "type": "bool",
-            "defaultValue": true
-        },
-        "enableRbacAuthorization": {
-            "type": "bool",
-            "defaultValue": true
-        },
-        "enableSoftDelete": {
-            "type": "bool",
-            "defaultValue": true
-        },
-        "softDeleteRetentionInDays": {
-            "type": "int",
-            "defaultValue": 90
-        },
-        "connectivitySubscriptionId": {
-            "type": "string",
-            "defaultValue": "",
-            "maxLength": 36,
-            "metadata": {
-                "description": "Provide the subscription id of an existing, empty subscription you want to dedicate for networking."
-            }
         }
     },
     "resources": [
         {
-            "type": "Microsoft.KeyVault/vaults",
-            "apiVersion": "2021-06-01-preview",
-            "name": "[parameters('keyVaultName')]",
-            "location": "[parameters('location')]",
-            "subscriptionId":"[parameters('connectivitySubscriptionId')]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2021-04-01",
+            "name": "keyVaultDeployment",
             "properties": {
-                "sku": {
-                    "family": "A",
-                    "name": "[parameters('sku')]"
-                },
-                "tenantId": "[parameters('tenant')]",
-                "accessPolicies": "[parameters('accessPolicies')]",
-                "enabledForDeployment": "[parameters('enabledForDeployment')]",
-                "enabledForTemplateDeployment": "[parameters('enabledForTemplateDeployment')]",
-                "enabledForDiskEncryption": "[parameters('enabledForDiskEncryption')]",
-                "enableRbacAuthorization": "[parameters('enableRbacAuthorization')]",
-                "publicNetworkAccess": "[parameters('publicNetworkAccess')]",
-                "networkAcls": "[parameters('networkAcls')]",
-                "properties": {
-                    "enableSoftDelete": "[parameters('enableSoftDelete')]",
-                    "softDeleteRetentionInDays": "[parameters('softDeleteRetentionInDays')]"
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+                            "type": "Microsoft.Resources/resourceGroups",
+                            "apiVersion": "2021-04-01",
+                            "location": "[resourceGroup().location]",
+                            "name": "patito-test"
+                        },
+                        {
+                            "type": "Microsoft.KeyVault/vaults",
+                            "apiVersion": "2021-06-01-preview",
+                            "name": "[parameters('keyVaultName')]",
+                            "location": "[resourceGroup().location]",
+                            "properties": {
+                                "sku": {
+                                    "family": "A",
+                                    "name": "standard"
+                                },
+                                "tenantId": "[subscription().tenantId]",
+                                "accessPolicies": [],
+                                "enabledForDeployment": false,
+                                "enabledForTemplateDeployment": true,
+                                "enabledForDiskEncryption": true,
+                                "enableRbacAuthorization": true,
+                                "publicNetworkAccess": "Enabled",
+                                "networkAcls": {
+                                    "bypass": "AzureServices",
+                                    "defaultAction": "Allow"
+                                },
+                                "properties": {
+                                    "enableSoftDelete": true,
+                                    "softDeleteRetentionInDays": 90
+                                }
+                            },
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Resources/resourceGroups', 'patito-test')]"
+                            ]
+                        }
+                    ]
                 }
             }
         }
