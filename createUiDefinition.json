@@ -53,12 +53,12 @@
         },
         "outputs": {
             "parameters": {
-                "location": "[steps('deploymentLocation').location]",
+                "location": "[steps('deploymentLocation').location.name]",
                 "mgmtGroupPrefix": "[steps('mgmtGroupSettings').mgmtGroupPrefix]",
                 "subscriptionId": "[steps('mgmtGroupSettings').subscriptionSelector.subscriptionId]"
             },
             "kind": "Tenant",
-            "location": "[steps('deploymentLocation').location]"
+            "location": "[steps('deploymentLocation').location.name]"
         }
     }
 }
