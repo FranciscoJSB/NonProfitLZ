@@ -47,6 +47,10 @@
         "retentionInDays": {
             "type": "string",
             "defaultValue": ""
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[deployment().location]"
         }
     },
     "variables": {
