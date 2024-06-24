@@ -77,7 +77,7 @@
                 "location": "[steps('basics').resourceScope.location.name]",
                 "storageAccountName": "[steps('storage').storageAccountName]"
             },
-            "kind": "ResourceGroup",
+            "kind": "Tenant",
             "location": "[steps('basics').resourceScope.location.name]"
         }
     }
