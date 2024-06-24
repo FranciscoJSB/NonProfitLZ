@@ -1,289 +1,490 @@
+
 {
-    "$schema": "<relative path to createFormUI.schema.json>",
-    "view": {
-        "kind": "Form",
-        "properties": {
-            "title": "FSI Landing Zones on Microsoft Azure",
-            "isWizard": false,
-            "steps": [
-                {
-                    "name": "basics",
-                    "label": "Deployment location",
-                    "elements": [
-                        {
-                            "name": "resourceScope",
-                            "type": "Microsoft.Common.ResourceScope"
-                        }
-                    ]
-                },
-                {
-                    "name": "lzSettings",
-                    "label": "Management Group and Subscription Organization",
-                    "subLabel": {
-                        "preValidation": "Provide a prefix for the management group structure that will be created.",
-                        "postValidation": "Done"
-                    },
-                    "bladeTitle": "Company prefix",
-                    "elements": [
-                        {
-                            "name": "info",
-                            "type": "Microsoft.Common.InfoBox",
-                            "visible": true,
-                            "options": {
-                                "text": "FSI Landing Zones requires access at the tenant root (/) scope. Visit this link to ensure you have the appropriate RBAC permission to complete the deployment",
-                                "uri": "https://docs.microsoft.com/azure/role-based-access-control/elevate-access-global-admin",
-                                "style": "Info"
-                            }
-                        },
-                        {
-                            "name": "mgSection",
-                            "type": "Microsoft.Common.Section",
-                            "label": "Management Groups",
-                            "elements": [
-                                {
-                                    "name": "mgmtGroup",
-                                    "type": "Microsoft.Common.TextBlock",
-                                    "visible": true,
-                                    "options": {
-                                        "text": "FSI Landing Zones will create the management group hierarchy under the Tenant Root Group with the prefix provided at this step, which will be used to establish a proven architecture for subscription organization and policy driven governance at scale.",
-                                        "link": {
-                                            "label": "Learn more",
-                                            "uri": "https://github.com/microsoft/industry/tree/main/fsi#fsi-landing-zones-on-microsoft-azure"
-                                        }
-                                    }
-                                },
-                                {
-                                    "name": "esMgmtGroup",
-                                    "type": "Microsoft.Common.TextBox",
-                                    "label": "Management Group prefix",
-                                    "toolTip": "Provide a prefix (max 10 characters, unique at tenant-scope) for the Management Group hierarchy and other resources created as part of FSI Landing Zones.",
-                                    "defaultValue": "",
-                                    "constraints": {
-                                        "required": true,
-                                        "regex": "^[a-z0-9A-Z-]{1,10}$",
-                                        "validationMessage": "The prefix must be 1-10 characters."
-                                    }
-                                }
-                            ],
-                            "visible": true
-                        },
-                        {
-                            "name": "rpRegistrationApi",
-                            "type": "Microsoft.Solutions.ArmApiControl",
-                            "request": {
-                                "method": "POST",
-                                "path": "[concat('/providers/Microsoft.Management/managementGroups/',steps('basics').resourceScope.tenant.tenantId, '/providers/Microsoft.PolicyInsights/register?api-version=2021-04-01')]"
-                            }
-                        },
-                        {
-                            "name": "subSection",
-                            "type": "Microsoft.Common.Section",
-                            "label": "Subscription Organization",
-                            "elements": [
-                                {
-                                    "name": "subOrg",
-                                    "type": "Microsoft.Common.TextBlock",
-                                    "visible": true,
-                                    "options": {
-                                        "text": "FSI Landing Zones recommends dedidated subscriptions for the Azure platform functionality, such as Security, Governance, Compliance, Network Connectivity, and Identity and Access. This enables the organization to scale the Azure platform and the workloads in the landing zones independently regardless of future scale-point.",
-                                        "link": {
-                                            "label": "Learn more",
-                                            "uri": "https://github.com/microsoft/industry/blob/main/fsi/docs/architectureAndDesign.md#architecture-and-design"
-                                        }
-                                    }
-                                },
-                                {
-                                    "name": "subOrgsOption",
-                                    "type": "Microsoft.Common.OptionsGroup",
-                                    "label": "Select dedicated subscriptions or a single subscription for FSI Landing Zones platform resources",
-                                    "defaultValue": "Dedicated (recommended)",
-                                    "toolTip": "Dedicated subscriptions will require separate Azure subscriptions for platform resources and is the recommended option for production environments. The single subscription option will deploy all platform resources on a single subscription.",
-                                    "constraints": {
-                                        "allowedValues": [
-                                            {
-                                                "label": "Dedicated (recommended)",
-                                                "value": "Dedicated"
-                                            },
-                                            {
-                                                "label": "Single",
-                                                "value": "Single"
-                                            }
-                                        ]
-                                    },
-                                    "visible": true
-                                }
-                            ],
-                            "visible": false
-                        },
-                        {
-                            "name": "esSingleSubSection",
-                            "type": "Microsoft.Common.Section",
-                            "label": "Single platform subscription",
-                            "elements": [
-                                {
-                                    "name": "subWarning",
-                                    "type": "Microsoft.Common.InfoBox",
-                                    "visible": true,
-                                    "options": {
-                                        "icon": "Warning",
-                                        "text": "Dedicated subscriptions are recommended for the various platform components to ensure scale, sustainability, and segregation of duties, and especially around networking. However, a single subscription can also be used in case this is not a concern (e.g., small organizations, or testing purposes).",
-                                        "uri": "https://docs.microsoft.com/azure/cloud-adoption-framework/ready/enterprise-scale/management-group-and-subscription-organization"
-                                    }
-                                },
-                                {
-                                    "name": "singleSubText",
-                                    "type": "Microsoft.Common.TextBlock",
-                                    "visible": true,
-                                    "options": {
-                                        "text": "Select the single subscription that will be used for all platform resources during deployment, for security, logging, connectivity, and identity."
-                                    }
-                                },
-                                {
-                                    "type": "Microsoft.Common.SubscriptionSelector",
-                                    "name": "esSingleSub",
-                                    "label": "Single platform subscription"
-                                }
-                            ],
-                            "visible": "[equals(steps('lzSettings').subSection.subOrgsOption, 'Single')]"
-                        }
-                    ]
-                },
-                {
-                    "name": "esGoalState",
-                    "label": "IMC-Hub Subscription Deployment",
-                    "subLabel": {
-                        "preValidation": "",
-                        "postValidation": ""
-                    },
-                    "bladeTitle": "lzGs",
-                    "elements": [
-                        {
-                            "name": "multiPlatformMgmtSub",
-                            "type": "Microsoft.Common.InfoBox",
-                            "visible": "[not(equals(steps('lzSettings').subSection.subOrgsOption, 'Single'))]",
-                            "options": {
-                                "text": "To enable platform management and monitoring, you must allocate a dedicated Azure Subscription. Please note, this Subscription will be moved to the platform Management Group, and ARM will deploy a Log Analytics workspace and requisite settings. We recommend using a new Subscription with no existing resources. Note that Azure Policy will be used to govern the configuration for the platform at scale.",
-                                "uri": "https://docs.microsoft.com/azure/cloud-adoption-framework/ready/enterprise-scale/management-and-monitoring",
-                                "style": "Info"
-                            }
-                        },
-                        {
-                            "name": "singlePlatformMgmtSub",
-                            "type": "Microsoft.Common.InfoBox",
-                            "visible": "[equals(steps('lzSettings').subSection.subOrgsOption, 'Single')]",
-                            "options": {
-                                "text": "To enable management and monitoring, you can configure core infra such as Log Analytics and additional monitoring solutions to your dedicated platform subscription. Note that Azure Policy will be used to govern the configuration for the platform at scale.",
-                                "uri": "https://docs.microsoft.com/azure/cloud-adoption-framework/ready/enterprise-scale/management-and-monitoring",
-                                "style": "Info"
-                            }
-                        },
-                        {
-                            "name": "azMonSection",
-                            "type": "Microsoft.Common.Section",
-                            "label": "Azure Monitor",
-                            "elements": [
-                                {
-                                    "name": "azMonText",
-                                    "type": "Microsoft.Common.TextBlock",
-                                    "visible": true,
-                                    "options": {
-                                        "text": "Azure Monitor with Log Analytics provides the core infrastructure to enable platform observability, security, and log retention for the FSI Landing Zones. You can create a dedicated Log Analytics workspace and enable curated analytical solutions, that will also intersect with Microsoft Defender for Cloud and Microsoft Sentinel.",
-                                        "link": {
-                                            "label": "Learn more",
-                                            "uri": "https://learn.microsoft.com/azure/azure-monitor/logs/log-analytics-overview"
-                                        }
-                                    }
-                                },
-                                {
-                                    "name": "esLogAnalytics",
-                                    "type": "Microsoft.Common.OptionsGroup",
-                                    "label": "Deploy Log Analytics workspace and enable monitoring for your platform and resources",
-                                    "defaultValue": "Yes (recommended)",
-                                    "toolTip": "If 'Yes' is selected when also adding a subscription for management, Log Analytics workspace will be created in the dedicated subscription and enable additional configuration options in the deployment wizard.",
-                                    "constraints": {
-                                        "allowedValues": [
-                                            {
-                                                "label": "Yes (recommended)",
-                                                "value": "Yes"
-                                            },
-                                            {
-                                                "label": "No",
-                                                "value": "No"
-                                            }
-                                        ]
-                                    },
-                                    "visible": true
-                                },
-                                {
-                                    "name": "esLogRetention",
-                                    "type": "Microsoft.Common.Slider",
-                                    "min": 30,
-                                    "max": 730,
-                                    "label": "Log Analytics Data Retention (days)",
-                                    "subLabel": "Days",
-                                    "defaultValue": 30,
-                                    "showStepMarkers": false,
-                                    "toolTip": "Select retention days for Azure logs. Default is 30 days. If longer retention is required, you can optionally configure Log Analytics data export to a Storage Account or an Event Hub namespace.",
-                                    "constraints": {
-                                        "required": false
-                                    },
-                                    "visible": "[equals(steps('esGoalState').azMonSection.esLogAnalytics,'Yes')]"
-                                }
-                            ],
-                            "visible": true
-                        },
-                        {
-                            "name": "esMgmtSubSection",
-                            "type": "Microsoft.Common.Section",
-                            "label": "Management subscription",
-                            "elements": [
-                                {
-                                    "type": "Microsoft.Common.SubscriptionSelector",
-                                    "name": "esMgmtSub",
-                                    "label": "Management subscription"
-                                }
-                            ],
-                            "visible": true
-                        }
-                    ]
-                },
-                {
-                    "name": "esConnectivityGoalState",
-                    "label": "Network Connectivity and Topology",
-                    "subLabel": {
-                        "preValidation": "",
-                        "postValidation": ""
-                    },
-                    "bladeTitle": "lzGs",
-                    "elements": [
-                        {
-                            "name": "esNwSubSection",
-                            "type": "Microsoft.Common.Section",
-                            "label": "Connectivity subscription",
-                            "elements": [
-                                {
-                                    "type": "Microsoft.Common.SubscriptionSelector",
-                                    "name": "esNwSub",
-                                    "label": "Connectivity subscription"
-                                }
-                            ],
-                            "visible": true
-                        }
-                    ]
-                }
+    "$schema": "https://schema.management.azure.com/schemas/2019-08-01/tenantDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "industryPrefix": {
+            "type": "string",
+            "maxLength": 10,
+            "metadata": {
+                "description": "Provide a prefix (max 10 characters, unique at tenant-scope) for the Management Group hierarchy and other resources created as part of Enterprise-scale."
+            }
+        },
+        "industry": {
+            "type": "string",
+            "allowedValues": [
+                "fsi",
+                "telco"
             ]
         },
-        "outputs": {
-            "parameters": {
-                "industry": "fsi",
-                "connectivitySubscriptionId": "[if(not(equals(steps('esGoalState').esNwSubSection.esNwSub.subscriptionId,steps('esGoalState').esMgmtSubSection.esMgmtSub.subscriptionId)),steps('esGoalState').esNwSubSection.esNwSub.subscriptionId,'')]",
-                "managementSubscriptionId": "[steps('esGoalState').esMgmtSubSection.esMgmtSub.subscriptionId]",
-                "enableLogAnalytics": "[steps('esGoalState').azMonSection.esLogAnalytics]",
-                "industryPrefix": "[steps('lzSettings').mgSection.esMgmtGroup]",
-                "retentionInDays": "[string(steps('esGoalState').azMonSection.esLogRetention)]"
-            },
-            "kind": "Tenant",
-            "location": "[steps('basics').resourceScope.location.name]"
+        "managementSubscriptionId": {
+            "type": "string",
+            "defaultValue": "",
+            "maxLength": 36,
+            "metadata": {
+                "description": "Provide the subscription id of an existing, empty subscription you want to dedicate for management. If you don't want to bring a subscription, leave this parameter empty as is."
+            }
+        },
+        "connectivitySubscriptionId": {
+            "type": "string",
+            "defaultValue": "",
+            "maxLength": 36,
+            "metadata": {
+                "description": "Provide the subscription id of an existing, empty subscription you want to dedicate for networking."
+            }
+        },
+        "enableLogAnalytics": {
+            "type": "string",
+            "defaultValue": "No",
+            "allowedValues": [
+                "Yes",
+                "No"
+            ],
+            "metadata": {
+                "description": "If 'Yes' is selected when also adding a subscription for management, ARM will assign two policies to enable auditing in your environment, into the Log Analytics workspace for platform monitoring. If 'No', it will be ignored."
+            }
+        },
+        "retentionInDays": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[deployment().location]"
+        }
+    },
+    "variables": {
+        "geoMap": {
+            "eastus": "North-America",
+            "eastus2": "North-America",
+            "southcentralus": "North-America",
+            "westus2": "North-America",
+            "westus3": "North-America",
+            "australiaeast": "APAC",
+            "southeastasia": "APAC",
+            "northeurope": "EMEA",
+            "swedencentral": "EMEA",
+            "uksouth": "EMEA",
+            "westeurope": "EMEA",
+            "centralus": "North-America",
+            "southafricanorth": "EMEA",
+            "centralindia": "APAC",
+            "eastasia": "APAC",
+            "japaneast": "APAC",
+            "koreacentral": "APAC",
+            "canadacentral": "North-America",
+            "francecentral": "EMEA",
+            "germanywestcentral": "EMEA",
+            "norwayeast": "EMEA",
+            "switzerlandnorth": "EMEA",
+            "uaenorth": "EMEA",
+            "brazilsouth": "South-America",
+            "eastus2euap": "North-America",
+            "qatarcentral": "EMEA",
+            "asia": "APAC",
+            "asiapacific": "APAC",
+            "australia": "APAC",
+            "brazil": "South-America",
+            "canada": "North-America",
+            "europe": "EMEA",
+            "france": "EMEA",
+            "germany": "EMEA",
+            "india": "APAC",
+            "japan": "APAC",
+            "korea": "APAC",
+            "norway": "EMEA",
+            "singapore": "APAC",
+            "southafrica": "EMEA",
+            "switzerland": "EMEA",
+            "unitedstates": "North-America",
+            "northcentralus": "North-America",
+            "westus": "North-America",
+            "centraluseuap": "North-America",
+            "westcentralus": "North-America",
+            "southafricawest": "EMEA",
+            "australiacentral": "APAC",
+            "australiacentral2": "APAC",
+            "australiasoutheast": "APAC",
+            "japanwest": "APAC",
+            "koreasouth": "APAC",
+            "southindia": "APAC",
+            "westindia": "APAC",
+            "canadaeast": "North-America",
+            "francesouth": "EMEA",
+            "germanynorth": "EMEA",
+            "norwaywest": "EMEA",
+            "switzerlandwest": "EMEA",
+            "ukwest": "EMEA",
+            "uaecentral": "EMEA",
+            "brazilsoutheast": "South-America"
+        },
+        "mgmtGeo": "[variables('geoMap')[parameters('location')]]",
+        "mgmtGroups": {
+            "platform": "[parameters('industryPrefix')]",
+            "lzs": "[parameters('industryPrefix')]",
+            "geo": "[parameters('industryPrefix')]",
+            "decommissioned": "[parameters('industryPrefix')]",
+            "playground": "[parameters('industryPrefix')]",
+            "corp": "[parameters('industryPrefix')]",
+            "online": "[parameters('industryPrefix')]",
+            "identity": "[parameters('industryPrefix')]",
+            "management": "[parameters('industryPrefix')]",
+            "connectivity": "[parameters('industryPrefix')]",
+            "industryRoot": "[parameters('industryPrefix')]"
+        },
+        "scopes": {
+            "industryRootManagementGroup": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('mgmtGroups').industryRoot)]",
+            "platformManagementGroup": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('mgmtGroups').platform)]",
+            "managementManagementGroup": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('mgmtGroups').management)]",
+            "connectivityManagementGroup": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('mgmtGroups').connectivity)]",
+            "identityManagementGroup": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('mgmtGroups').identity)]",
+            "playgroundManagementGroup": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('mgmtGroups').playground)]",
+            "lzsManagementGroup": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('mgmtGroups').lzs)]",
+            "geoManagementGroup": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('mgmtGroups').geo)]",
+            "corpManagementGroup": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('mgmtGroups').corp)]",
+            "onlineManagementGroup": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('mgmtGroups').online)]"
+        },
+        "deploymentUris": {
+            "managementGroups": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/mgmtGroupStructure/mgmtGroups.json')]",
+            "policyInsightsRpRegistration": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyInsightsRpReg.json')]",
+            "allowedRegionsPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DENY-RegionsPolicyAssignment.json')]",
+            "allowedRgRegionsPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DENY-RgRegionsPolicyAssignment.json')]",
+            "allowedResourcesPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DENY-ResourcesPolicyAssignment.json')]",
+            "customRbacRoleDefinition": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/roleDefinitions/Custom-RBACDefinitions.json')]",
+            
+            "dataPolicyDefinitions": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyDefinitions/dataPolicies.json')]",
+            "vnetConnectivityHub": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/hubspoke-connectivity.json')]",
+            "vwanConnectivityHub": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/vwan-connectivity.json')]",
+            "nvaConnectivityHub": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/nvahubspoke-connectivity.json')]",
+            "ingressAndEgress": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/ingress-egress.json')]",
+            "subscriptionPlacement": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/subscriptionOrganization/subscriptionOrganization.json')]",
+            "monitoring": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/logAnalyticsWorkspace.json')]",
+            "ddosProtection": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/ddosProtection.json')]",
+            "logAnalyticsPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DINE-LogAnalyticsPolicyAssignment.json')]",
+            "monitoringSolutions": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/logAnalyticsSolutions.json')]",
+            "asbPolicyInitiative": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DINE-ASBPolicyAssignment.json')]",
+            "resourceDiagnosticsInitiative": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DINE-ResourceDiagnosticsPolicyAssignment.json')]",
+            "activityDiagnosticsPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DINE-ActivityLogPolicyAssignment.json')]",
+            "ascConfigPolicyInitiative": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DINE-ASCConfigPolicyAssignment.json')]",
+            "defenderEndpointPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DINE-DefenderForVms.json')]",
+            "azVmBackupPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DINE-VMBackupPolicyAssignment.json')]",
+            "pipPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DENY-PublicIpAddressPolicyAssignment.json')]",
+            "rdpFromInternetPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DENY-RDPFromInternetPolicyAssignment.json')]",
+            "subnetNsgPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DENY-SubnetWithoutNsgPolicyAssignment.json')]",
+            "corpVnetPeering": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/vnetPeering.json')]",
+            "corpVwanPeering": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/vnetPeeringVwan.json')]",
+            "privateDnsZones": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/privateDnsZoneWithLink.json')]",
+            "roleAssignments": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/roleAssignments/roleAssignment.json')]",
+            "govAscPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/gov/fairfaxDINE-ASCConfigPolicyAssignment.json')]",
+            "logStorageAccount": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/logStorageAccount.json')]",
+            "nwDeployment": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/networkWatcher.json')]",
+            "nsgFlowLogPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DINE-NSGFlowLogsPolicyAssignment.json')]",
+            "nsgFlowLogPolicyExemption": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyExemptions/EXEMPT-NSGFlowLogStAcc.json')]",
+            "sshFromInternetPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DENY-SSHFromInternetPolicyAssignment.json')]",
+            "denyVnetPeeringPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DENY-VNetPeeringPolicyAssignment.json')]",
+            "budgetPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DINE-BudgetPolicyAssignment.json')]",
+            "erHaPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'telco/managementGroupTemplates/policyAssignments/DENY-non-ha-expressRoutes-policyAssignment.json')]",
+            "pipHaPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'telco/managementGroupTemplates/policyAssignments/DENY-non-ha-publicIps-policyAssignment.json')]"
+        },
+        "deploymentSuffix": "[concat('-', deployment().location, guid(parameters('industryPrefix')))]",
+        "industry": "[parameters('industry')]",
+        "deploymentNames": {
+            "mgmtGroupDeploymentName": "[take(concat(variables('industry'), '-Mgs', variables('deploymentSuffix')), 64)]",
+            "policyRpRegDeploymentName": "[take(concat(variables('industry'), '-PolicyInsights', variables('deploymentSuffix')), 64)]",
+            "customRbacDeploymentName": "[take(concat(variables('industry'), '-RoleDefinitions', variables('deploymentSuffix')), 64)]",
+            "allowedRegionsDeploymentName": "[take(concat(variables('industry'), '-Azure-Regions', variables('deploymentSuffix')), 64)]",
+            "allowedRgRegionsDeploymentName": "[take(concat(variables('industry'), '-Azure-RG-Regions', variables('deploymentSuffix')), 64)]",
+            "allowedResourcesDeploymentName": "[take(concat(variables('industry'), '-Azure-Resources', variables('deploymentSuffix')), 64)]",
+            "centralizedLoggingDeploymentName": "[take(concat(variables('industry'), '-Centralized-Logs', variables('deploymentSuffix')), 64)]",
+            "compliantApimDeploymentName": "[take(concat(variables('industry'), '-Compliant-Apim', variables('deploymentSuffix')), 64)]",
+            "compliantAppServiceDeploymentName": "[take(concat(variables('industry'), '-Compliant-AppService', variables('deploymentSuffix')), 64)]",
+            "compliantAutomationDeploymentName": "[take(concat(variables('industry'), '-Compliant-Automation', variables('deploymentSuffix')), 64)]",
+            "compliantBackupDeploymentName": "[take(concat(variables('industry'), '-Compliant-Backup', variables('deploymentSuffix')), 64)]",
+            "compliantCognitiveSearchDeploymentName": "[take(concat(variables('industry'), '-Compliant-CognitiveSearch', variables('deploymentSuffix')), 64)]",
+            "compliantComputeDeploymentName": "[take(concat(variables('industry'), '-Compliant-Compute', variables('deploymentSuffix')), 64)]",
+            "compliantContainerAppsDeploymentName": "[take(concat(variables('industry'), '-Compliant-ContainerApps', variables('deploymentSuffix')), 64)]",
+            "compliantContainerInstanceDeploymentName": "[take(concat(variables('industry'), '-Compliant-ContainerInstance', variables('deploymentSuffix')), 64)]",
+            "compliantContainerRegistryDeploymentName": "[take(concat(variables('industry'), '-Compliant-ContainerRegistry', variables('deploymentSuffix')), 64)]",
+            "compliantCosmosDbDeploymentName": "[take(concat(variables('industry'), '-Compliant-CosmosDb', variables('deploymentSuffix')), 64)]",
+            "compliantDataExplorerDeploymentName": "[take(concat(variables('industry'), '-Compliant-DataExplorer', variables('deploymentSuffix')), 64)]",
+            "compliantDataFactoryDeploymentName": "[take(concat(variables('industry'), '-Compliant-DataFactory', variables('deploymentSuffix')), 64)]",
+            "compliantEventGridDeploymentName": "[take(concat(variables('industry'), '-Compliant-EventGrid', variables('deploymentSuffix')), 64)]",
+            "compliantEventHubDeploymentName": "[take(concat(variables('industry'), '-Compliant-EventHub', variables('deploymentSuffix')), 64)]",
+            "compliantKeyVaultDeploymentName": "[take(concat(variables('industry'), '-Compliant-KeyVault', variables('deploymentSuffix')), 64)]",
+            "compliantKubernetesDeploymentName": "[take(concat(variables('industry'), '-Compliant-Kubernetes', variables('deploymentSuffix')), 64)]",
+            "compliantMachineLearningDeploymentName": "[take(concat(variables('industry'), '-Compliant-MachineLearning', variables('deploymentSuffix')), 64)]",
+            "compliantNetworkDeploymentName": "[take(concat(variables('industry'), '-Compliant-Network', variables('deploymentSuffix')), 64)]",
+            "compliantOpenAiDeploymentName": "[take(concat(variables('industry'), '-Compliant-OpenAi', variables('deploymentSuffix')), 64)]",
+            "compliantPostgreDeploymentName": "[take(concat(variables('industry'), '-Compliant-Postgre', variables('deploymentSuffix')), 64)]",
+            "compliantServiceBusDeploymentName": "[take(concat(variables('industry'), '-Compliant-ServiceBus', variables('deploymentSuffix')), 64)]",
+            "compliantSqlDeploymentName": "[take(concat(variables('industry'), '-Compliant-Sql', variables('deploymentSuffix')), 64)]",
+            "compliantStorageDeploymentName": "[take(concat(variables('industry'), '-Compliant-Storage', variables('deploymentSuffix')), 64)]",
+            "compliantSynapseDeploymentName": "[take(concat(variables('industry'), '-Compliant-Synapse', variables('deploymentSuffix')), 64)]",
+            "compliantVirtualDesktopDeploymentName": "[take(concat(variables('industry'), '-Compliant-AVD', variables('deploymentSuffix')), 64)]",
+            "mgmtSubscriptionPlacement": "[take(concat(variables('industry'), '-MgmtSub', variables('deploymentSuffix')), 64)]",
+            "policyIdentityDeploymentName": "[take(concat(variables('industry'), '-PolicyIdentity', variables('deploymentSuffix')), 64)]",
+            "policyIdentityRoleAssignmentDeploymentName": "[take(concat(variables('industry'), '-PolicyIdentityRoleAssignment', variables('deploymentSuffix')), 64)]",
+            "databricksSkuDeploymentName": "[take(concat(variables('industry'), '-DBSku', variables('deploymentSuffix')), 64)]",
+            "databricksPipDeploymentName": "[take(concat(variables('industry'), '-DBPip', variables('deploymentSuffix')), 64)]",
+            "databricksClusterDeploymentName": "[take(concat(variables('industry'), '-DBCluster', variables('deploymentSuffix')), 64)]",
+            "corpPeeringDeploymentName": "[take(concat(variables('industry'), '-CorpPeering', variables('deploymentSuffix')), 60)]",
+            "connectivitySubscriptionPlacement": "[take(concat(variables('industry'), '-ConnectivitySub', variables('deploymentSuffix')), 64)]",
+            "ingressSubscriptionPlacement": "[take(concat(variables('industry'), '-IngressSub', variables('deploymentSuffix')), 64)]",
+            "egressSubscriptionPlacement": "[take(concat(variables('industry'), '-EgressSub', variables('deploymentSuffix')), 64)]",
+            "identitySubscriptionPlacement": "[take(concat(variables('industry'), '-IdentitySub', variables('deploymentSuffix')), 64)]",
+            "policyDeploymentName": "[take(concat(variables('industry'), '-Policy', variables('deploymentSuffix')), 64)]",
+            "dataPolicyDeploymentName": "[take(concat(variables('industry'),'-Data-Policy', variables('deploymentSuffix')), 64)]",
+            "ddosDeploymentName": "[take(concat(variables('industry'), '-DDoS', variables('deploymentSuffix')), 64)]",
+            "monitoringDeploymentName": "[take(concat(variables('industry'), '-Monitoring', variables('deploymentSuffix')), 64)]",
+            "logAnalyticsPolicyDeploymentName": "[take(concat(variables('industry'), '-LAPolicy', variables('deploymentSuffix')), 64)]",
+            "monitoringSolutionsDeploymentName": "[take(concat(variables('industry'), '-Solutions', variables('deploymentSuffix')), 64)]",
+            "asbPolicyDeploymentName": "[take(concat(variables('industry'), '-ASB', variables('deploymentSuffix')), 64)]",
+            "resourceDiagnosticsPolicyDeploymentName": "[take(concat(variables('industry'), '-ResourceDiagnostics', variables('deploymentSuffix')), 64)]",
+            "activityDiagnosticsPolicyDeploymentName": "[take(concat(variables('industry'), '-ActivityDiagnostics', variables('deploymentSuffix')), 64)]",
+            "ascPolicyDeploymentName": "[take(concat(variables('industry'), '-ASC', variables('deploymentSuffix')), 64)]",
+            "ascGovPolicyDeploymentName": "[take(concat(variables('industry'), '-Gov-ASC', variables('deploymentSuffix')), 64)]",
+            "vnetConnectivityHubDeploymentName": "[take(concat(variables('industry'), '-HubSpoke', variables('deploymentSuffix')), 64)]",
+            "ingressDeploymentName": "[take(concat(variables('industry'), '-Ingress', variables('deploymentSuffix')), 64)]",
+            "egressDeploymentName": "[take(concat(variables('industry'), '-Egress', variables('deploymentSuffix')), 64)]",
+            "vwanConnectivityHubDeploymentName": "[take(concat(variables('industry'), '-VWanHub', variables('deploymentSuffix')), 64)]",
+            "nvaConnectivityHubDeploymentName": "[take(concat(variables('industry'), '-NVAHub', variables('deploymentSuffix')), 64)]",
+            "azVmMonitorPolicyDeploymentName": "[take(concat(variables('industry'), '-AzVmMonitor', variables('deploymentSuffix')), 64)]",
+            "defenderEndpointPolicyDeploymentName": "[take(concat(variables('industry'), '-DefenderEndpoint', variables('deploymentSuffix')), 64)]",
+            "azVmssMonitorPolicyDeploymentName": "[take(concat(variables('industry'),'-AzVmssMonitor', variables('deploymentSuffix')), 64)]",
+            "azBackupLzPolicyDeploymentName": "[take(concat(variables('industry'),'-AzBackupLz', variables('deploymentSuffix')), 64)]",
+            "azBackupIdentityPolicyDeploymentName": "[take(concat(variables('industry'), '-AzBackupIdentity', variables('deploymentSuffix')), 64)]",
+            "azPolicyForAksPolicyDeploymentName": "[take(concat(variables('industry'), '-AksPolicy', variables('deploymentSuffix')), 64)]",
+            "aksPrivEscalationPolicyDeploymentName": "[take(concat(variables('industry'), '-AksPrivEsc', variables('deploymentSuffix')), 64)]",
+            "aksHttpsPolicyDeploymentName": "[take(concat(variables('industry'), '-AksHttps', variables('deploymentSuffix')), 64)]",
+            "aksPrivilegedPolicyDeploymentName": "[take(concat(variables('industry'), '-AksPrivileged', variables('deploymentSuffix')), 64)]",
+            "tlsSslPolicyDeploymentName": "[take(concat(variables('industry'), '-TLSSSL', variables('deploymentSuffix')), 64)]",
+            "ipFwPolicyDeploymentName": "[take(concat(variables('industry'), '-IPFwd', variables('deploymentSuffix')), 64)]",
+            "publicEndpointPolicyDeploymentName": "[take(concat(variables('industry'), '-PEndpoint', variables('deploymentSuffix')), 64)]",
+            "publicEndpointPolicyDefinitionName": "[take(concat(variables('industry'), '-Policy-PEndpoints', variables('deploymentSuffix')), 64)]",
+            "pipPolicyDeploymentName": "[take(concat(variables('industry'), '-PIP', variables('deploymentSuffix')), 64)]",
+            "rdpFromInternetPolicyDeploymentName": "[take(concat(variables('industry'), '-RDP', variables('deploymentSuffix')), 64)]",
+            "sshFromInternetPolicyDeploymentName": "[take(concat(variables('industry'), '-SSH', variables('deploymentSuffix')), 64)]",
+            "rdpFromInternetIdentityPolicyDeploymentName": "[take(concat(variables('industry'), '-RDPIdentity', variables('deploymentSuffix')), 64)]",
+            "storageHttpsPolicyDeploymentName": "[take(concat(variables('industry'), '-StorageHttps', variables('deploymentSuffix')), 64)]",
+            "subnetNsgPolicyDeploymentName": "[take(concat(variables('industry'), '-SubnetNsg', variables('deploymentSuffix')), 64)]",
+            "subnetNsgIdentityPolicyDeploymentName": "[take(concat(variables('industry'), '-SubnetNsgIdentity', variables('deploymentSuffix')), 64)]",
+            "playgroundSubs": "[take(concat(variables('industry'), '-Playground', variables('deploymentSuffix')), 60)]",
+            "onlineLzSubs": "[take(concat(variables('industry'), '-OnlineLzs', variables('deploymentSuffix')), 60)]",
+            "corpLzSubs": "[take(concat(variables('industry'), '-CorpLzs', variables('deploymentSuffix')), 60)]",
+            "corpConnectedMoveLzSubs": "[take(concat(variables('industry'), '-CorpConnLzs', variables('deploymentSuffix')), 50)]",
+            "corpConnectedLzSubs": "[take(concat(variables('industry'), '-CorpPeering', variables('deploymentSuffix')), 50)]",
+            "privateDnsZonesDeploymentName": "[take(concat(variables('industry'), '-PrivDNSZones', variables('deploymentSuffix')), 35)]",
+            "dnsZoneRoleAssignmentDeploymentName": "[take(concat(variables('industry'), '-DNSZoneRole', variables('deploymentSuffix')), 64)]",
+            "dnsZoneOperatorRoleAssignmentDeploymentName": "[take(concat(variables('industry'), '-DNSZoneOperatorRole', variables('deploymentSuffix')), 64)]",
+            "nsgFLowLogRoleAssignmentDeploymentName": "[take(concat(variables('industry'), '-NSGFlowRole', variables('deploymentSuffix')), 64)]",
+            "identityPeeringDeploymentName": "[take(concat(variables('industry'), '-IDPeering', variables('deploymentSuffix')), 64)]",
+            "identityVwanPeeringDeploymentName": "[take(concat(variables('industry'), '-IDVwanPeering', variables('deploymentSuffix')), 64)]",
+            "corpConnectedLzVwanSubs": "[take(concat(variables('industry'), '-CorpConnLzsVwan', variables('deploymentSuffix')), 50)]",
+            "logStorageDeploymentName": "[take(concat(variables('industry'), '-LogStorage', variables('deploymentSuffix')), 64)]",
+            "nwDeploymentName": "[take(concat(variables('industry'), '-NwPlatform', variables('deploymentSuffix')), 64)]",
+            "nwRgLzPolicyAssignment": "[take(concat(variables('industry'), '-NwRgLz', variables('deploymentSuffix')), 64)]",
+            "nsgFlowLogsPlatformPolicyAssignment": "[take(concat(variables('industry'), '-NSGFlowPlatform', variables('deploymentSuffix')), 64)]",
+            "nsgFLowLogsLzPolicyAssignment": "[take(concat(variables('industry'), '-NSGFlowLz', variables('deploymentSuffix')), 64)]",
+            "nsgFlowLogPolicyExemption": "[take(concat(variables('industry'), '-NSGExempt', variables('deploymentSuffix')), 64)]",
+            "denyVnetPeeringDeploymentName": "[take(concat(variables('industry'), '-VNetPeering', variables('deploymentSuffix')), 64)]",
+            "budgetDeploymentName": "[take(concat(variables('industry'), '-Budget', variables('deploymentSuffix')), 64)]",
+            "centralizedPlaygroundLogsAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Logging-Playground', variables('deploymentSuffix')), 64)]",
+            "centralizedPlatformLogsAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Logging-Platform', variables('deploymentSuffix')), 64)]",
+            "compliantCorpLzAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-CorpLz', variables('deploymentSuffix')), 64)]",
+            "compliantAutomationAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-Auto', variables('deploymentSuffix')), 64)]",
+            "compliantBackupAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-Backup', variables('deploymentSuffix')), 64)]",
+            "compliantCosmosDbAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-CosmosDb', variables('deploymentSuffix')), 64)]",
+            "compliantCognitiveSearchAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-Search', variables('deploymentSuffix')), 64)]",
+            "compliantComputeAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-Compute', variables('deploymentSuffix')), 64)]",
+            "compliantDataExplorerAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-ADE', variables('deploymentSuffix')), 64)]",
+            "compliantDataFactoryAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-ADF', variables('deploymentSuffix')), 64)]",
+            "compliantEventGridAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-EG', variables('deploymentSuffix')), 64)]",
+            "compliantEventHubAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-EH', variables('deploymentSuffix')), 64)]",
+            "compliantKeyVaultAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-KeyVault', variables('deploymentSuffix')), 64)]",
+            "compliantOpenAiAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-OpenAi', variables('deploymentSuffix')), 64)]",
+            "compliantPostgreAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-Postgre', variables('deploymentSuffix')), 64)]",
+            "compliantSqlAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-SQL', variables('deploymentSuffix')), 64)]",
+            "compliantSynapseAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-Synapse', variables('deploymentSuffix')), 64)]",
+            "compliantMachineLearningAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-MachineLearning', variables('deploymentSuffix')), 64)]",
+            "compliantNetworkAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-Network', variables('deploymentSuffix')), 64)]",
+            "compliantPlatformNetworkAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-PlatformNetwork', variables('deploymentSuffix')), 64)]",
+            "compliantContainerAppsAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-ContainerApps', variables('deploymentSuffix')), 64)]",
+            "compliantContainerInstanceAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-ContainerInstance', variables('deploymentSuffix')), 64)]",
+            "compliantContainerRegistryAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-ContainerRegistry', variables('deploymentSuffix')), 64)]",
+            "compliantServiceBusAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-ServiceBus', variables('deploymentSuffix')), 64)]",
+            "compliantKubernetesAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-Kubernetes', variables('deploymentSuffix')), 64)]",
+            "compliantStorageAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-Storage', variables('deploymentSuffix')), 64)]",
+            "compliantApimAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-Apim', variables('deploymentSuffix')), 64)]",
+            "compliantAppServiceAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-AppService', variables('deploymentSuffix')), 64)]",
+            "compliantVirtualDesktopAssignmentDeploymentName": "[take(concat(variables('industry'), '-Enforce-Compliant-AVD', variables('deploymentSuffix')), 64)]",
+            "erHaPolicyAssignment": "[take(concat(variables('industry'), '-DenyNonHaEr', variables('deploymentSuffix')), 64)]",
+            "pipHaPolicyAssignment": "[take(concat(variables('industry'), '-DenyNonHaPip', variables('deploymentSuffix')), 64)]",
+            "privateDnsOperatorPolicyDeploymentName": "[take(concat(variables('industry'), '-PrivateDNSOperator',variables('deploymentSuffix')), 64)]"
+        },
+        "platformRgNames": {
+            "mgmtRg": "[concat(parameters('industryPrefix'), '-mgmt')]",
+            "userAssignedIdentity": "[concat(parameters('industryPrefix'), '-policy-identity')]",
+            "connectivityRg": "[concat(parameters('industryPrefix'), '-vnethub-', parameters('location'))]",
+            "ddosRg": "[concat(parameters('industryPrefix'), '-ddos')]",
+            "privateDnsRg": "[concat(parameters('industryPrefix'), '-privatedns')]",
+            "identityVnetRg": "[concat(parameters('industryPrefix'), '-vnet-', parameters('location'))]",
+            "lzVnetRg": "[concat(parameters('industryPrefix'), '-vnet-', parameters('location'))]",
+            "logNwRg": "[concat(parameters('industryPrefix'), '-nwlog-', parameters('location'))]"
+        },
+        "platformResourceNames": {
+            "logAnalyticsWorkspace": "[concat(parameters('industryPrefix'), '-law')]",
+            "eventHubNamespace": "[toLower(take(concat(replace(replace(parameters('industryPrefix'), '-', ''), '_', ''), parameters('location'), uniqueString(deployment().name)), 23))]",
+            "userAssignedIdentityName": "[concat(parameters('industryPrefix'), '-policy-identity')]",
+            "logNwStorageAccount": "[toLower(take(concat(replace(replace(parameters('industryPrefix'), '-', ''), '_', ''), parameters('location'), uniqueString(deployment().name)), 23))]",
+            "automationAccount": "[concat(parameters('industryPrefix'), '-aauto')]",
+            "vpnGwName": "[concat(parameters('industryPrefix'), '-vpngw-', parameters('location'))]",
+            "erGwName": "[concat(parameters('industryPrefix'), '-ergw-', parameters('location'))]",
+            "ddosName": "[concat(parameters('industryPrefix'), '-ddos-', parameters('location'))]",
+            "azFwPolicyName": "[concat(parameters('industryPrefix'), '-azfwpolicy-', parameters('location'))]",
+            "azFwName": "[concat(parameters('industryPrefix'), '-fw-', parameters('location'))]",
+            "azErGwIpName": "[concat(parameters('industryPrefix'), '-erpip-', parameters('location'))]",
+            "hubName": "[concat(parameters('industryPrefix'), '-hub-', parameters('location'))]",
+            "vwanName": "[concat(parameters('industryPrefix'), '-vwan-', parameters('location'))]",
+            "azVpnGwIpName": "[concat(parameters('industryPrefix'), '-gwpip-', parameters('location'))]",
+            "azFwIpName": "[concat(parameters('industryPrefix'), '-fwpip-', parameters('location'))]",
+            "identityVnet": "[concat(parameters('industryPrefix'), '-vnet-', parameters('location'))]",
+            "lzVnet": "[concat(parameters('industryPrefix'), '-vnet-', parameters('location'))]"
+        },
+        "roleDefinitions": {
+            "networkContributor": "4d97b98b-1d4f-4787-a291-c67834d212e7",
+            "contributor": "b24988ac-6180-42a0-ab88-20f7382dd24c"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "[variables('deploymentNames').mgmtGroupDeploymentName]",
+            "location": "[deployment().location]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[variables('deploymentUris').managementGroups]"
+                },
+                "parameters": {
+                    "topLevelManagementGroupPrefix": {
+                        "value": "[parameters('industryPrefix')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "[variables('deploymentNames').customRbacDeploymentName]",
+            "location": "[deployment().location]",
+            "scope": "[concat('Microsoft.Management/managementGroups/', parameters('industryPrefix'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').mgmtGroupDeploymentName)]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[variables('deploymentUris').customRbacRoleDefinition]"
+                },
+                "parameters": {
+                    "topLevelManagementGroupPrefix": {
+                        "value": "[parameters('industryPrefix')]"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[not(empty(parameters('managementSubscriptionId')))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-10-01",
+            "name": "[variables('deploymentNames').mgmtSubscriptionPlacement]",
+            "location": "[deployment().location]",
+            "scope": "[variables('scopes').managementManagementGroup]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').mgmtGroupDeploymentName)]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[variables('deploymentUris').subscriptionPlacement]"
+                },
+                "parameters": {
+                    "targetManagementGroupId": {
+                        "value": "[variables('mgmtGroups').management]"
+                    },
+                    "subscriptionId": {
+                        "value": "[parameters('managementSubscriptionId')]"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[not(empty(parameters('connectivitySubscriptionId')))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-10-01",
+            "name": "[variables('deploymentNames').connectivitySubscriptionPlacement]",
+            "location": "[deployment().location]",
+            "scope": "[variables('scopes').managementManagementGroup]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').mgmtGroupDeploymentName)]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[variables('deploymentUris').subscriptionPlacement]"
+                },
+                "parameters": {
+                    "targetManagementGroupId": {
+                        "value": "[variables('mgmtGroups').connectivity]"
+                    },
+                    "subscriptionId": {
+                        "value": "[parameters('connectivitySubscriptionId')]"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('enableLogAnalytics'), 'Yes'), not(empty(parameters('managementSubscriptionId'))))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-10-01",
+            "name": "[variables('deploymentNames').monitoringDeploymentName]",
+            "location": "[deployment().location]",
+            "subscriptionId": "[parameters('managementSubscriptionId')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').mgmtSubscriptionPlacement)]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[variables('deploymentUris').monitoring]"
+                },
+                "parameters": {
+                    "rgName": {
+                        "value": "[variables('platformRgNames').mgmtRg]"
+                    },
+                    "workspaceName": {
+                        "value": "[variables('platformResourceNames').logAnalyticsWorkspace]"
+                    },
+                    "workspaceRegion": {
+                        "value": "[deployment().location]"
+                    },
+                    "retentionInDays": {
+                        "value": "[parameters('retentionInDays')]"
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "deployment": {
+            "type": "string",
+            "value": "[concat(deployment().name, ' has successfully deployed.')]"
         }
     }
 }
