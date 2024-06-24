@@ -243,7 +243,7 @@
                                     "label": "Management subscription"
                                 }
                             ],
-                            "visible": "[and(equals(steps('esGoalState').azMonSection.esLogAnalytics, 'Yes'), not(equals(steps('lzSettings').subSection.subOrgsOption, 'Single')))]"
+                            "visible": true
                         },
 
 
