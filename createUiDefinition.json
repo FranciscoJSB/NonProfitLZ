@@ -1,35 +1,84 @@
+
 {
-  "handler": "Microsoft.Azure.CreateUIDef",
-  "version": "1.0.0",
-  "parameters": {
-    "basics": [
-      {
-        "name": "resourceGroup",
-        "type": "Microsoft.Common.ResourceGroupSelector",
-        "label": "Resource Group"
-      },
-      {
-        "name": "location",
-        "type": "Microsoft.Common.Location",
-        "label": "Location"
-      },
-      {
-        "name": "storageAccountName",
-        "type": "Microsoft.Common.TextBox",
-        "label": "Storage Account Name",
-        "constraints": {
-          "required": true,
-          "regex": "^[a-z0-9]{3,24}$",
-          "validationMessage": "Storage account name must be between 3 and 24 characters and can contain only lowercase letters and numbers."
+    "$schema": "<relative path to createFormUI.schema.json>",
+    "view": {
+        "kind": "Form",
+        "properties": {
+            "title": "FSI Landing Zones on Microsoft Azure",
+            "steps": [
+                {
+                    "name": "basics",
+                    "label": "Basics",
+                    "elements": [
+                        {
+                            "name": "resourceScope",
+                            "type": "Microsoft.Common.ResourceScope",
+                            "subscription": {
+                                "constraints": {
+                                    "validations": [
+                                        {
+                                            "isValid": "[not(contains(toLower(steps('basics').resourceScope.subscription.displayName),'test'))]",
+                                            "message": "Can't use test subscription."
+                                        }
+                                    ]
+                                },
+                                "resourceProviders": [
+                                    "Microsoft.Storage"
+                                ]
+                            },
+                            "location": {
+                                "label": "Region",
+                                "toolTip": "Azure region",
+                                "resourceTypes": [
+                                    "Microsoft.KeyVault/vaults",
+                                    "Microsoft.Storage/storageAccounts"
+                                ],
+                                "allowedValues": [
+                                    "eastus",
+                                    "westus2"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "storage",
+                    "label": "Storage",
+                    "elements": [
+                        {
+                            "name": "storageDescription",
+                            "type": "Microsoft.Common.TextBlock",
+                            "options": {
+                                "text": "A Storage Account is a Microsoft Azure service that provides storage that can be accessed from anywhere in the world over HTTP or HTTPS."
+                            }
+                        },
+                        {
+                            "name": "storageAccountName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "Storage Account Name",
+                            "toolTip": "The name of the Storage Account.",
+                            "defaultValue": "mystorageaccount",
+                            "constraints": {
+                                "required": true,
+                                "validations": [
+                                    {
+                                        "regex": "^[a-z0-9]{3,24}$",
+                                        "message": "The Storage Account name must be between 3 and 24 characters long and contain only lowercase letters and numbers."
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "outputs": {
+            "parameters": {
+                "location": "[steps('basics').resourceScope.location.name]",
+                "storageAccountName": "[steps('storage').storageAccountName]"
+            },
+            "kind": "ResourceGroup",
+            "location": "[steps('basics').resourceScope.location.name]"
         }
-      }
-    ],
-    "steps": [
-      {
-        "name": "settings",
-        "label": "Settings",
-        "elements": []
-      }
-    ]
-  }
+    }
 }
