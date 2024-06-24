@@ -1,193 +1,34 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "industryPrefix": {
-            "type": "string",
-            "maxLength": 10,
-            "metadata": {
-                "description": "Provide a prefix (max 10 characters, unique at tenant-scope) for the Management Group hierarchy and other resources created as part of Enterprise-scale."
-            }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
+      "name": "nestedDeployment",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/FranciscoJSB/NonProfitLZ/main/main.bicep",
+          "contentVersion": "1.0.0.0"
         },
-        "enableLogAnalytics": {
-            "type": "string",
-            "defaultValue": "No",
-            "allowedValues": [
-                "Yes",
-                "No"
-            ],
-            "metadata": {
-                "description": "If 'Yes' is selected when also adding a subscription for management, ARM will assign two policies to enable auditing in your environment, into the Log Analytics workspace for platform monitoring. If 'No', it will be ignored."
-            }
-        },
-        "retentionInDays": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "industry": {
-            "type": "string",
-            "allowedValues": [
-                "fsi",
-                "telco"
-            ]
-        },
-        "managementSubscriptionId": {
-            "type": "string",
-            "defaultValue": "",
-            "maxLength": 36,
-            "metadata": {
-                "description": "Provide the subscription id of an existing, empty subscription you want to dedicate for management. If you don't want to bring a subscription, leave this parameter empty as is."
-            }
-        },
-        "connectivitySubscriptionId": {
-            "type": "string",
-            "defaultValue": "",
-            "maxLength": 36,
-            "metadata": {
-                "description": "Provide the subscription id of an existing, empty subscription you want to dedicate for networking."
-            }
+        "parameters": {
+          "storageAccountName": {
+            "value": "[parameters('storageAccountName')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          }
         }
-    },
-    "variables": {
-        "deploymentSuffix": "[concat('-', deployment().location, guid(parameters('industryPrefix')))]",
-        "resourceGroups": {
-            "identityRg": "[concat(parameters('mgmtGroupPrefix'),'-management')]",
-            "landingZoneRg": "[concat(parameters('mgmtGroupPrefix'),'-landingzone')]"
-        },
-        "deploymentNames": {
-            "mgmtGroupDeploymentName": "[take(concat(variables('industry'), '-Mgs', variables('deploymentSuffix')), 64)]"
-        },
-        "deploymentUris": {
-            "managementGroups": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/mgmtGroupStructure/mgmtGroups.json')]",
-            "subscriptionPlacement": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/subscriptionOrganization/subscriptionOrganization.json')]"
-        },
-        "mgmtGroups": {
-            "lzs": "[concat(parameters('industryPrefix'), '-', 'Landing-Zones')]"
-        },
-        "scopes": {
-            "managementManagementGroup": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('mgmtGroups').management)]"
-        },
-        "industry": "[parameters('industry')]",
-        "platformRgNames": {
-            "mgmtRg": "[concat(parameters('industryPrefix'), '-mgmt')]"
-        },
-        "platformResourceNames": {
-            "logAnalyticsWorkspace": "[concat(parameters('industryPrefix'), '-law')]"
-        },
-        "platformResourceIds": {
-            "logAnalyticsResourceId": "[concat('/subscriptions/', variables('singleVsDedicatedMgmtSub'), '/resourceGroups/', variables('platformRgNames').mgmtRg, '/providers/Microsoft.OperationalInsights/workspaces/', variables('platformResourceNames').logAnalyticsWorkspace)]"
-        }
-    },
-    "resources": [
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2019-10-01",
-            "name": "[variables('deploymentNames').mgmtGroupDeploymentName]",
-            "location": "[deployment().location]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "contentVersion": "1.0.0.0",
-                    "uri": "[variables('deploymentUris').managementGroups]"
-                },
-                "parameters": {
-                    "topLevelManagementGroupPrefix": {
-                        "value": "[parameters('industryPrefix')]"
-                    }
-                }
-            }
-        },
-        {
-            
-            "condition": "[not(empty(parameters('managementSubscriptionId')))]",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-10-01",
-            "name": "[variables('deploymentNames').mgmtSubscriptionPlacement]",
-            "location": "[deployment().location]",
-            "scope": "[variables('scopes').managementManagementGroup]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').mgmtGroupDeploymentName)]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "contentVersion": "1.0.0.0",
-                    "uri": "[variables('deploymentUris').subscriptionPlacement]"
-                },
-                "parameters": {
-                    "targetManagementGroupId": {
-                        "value": "[variables('mgmtGroups').management]"
-                    },
-                    "subscriptionId": {
-                        "value": "[parameters('managementSubscriptionId')]"
-                    }
-                }
-            }
-        },
-        {
-            
-            "condition": "[not(empty(parameters('connectivitySubscriptionId')))]",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-10-01",
-            "name": "[variables('deploymentNames').connectivitySubscriptionPlacement]",
-            "location": "[deployment().location]",
-            "scope": "[variables('scopes').connectivityManagementGroup]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').mgmtGroupDeploymentName)]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "contentVersion": "1.0.0.0",
-                    "uri": "[variables('deploymentUris').subscriptionPlacement]"
-                },
-                "parameters": {
-                    "targetManagementGroupId": {
-                        "value": "[variables('mgmtGroups').management]"
-                    },
-                    "subscriptionId": {
-                        "value": "[parameters('connectivitySubscriptionId')]"
-                    }
-                }
-            }
-        },
-        {
-            "condition": "[and(equals(parameters('enableLogAnalytics'), 'Yes'), not(empty(parameters('managementSubscriptionId'))))]",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-10-01",
-            "name": "[variables('deploymentNames').monitoringDeploymentName]",
-            "location": "[deployment().location]",
-            "subscriptionId": "[parameters('managementSubscriptionId')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').mgmtSubscriptionPlacement)]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "contentVersion": "1.0.0.0",
-                    "uri": "[variables('deploymentUris').monitoring]"
-                },
-                "parameters": {
-                    "rgName": {
-                        "value": "[variables('platformRgNames').mgmtRg]"
-                    },
-                    "workspaceName": {
-                        "value": "[variables('platformResourceNames').logAnalyticsWorkspace]"
-                    },
-                    "workspaceRegion": {
-                        "value": "[deployment().location]"
-                    },
-                    "retentionInDays": {
-                        "value": "[parameters('retentionInDays')]"
-                    }
-                }
-            }
-        }
-    ],
-    "outputs": {
-        "deployment": {
-            "type": "string",
-            "value": "[concat(deployment().name, ' has successfully deployed.')]"
-        }
+      }
     }
+  ],
+  "parameters": {
+    "storageAccountName": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    }
+  }
 }
