@@ -1,1 +1,187 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-08-01/managementGroupDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "rgName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Resource Group"
+            }
+        },
+        "connectivitySubscriptionId": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Provide the subscription id for the dedicated connectivity subscription."
+            }
+        },
+        "addressPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Address prefix for the Virtual Network"
+            }
+        },
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "Location for the resources"
+            },
+            "defaultValue": "[deployment().location]"
+        },
+        "enableVpnGw": {
+            "type": "string",
+            "allowedValues": [
+                "Yes",
+                "No"
+            ],
+            "defaultValue": "No",
+            "metadata": {
+                "description": "Enable VPN Gateway"
+            }
+        },
+        "enableDdoS": {
+            "type": "string",
+            "allowedValues": [
+                "Yes",
+                "No"
+            ],
+            "defaultValue": "No",
+            "metadata": {
+                "description": "Enable DDoS Protection"
+            }
+        },
+        "subnetMaskForGw": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet for the VPN Gateway"
+            }
+        },
+        "gwRegionalSku": {
+            "type": "string",
+            "metadata": {
+                "description": "SKU for the VPN Gateway"
+            }
+        }
+    },
+    "variables": {
+        "vnetName": "[concat(parameters('rgName'), '-vnet')]",
+        "vpnGwName": "[concat(parameters('rgName'), '-vpngw')]",
+        "vpnGwPipName": "[concat(parameters('vpnGwName'), '-pip')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "[concat('vnetDeployment-', parameters('location'))]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Network/virtualNetworks",
+                            "apiVersion": "2023-04-01",
+                            "name": "[variables('vnetName')]",
+                            "location": "[parameters('location')]",
+                            "properties": {
+                                "addressSpace": {
+                                    "addressPrefixes": [
+                                        "[parameters('addressPrefix')]"
+                                    ]
+                                },
+                                "subnets": [
+                                    {
+                                        "name": "GatewaySubnet",
+                                        "properties": {
+                                            "addressPrefix": "[parameters('subnetMaskForGw')]"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "condition": "[equals(parameters('enableVpnGw'), 'Yes')]",
+                            "type": "Microsoft.Network/publicIPAddresses",
+                            "apiVersion": "2020-05-01",
+                            "name": "[variables('vpnGwPipName')]",
+                            "location": "[parameters('location')]",
+                            "sku": {
+                                "name": "Standard"
+                            },
+                            "properties": {
+                                "publicIPAllocationMethod": "Static"
+                            }
+                        },
+                        {
+                            "condition": "[equals(parameters('enableVpnGw'), 'Yes')]",
+                            "type": "Microsoft.Network/virtualNetworkGateways",
+                            "apiVersion": "2020-05-01",
+                            "name": "[variables('vpnGwName')]",
+                            "location": "[parameters('location')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Network/publicIPAddresses', variables('vpnGwPipName'))]",
+                                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+                            ],
+                            "properties": {
+                                "gatewayType": "Vpn",
+                                "vpnType": "RouteBased",
+                                "ipConfigurations": [
+                                    {
+                                        "name": "vnetGatewayConfig",
+                                        "properties": {
+                                            "privateIPAllocationMethod": "Dynamic",
+                                            "subnet": {
+                                                "id": "[concat('/subscriptions/', parameters('connectivitySubscriptionId'), '/resourceGroups/', parameters('rgName'), '/providers/Microsoft.Network/virtualNetworks/', variables('vnetName'), '/subnets/GatewaySubnet')]"
+                                            },
+                                            "publicIpAddress": {
+                                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('vpnGwPipName'))]"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "sku": {
+                                    "name": "[parameters('gwRegionalSku')]",
+                                    "tier": "[parameters('gwRegionalSku')]"
+                                }
+                            }
+                        },
+                        {
+                            "condition": "[equals(parameters('enableDdoS'), 'Yes')]",
+                            "type": "Microsoft.Network/virtualNetworks/providers/diagnosticSettings",
+                            "apiVersion": "2021-05-01-preview",
+                            "name": "[concat(variables('vnetName'), '/', 'Microsoft.Insights/setByPolicy')]",
+                            "location": "[parameters('location')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+                            ],
+                            "properties": {
+                                "workspaceId": "[parameters('logAnalyticsWorkspaceId')]",
+                                "metrics": [
+                                    {
+                                        "category": "AllMetrics",
+                                        "enabled": true,
+                                        "retentionPolicy": {
+                                            "days": 0,
+                                            "enabled": false
+                                        }
+                                    }
+                                ],
+                                "logs": [
+                                    {
+                                        "categoryGroup": "allLogs",
+                                        "enabled": true
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
 
