@@ -276,7 +276,7 @@
         "outputs": {
             "parameters": {
                 "industry": "fsi",
-                "connectivitySubscriptionId": "[if(not(equals(steps('esGoalState').esNwSubSection.esNwSub.subscriptionId,steps('esGoalState').esMgmtSubSection.esMgmtSub.subscriptionId)),steps('esGoalState').esNwSubSection.esNwSub.subscriptionId,'')]",
+                "connectivitySubscriptionId": "[steps('esConnectivityGoalState').esNwSubSection.esNwSub.subscriptionId]",
                 "managementSubscriptionId": "[steps('esGoalState').esMgmtSubSection.esMgmtSub.subscriptionId]",
                 "enableLogAnalytics": "[steps('esGoalState').azMonSection.esLogAnalytics]",
                 "industryPrefix": "[steps('lzSettings').mgSection.esMgmtGroup]",
