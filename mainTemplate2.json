@@ -52,13 +52,13 @@
             "type": "string",
             "defaultValue": "[deployment().location]"
         },
-        "vnetName": {
+        "hubName": {
             "type": "string",
             "metadata": {
                 "description": "Name of the Virtual Network"
             }
         },
-        "vnetPrefix": {
+        "hubAddrPrefix": {
             "type": "string",
             "metadata": {
                 "description": "CIDR prefix for the Virtual Network"
@@ -450,14 +450,14 @@
                     "rgName": {
                         "value": "[variables('platformRgNames').mgmtRg]"
                     },
-                    "vnetName": {
-                        "value": "[parameters('vnetName')]"
+                    "hubName": {
+                        "value": "[parameters('hubName')]"
                     },
                     "hubRegion": {
                         "value": "[deployment().location]"
                     },
-                    "vnetPrefix": {
-                        "value": "[parameters('vnetPrefix')]"
+                    "hubAddrPrefix": {
+                        "value": "[parameters('hubAddrPrefix')]"
                     }
                 }
             }
