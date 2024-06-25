@@ -5,13 +5,13 @@
         "rgName": {
             "type": "String"
         },
-        "vnetName": {
+        "hubName": {
             "type": "string",
             "metadata": {
                 "description": "Name of the Virtual Network"
             }
         },
-        "vnetPrefix": {
+        "hubAddrPrefix": {
             "type": "string",
             "metadata": {
                 "description": "CIDR prefix for the Virtual Network"
