@@ -106,7 +106,7 @@
             "nvaConnectivityHub": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/nvahubspoke-connectivity.json')]",
             "ingressAndEgress": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/ingress-egress.json')]",
             "subscriptionPlacement": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/subscriptionOrganization/subscriptionOrganization.json')]",
-            "monitoring": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/logAnalyticsWorkspace.bicep')]",
+            "monitoring": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/logAnalyticsWorkspace.json')]",
             "ddosProtection": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/ddosProtection.json')]",
             "logAnalyticsPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DINE-LogAnalyticsPolicyAssignment.json')]",
             "monitoringSolutions": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/logAnalyticsSolutions.json')]",
