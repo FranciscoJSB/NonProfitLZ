@@ -1,13 +1,13 @@
-@description('The name of the resource group.')
+
 param rgName string
 
-@description('The name of the Log Analytics Workspace.')
+
 param workspaceName string = ''
 
-@description('The region for the workspace.')
+
 param workspaceRegion string = deployment().location
 
-@description('The number of days to retain logs.')
+
 param retentionInDays string = '30'
 
 var laDeploymentName = 'fsi-loganalytics'
