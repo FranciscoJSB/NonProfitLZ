@@ -20,6 +20,24 @@
         "hubRegion": {
             "type": "String",
             "defaultValue": "[deployment().location]"
+        },
+        "hubSubnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Hub Subnet"
+            }
+        },
+        "hubSubnetAddrPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "CIDR prefix for the Hub Subnet"
+            }
+        },
+        "vpnGWSubnet": {
+            "type": "string",
+            "metadata": {
+                "description": "CIDR prefix for the VPN Gateway Subnet"
+            }
         }
     },
     "variables": {},
@@ -58,7 +76,42 @@
                                         "[parameters('vnetPrefix')]"
                                     ]
                                 },
-                                "subnets": []
+                                "subnets": [
+                                    {
+                                        "name": "[parameters('hubSubnetName')]",
+                                        "properties": {
+                                            "addressPrefix": "[parameters('hubSubnetAddrPrefix')]"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Network/virtualNetworkGateways",
+                            "apiVersion": "2021-02-01",
+                            "name": "myVpnGateway",
+                            "location": "[parameters('location')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
+                            ],
+                            "properties": {
+                                "gatewayType": "Vpn",
+                                "vpnType": "RouteBased",
+                                "sku": {
+                                    "name": "VpnGw1",
+                                    "tier": "VpnGw1"
+                                },
+                                "ipConfigurations": [
+                                    {
+                                        "name": "vnetGatewayConfig",
+                                        "properties": {
+                                            "privateIPAllocationMethod": "Dynamic",
+                                            "subnet": {
+                                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), 'GatewaySubnet')]"
+                                            }
+                                        }
+                                    }
+                                ]
                             }
                         }
                     ],
