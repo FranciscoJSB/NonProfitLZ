@@ -91,7 +91,7 @@
                             "type": "Microsoft.Network/virtualNetworkGateways",
                             "apiVersion": "2021-02-01",
                             "name": "myVpnGateway",
-                            "location": "[parameters('location')]",
+                            "location": "[parameters('hubRegion')]",
                             "dependsOn": [
                                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('hubName'))]"
                             ],
@@ -113,6 +113,15 @@
                                         }
                                     }
                                 ]
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Network/networkSecurityGroups",
+                            "apiVersion": "2021-02-01",
+                            "name": "[concat(parameters('hubName'), '-nsg-01')]",
+                            "location": "[parameters('hubRegion')]",
+                            "properties": {
+                                "securityRules": []
                             }
                         }
                     ],
