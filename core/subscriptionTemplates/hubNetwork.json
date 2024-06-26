@@ -120,18 +120,6 @@
                                     }
                                 ]
                             }
-                        },
-                        {
-                            "type": "Microsoft.Network/networkSecurityGroups",
-                            "apiVersion": "2021-02-01",
-                            "name": "[concat(parameters('hubName'), '-nsg-01')]",
-                            "location": "[parameters('hubRegion')]",
-                            "properties": {
-                                "securityRules": []
-                            },
-                            "dependsOn":[
-                                "[resourceId('Microsoft.Network/virtualNetworks', parameters('hubName'))]"
-                            ]
                         }
                     ],
                     "outputs": {}
