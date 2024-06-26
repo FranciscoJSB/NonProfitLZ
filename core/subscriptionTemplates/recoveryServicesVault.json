@@ -30,16 +30,37 @@
             "properties": {}
         },
         {
-            "type": "Microsoft.RecoveryServices/vaults",
-            "apiVersion": "2021-08-01",
-            "name": "[parameters('recoveryName')]",
-            "location": "[parameters('rsvRegion')]",
-            "properties": {},
-            "sku": {
-                "name": "Standard",
-                "tier": "Standard"
-            },
-            "tags": {}
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "[variables('laDeploymentName')]",
+            "resourceGroup": "[parameters('rgName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('rgName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.RecoveryServices/vaults",
+                            "apiVersion": "2021-08-01",
+                            "name": "[parameters('recoveryName')]",
+                            "location": "[parameters('rsvRegion')]",
+                            "properties": {},
+                            "sku": {
+                                "name": "Standard",
+                                "tier": "Standard"
+                            },
+                            "tags": {}
+                        }
+                    ],
+                    "outputs": {}
+                }
+            }
         }
     ],
     "outputs": {}
