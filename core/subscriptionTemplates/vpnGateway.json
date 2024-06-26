@@ -1,1 +1,84 @@
 
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "rgName": {
+            "type": "String"
+        },
+        "hubName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Virtual Network"
+            }
+        },
+        "vpnGWRegion": {
+            "type": "String",
+            "defaultValue": "[deployment().location]"
+        },
+        "gatewaySubnetName": {
+            "type": "string",
+            "defaultValue": "GatewaySubnet",
+            "metadata": {
+                "description": "Name of the Gateway Subnet within the Virtual Network"
+            }
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2018-05-01",
+            "name": "[parameters('rgName')]",
+            "location": "[deployment().location]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "hub-network",
+            "resourceGroup": "[parameters('rgName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('rgName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Network/virtualNetworkGateways",
+                            "apiVersion": "2021-02-01",
+                            "name": "vpn-gw-imc-001",
+                            "location": "[parameters('vpnGWRegion')]",
+                            "properties": {
+                                "gatewayType": "Vpn",
+                                "vpnType": "RouteBased",
+                                "sku": {
+                                    "name": "VpnGw1",
+                                    "tier": "VpnGw1"
+                                },
+                                "ipConfigurations": [
+                                    {
+                                        "name": "vnetGatewayConfig",
+                                        "properties": {
+                                            "privateIPAllocationMethod": "Dynamic",
+                                            "subnet": {
+                                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), parameters('gatewaySubnetName'))]"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "outputs": {}
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
