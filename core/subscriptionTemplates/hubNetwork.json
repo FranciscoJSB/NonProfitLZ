@@ -1,3 +1,4 @@
+
 {
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
@@ -68,12 +69,12 @@
                         {
                             "type": "Microsoft.Network/virtualNetworks",
                             "apiVersion": "2021-02-01",
-                            "name": "[parameters('vnetName')]",
+                            "name": "[parameters('hubName')]",
                             "location": "[parameters('hubRegion')]",
                             "properties": {
                                 "addressSpace": {
                                     "addressPrefixes": [
-                                        "[parameters('vnetPrefix')]"
+                                        "[parameters('hubAddrPrefix')]"
                                     ]
                                 },
                                 "subnets": [
@@ -92,7 +93,7 @@
                             "name": "myVpnGateway",
                             "location": "[parameters('location')]",
                             "dependsOn": [
-                                "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
+                                "[resourceId('Microsoft.Network/virtualNetworks', parameters('hubName'))]"
                             ],
                             "properties": {
                                 "gatewayType": "Vpn",
@@ -107,7 +108,7 @@
                                         "properties": {
                                             "privateIPAllocationMethod": "Dynamic",
                                             "subnet": {
-                                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), 'GatewaySubnet')]"
+                                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), 'GatewaySubnet')]"
                                             }
                                         }
                                     }
