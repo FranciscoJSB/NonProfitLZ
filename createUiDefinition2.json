@@ -304,6 +304,33 @@
                                         "regex": "^([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}$",
                                         "validationMessage": "Enter a valid CIDR notation, typically a /27 for VPN gateways."
                                     }
+                                },
+                                {
+                                    "name": "networkSecurity",
+                                    "type": "Microsoft.Common.Section",
+                                    "label": "Network Security",
+                                    "elements": [
+                                        {
+                                            "name": "esDdoS",
+                                            "type": "Microsoft.Common.OptionsGroup",
+                                            "label": "Enable DDoS Protection",
+                                            "defaultValue": "Yes, DDoS Network Protection (recommended)",
+                                            "visible": "[not(equals(steps('esGoalState').azMonSection.esLogAnalytics, 'No'))]",
+                                            "toolTip": "If 'Yes' is selected when also adding a connectivity subscription, DDoS Network Protection will be enabled and protect your Azure resources from denial of service threats.",
+                                            "constraints": {
+                                                "allowedValues": [
+                                                    {
+                                                        "label": "Yes, DDoS Network Protection (recommended)",
+                                                        "value": "Yes"
+                                                    },
+                                                    {
+                                                        "label": "No",
+                                                        "value": "No"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
                                 }
                             ]
                         }
@@ -311,7 +338,7 @@
                 },
                 {
                     "name": "esConnectivityGoalState",
-                    "label": "Network Connectivity and Topology",
+                    "label": "Landing Zone Subscription Deployment",
                     "subLabel": {
                         "preValidation": "",
                         "postValidation": ""
@@ -347,7 +374,8 @@
                 "hubAddrPrefix": "[steps('esGoalState').hubNetworkConfigurations.vnetName]",
                 "hubSubnetName": "[steps('esGoalState').hubNetworkConfigurations.subnetName]",
                 "hubSubnetAddrPrefix": "[steps('esGoalState').hubNetworkConfigurations.subnetPrefix]",
-                "vpnGWSubnet": "[steps('esGoalState').hubNetworkConfigurations.vpnGatewaySubnet]"
+                "vpnGWSubnet": "[steps('esGoalState').hubNetworkConfigurations.vpnGatewaySubnet]",
+                "enableDdoS": "[steps('esConnectivityGoalState').nwSecurity.esDdoS]"
             },
             "kind": "Tenant",
             "location": "[steps('basics').resourceScope.location.name]"
