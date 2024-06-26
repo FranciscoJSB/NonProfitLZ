@@ -536,7 +536,7 @@
             "condition": "[not(empty(parameters('connectivitySubscriptionId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
-            "name": "[KeyVault-LZ-sub]",
+            "name": "[keyvaultlzsub]",
             "location": "[deployment().location]",
             "subscriptionId": "[parameters('connectivitySubscriptionId')]",
             "dependsOn": [
