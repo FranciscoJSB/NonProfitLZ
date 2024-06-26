@@ -308,6 +308,38 @@
                             ]
                         },
                         {
+                            "name": "networkSettings",
+                            "label": "Network Security Settings",
+                            "subLabel": {
+                                "preValidation": "Configure the network settings",
+                                "postValidation": "Configuration complete"
+                            },
+                            "bladeTitle": "Network Security Settings",
+                            "elements": [
+                                {
+                                    "name": "enableDDoS",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "label": "Enable DDoS Protection",
+                                    "toolTip": "Select whether to enable DDoS Protection",
+                                    "defaultValue": "No",
+                                    "constraints": {
+                                        "allowedValues": [
+                                            {
+                                                "label": "Yes",
+                                                "value": "Yes"
+                                            },
+                                            {
+                                                "label": "No",
+                                                "value": "No"
+                                            }
+                                        ],
+                                        "required": true
+                                    },
+                                    "visible": true
+                                }
+                            ]
+                        },
+                        {
                             "name": "backupAndRecovery",
                             "type": "Microsoft.Common.Section",
                             "label": "Backup and Recovery",
@@ -386,7 +418,8 @@
                 "hubSubnetAddrPrefix": "[steps('esGoalState').hubNetworkConfigurations.subnetPrefix]",
                 "vpnGWSubnet": "[steps('esGoalState').hubNetworkConfigurations.vpnGatewaySubnet]",
                 "recoveryName":"[steps('esGoalState').backupAndRecovery.recoveryServicesVaultName]",
-                "keyVaultName":"[steps('esLZGoalState').keyVaultConfiguration.keyVaultName]"
+                "keyVaultName":"[steps('esLZGoalState').keyVaultConfiguration.keyVaultName]",
+                "enableDDoS": "[steps('esGoalState').networkSettings.enableDDoS]"
             },
             "kind": "Tenant",
             "location": "[steps('basics').resourceScope.location.name]"
