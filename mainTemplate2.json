@@ -90,6 +90,12 @@
                 "Audit",
                 "No"
             ]
+        },
+        "recoveryName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Recovery Services Vault"
+            }
         }
     },
     "variables": {
@@ -119,7 +125,6 @@
             "onlineManagementGroup": "[tenantResourceId('Microsoft.Management/managementGroups/', variables('mgmtGroups').online)]"
         },
         "deploymentUris": {
-            
             "policyInsightsRpRegistration": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyInsightsRpReg.json')]",
             "allowedRegionsPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DENY-RegionsPolicyAssignment.json')]",
             "allowedRgRegionsPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DENY-RgRegionsPolicyAssignment.json')]",
@@ -156,16 +161,20 @@
             "budgetPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DINE-BudgetPolicyAssignment.json')]",
             "erHaPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'telco/managementGroupTemplates/policyAssignments/DENY-non-ha-expressRoutes-policyAssignment.json')]",
             "pipHaPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'telco/managementGroupTemplates/policyAssignments/DENY-non-ha-publicIps-policyAssignment.json')]",
-            
+
+
+
             "managementGroups": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/mgmtGroupStructure/mgmtGroups.json')]",
             "hubNetwork": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/hubNetwork.json')]",
             "monitoring": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/logAnalyticsWorkspace.json')]",
-            "ddosProtection": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/ddosProtection.json')]"
+            "ddosProtection": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/ddosProtection.json')]",
+            "recoveryVault": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/recoveryServicesVault.json')]"
         },
         "deploymentSuffix": "[concat('-', deployment().location, guid(parameters('industryPrefix')))]",
         "industry": "[parameters('industry')]",
         "deploymentNames": {
             "mgmtGroupDeploymentName": "[take(concat(variables('industry'), '-Mgs', variables('deploymentSuffix')), 64)]",
+            "recoveryVaultName":"[take(concat(variables('industry'), '-rsv', variables('deploymentSuffix')), 64)]",
             "policyRpRegDeploymentName": "[take(concat(variables('industry'), '-PolicyInsights', variables('deploymentSuffix')), 64)]",
             "customRbacDeploymentName": "[take(concat(variables('industry'), '-RoleDefinitions', variables('deploymentSuffix')), 64)]",
             "allowedRegionsDeploymentName": "[take(concat(variables('industry'), '-Azure-Regions', variables('deploymentSuffix')), 64)]",
@@ -485,20 +494,48 @@
                     "hubAddrPrefix": {
                         "value": "[parameters('hubAddrPrefix')]"
                     },
-                    "hubSubnetName":{
+                    "hubSubnetName": {
                         "value": "[parameters('hubSubnetName')]"
                     },
-                    "hubSubnetAddrPrefix":{
+                    "hubSubnetAddrPrefix": {
                         "value": "[parameters('hubSubnetAddrPrefix')]"
                     },
-                    "vpnGWSubnet":{
+                    "vpnGWSubnet": {
                         "value": "[parameters('vpnGWSubnet')]"
                     }
                 }
             }
         },
         {
-            
+            "condition": "[not(empty(parameters('managementSubscriptionId')))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-10-01",
+            "name": "[variables('deploymentNames').recoveryVaultName]",
+            "location": "[deployment().location]",
+            "subscriptionId": "[parameters('managementSubscriptionId')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').mgmtSubscriptionPlacement)]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[variables('deploymentUris').recoveryVault]"
+                },
+                "parameters": {
+                    "rgName": {
+                        "value": "[variables('platformRgNames').mgmtRg]"
+                    },
+                    "recoveryName": {
+                        "value": "[parameters('recoveryName')]"
+                    },
+                    "rsvRegion": {
+                        "value": "[deployment().location]"
+                    }
+                }
+            }
+        },
+        {
             "condition": "[and(equals(parameters('enableDdoS'), 'Yes'), not(empty(parameters('managementSubscriptionId'))))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
