@@ -174,7 +174,8 @@
             "ddosProtection": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/ddosProtection.json')]",
             "recoveryVault": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/recoveryServicesVault.json')]",
             "keyVault":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/keyVault.json')]",
-            "vpnGateway":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/vpnGateway.json')]"
+            "vpnGateway":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/vpnGateway.json')]",
+            "enableDDoS":"uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/enableDDoS.json')]"
         },
         "deploymentSuffix": "[concat('-', deployment().location, guid(parameters('industryPrefix')))]",
         "industry": "[parameters('industry')]",
@@ -182,6 +183,7 @@
             "mgmtGroupDeploymentName": "[take(concat(variables('industry'), '-Mgs', variables('deploymentSuffix')), 64)]",
             "keyVaultName": "[take(concat(variables('industry'), '-kv', variables('deploymentSuffix')), 64)]",
             "vpnGatewayName": "[take(concat(variables('industry'), '-vpnGW', variables('deploymentSuffix')), 64)]",
+            "enableDDoS":"[take(concat(variables('industry'), '-ddos-plan', variables('deploymentSuffix')), 64)]",
 
 
             "recoveryVaultName":"[take(concat(variables('industry'), '-rsv', variables('deploymentSuffix')), 64)]",
