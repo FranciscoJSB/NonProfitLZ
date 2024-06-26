@@ -381,7 +381,7 @@
                 "industryPrefix": "[steps('lzSettings').mgSection.esMgmtGroup]",
                 "retentionInDays": "[string(steps('esGoalState').azMonSection.esLogRetention)]",
                 "hubName": "[steps('esGoalState').hubNetworkConfigurations.vnetName]",
-                "hubAddrPrefix": "[steps('esGoalState').hubNetworkConfigurations.vnetName]",
+                "hubAddrPrefix": "[steps('esGoalState').hubNetworkConfigurations.vnetPrefix]",
                 "hubSubnetName": "[steps('esGoalState').hubNetworkConfigurations.subnetName]",
                 "hubSubnetAddrPrefix": "[steps('esGoalState').hubNetworkConfigurations.subnetPrefix]",
                 "vpnGWSubnet": "[steps('esGoalState').hubNetworkConfigurations.vpnGatewaySubnet]",
