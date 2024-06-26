@@ -393,7 +393,7 @@
                 "hubSubnetName": "[steps('esGoalState').hubNetworkConfigurations.subnetName]",
                 "hubSubnetAddrPrefix": "[steps('esGoalState').hubNetworkConfigurations.subnetPrefix]",
                 "vpnGWSubnet": "[steps('esGoalState').hubNetworkConfigurations.vpnGatewaySubnet]",
-                "enableDdoS": "[steps('esGoalState').hubNetworkConfigurations.esDdoS]",
+                "enableDdoS": "[steps('esGoalState').hubNetworkConfigurations.networkSecurity.esDdoS]",
                 "recoveryName":"[steps('esGoalState').backupAndRecovery.recoveryServicesVaultName]"
             },
             "kind": "Tenant",
