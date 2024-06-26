@@ -83,6 +83,12 @@
                                         "properties": {
                                             "addressPrefix": "[parameters('hubSubnetAddrPrefix')]"
                                         }
+                                    },
+                                    {
+                                        "name": "GatewaySubnet",
+                                        "properties": {
+                                            "addressPrefix": "[parameters('vpnGWSubnet')]"
+                                        }
                                     }
                                 ]
                             }
@@ -122,7 +128,10 @@
                             "location": "[parameters('hubRegion')]",
                             "properties": {
                                 "securityRules": []
-                            }
+                            },
+                            "dependsOn":[
+                                "[resourceId('Microsoft.Network/virtualNetworks', parameters('hubName'))]"
+                            ]
                         }
                     ],
                     "outputs": {}
