@@ -165,13 +165,17 @@
             "monitoring": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/logAnalyticsWorkspace.json')]",
             "ddosProtection": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/ddosProtection.json')]",
             "recoveryVault": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/recoveryServicesVault.json')]",
-            "keyVault":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/keyVault.json')]"
+            "keyVault":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/keyVault.json')]",
+            "vpnGateway":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/vpnGateway.json')]"
         },
         "deploymentSuffix": "[concat('-', deployment().location, guid(parameters('industryPrefix')))]",
         "industry": "[parameters('industry')]",
         "deploymentNames": {
             "mgmtGroupDeploymentName": "[take(concat(variables('industry'), '-Mgs', variables('deploymentSuffix')), 64)]",
             "keyVaultName": "[take(concat(variables('industry'), '-kv', variables('deploymentSuffix')), 64)]",
+            "vpnGatewayName": "[take(concat(variables('industry'), '-vpnGW', variables('deploymentSuffix')), 64)]",
+
+
             "recoveryVaultName":"[take(concat(variables('industry'), '-rsv', variables('deploymentSuffix')), 64)]",
             "policyRpRegDeploymentName": "[take(concat(variables('industry'), '-PolicyInsights', variables('deploymentSuffix')), 64)]",
             "customRbacDeploymentName": "[take(concat(variables('industry'), '-RoleDefinitions', variables('deploymentSuffix')), 64)]",
@@ -500,6 +504,38 @@
                     },
                     "vpnGWSubnet": {
                         "value": "[parameters('vpnGWSubnet')]"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[not(empty(parameters('managementSubscriptionId')))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-10-01",
+            "name": "[variables('deploymentNames').vpnGatewayName]",
+            "location": "[deployment().location]",
+            "subscriptionId": "[parameters('managementSubscriptionId')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').vnetConnectivityHubDeploymentName)]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[variables('deploymentUris').hubNetwork]"
+                },
+                "parameters": {
+                    "rgName": {
+                        "value": "[variables('platformRgNames').mgmtRg]"
+                    },
+                    "hubName": {
+                        "value": "[parameters('hubName')]"
+                    },
+                    "vpnGWRegion": {
+                        "value": "[deployment().location]"
+                    },
+                    "gatewaySubnetName":{
+                        "value":"GatewaySubnet" 
                     }
                 }
             }
