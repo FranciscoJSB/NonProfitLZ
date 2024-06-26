@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "FSI Landing Zones on Microsoft Azure",
+            "title": "NFP Landing Zone configurations on Microsoft Azure",
             "isWizard": false,
             "steps": [
                 {
@@ -271,6 +271,39 @@
                                         "regex": "^([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}$",
                                         "validationMessage": "Enter a valid CIDR notation."
                                     }
+                                },
+                                {
+                                    "name": "subnetName",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Subnet Name",
+                                    "toolTip": "Enter the name of the subnet",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^[a-zA-Z][a-zA-Z0-9-]*[a-zA-Z0-9]$",
+                                        "validationMessage": "The subnet name must start and end with an alphanumeric character and can contain hyphens."
+                                    }
+                                },
+                                {
+                                    "name": "subnetPrefix",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Subnet Address Prefix",
+                                    "toolTip": "Enter the CIDR address prefix for the subnet",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}$",
+                                        "validationMessage": "Enter a valid CIDR notation."
+                                    }
+                                },
+                                {
+                                    "name": "vpnGatewaySubnet",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "VPN Gateway Subnet",
+                                    "toolTip": "Enter the CIDR address prefix for the VPN Gateway subnet (typically x.x.x.x/27)",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}$",
+                                        "validationMessage": "Enter a valid CIDR notation, typically a /27 for VPN gateways."
+                                    }
                                 }
                             ]
                         }
@@ -310,8 +343,11 @@
                 "enableLogAnalytics": "[steps('esGoalState').azMonSection.esLogAnalytics]",
                 "industryPrefix": "[steps('lzSettings').mgSection.esMgmtGroup]",
                 "retentionInDays": "[string(steps('esGoalState').azMonSection.esLogRetention)]",
-                "hubName":"[steps('esGoalState').hubNetworkConfigurations.vnetName]",
-                "hubAddrPrefix":"[steps('esGoalState').hubNetworkConfigurations.vnetName]"
+                "hubName": "[steps('esGoalState').hubNetworkConfigurations.vnetName]",
+                "hubAddrPrefix": "[steps('esGoalState').hubNetworkConfigurations.vnetName]",
+                "hubSubnetName": "[steps('esGoalState').hubNetworkConfigurations.subnetName]",
+                "hubSubnetAddrPrefix": "[steps('esGoalState').hubNetworkConfigurations.subnetPrefix]",
+                "vpnGWSubnet": "[steps('esGoalState').hubNetworkConfigurations.vpnGatewaySubnet]"
             },
             "kind": "Tenant",
             "location": "[steps('basics').resourceScope.location.name]"
