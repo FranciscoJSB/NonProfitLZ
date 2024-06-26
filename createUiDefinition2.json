@@ -333,24 +333,6 @@
                                     ]
                                 }
                             ]
-                        },
-                        {
-                            "name": "backupAndRecovery",
-                            "type": "Microsoft.Common.Section",
-                            "label": "Backup and Recovery",
-                            "elements": [
-                                {
-                                    "name": "recoveryServicesVaultName",
-                                    "type": "Microsoft.Common.TextBox",
-                                    "label": "Recovery Services Vault Name",
-                                    "toolTip": "Enter the name for the Recovery Services Vault",
-                                    "constraints": {
-                                        "required": true,
-                                        "regex": "^[a-zA-Z][a-zA-Z0-9-]*[a-zA-Z0-9]$",
-                                        "validationMessage": "The name must start and end with an alphanumeric character and can contain hyphens but no spaces."
-                                    }
-                                }
-                            ]
                         }
                     ]
                 },
@@ -393,8 +375,7 @@
                 "hubSubnetName": "[steps('esGoalState').hubNetworkConfigurations.subnetName]",
                 "hubSubnetAddrPrefix": "[steps('esGoalState').hubNetworkConfigurations.subnetPrefix]",
                 "vpnGWSubnet": "[steps('esGoalState').hubNetworkConfigurations.vpnGatewaySubnet]",
-                "enableDdoS": "[steps('esGoalState').hubNetworkConfigurations.networkSecurity.esDdoS]",
-                "recoveryName":"[steps('esGoalState').backupAndRecovery.recoveryServicesVaultName]"
+                "enableDdoS": "[steps('esGoalState').hubNetworkConfigurations.networkSecurity.esDdoS]"
             },
             "kind": "Tenant",
             "location": "[steps('basics').resourceScope.location.name]"
