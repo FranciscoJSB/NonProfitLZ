@@ -309,31 +309,27 @@
                         },
                         {
                             "name": "networkSettings",
+                            "type": "Microsoft.Common.Section",
                             "label": "Network Security Settings",
-                            "subLabel": {
-                                "preValidation": "Configure the network settings",
-                                "postValidation": "Configuration complete"
-                            },
                             "bladeTitle": "Network Security Settings",
                             "elements": [
                                 {
                                     "name": "enableDDoS",
-                                    "type": "Microsoft.Common.DropDown",
+                                    "type": "Microsoft.Common.OptionsGroup",
                                     "label": "Enable DDoS Protection",
                                     "toolTip": "Select whether to enable DDoS Protection",
-                                    "defaultValue": "No",
+                                    "defaultValue": "Yes, DDoS Network Protection (recommended)",
                                     "constraints": {
                                         "allowedValues": [
                                             {
-                                                "label": "Yes",
+                                                "label": "Yes, DDoS Network Protection (recommended)",
                                                 "value": "Yes"
                                             },
                                             {
                                                 "label": "No",
                                                 "value": "No"
                                             }
-                                        ],
-                                        "required": true
+                                        ]
                                     },
                                     "visible": true
                                 }
@@ -399,7 +395,6 @@
                                 }
                             ]
                         }
-                        
                     ]
                 }
             ]
@@ -417,8 +412,8 @@
                 "hubSubnetName": "[steps('esGoalState').hubNetworkConfigurations.subnetName]",
                 "hubSubnetAddrPrefix": "[steps('esGoalState').hubNetworkConfigurations.subnetPrefix]",
                 "vpnGWSubnet": "[steps('esGoalState').hubNetworkConfigurations.vpnGatewaySubnet]",
-                "recoveryName":"[steps('esGoalState').backupAndRecovery.recoveryServicesVaultName]",
-                "keyVaultName":"[steps('esLZGoalState').keyVaultConfiguration.keyVaultName]",
+                "recoveryName": "[steps('esGoalState').backupAndRecovery.recoveryServicesVaultName]",
+                "keyVaultName": "[steps('esLZGoalState').keyVaultConfiguration.keyVaultName]",
                 "enableDDoS": "[steps('esGoalState').networkSettings.enableDDoS]"
             },
             "kind": "Tenant",
