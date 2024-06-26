@@ -1,4 +1,3 @@
-
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-08-01/tenantDeploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
@@ -63,8 +62,25 @@
             "metadata": {
                 "description": "CIDR prefix for the Virtual Network"
             }
+        },
+        "hubSubnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Subnet"
+            }
+        },
+        "hubSubnetAddrPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "CIDR prefix for the Subnet"
+            }
+        },
+        "vpnGWSubnet": {
+            "type": "string",
+            "metadata": {
+                "description": "CIDR prefix for the VPN Gateway Subnet"
+            }
         }
-        
     },
     "variables": {
         "mgmtGroups": {
@@ -99,7 +115,6 @@
             "allowedRgRegionsPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DENY-RgRegionsPolicyAssignment.json')]",
             "allowedResourcesPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DENY-ResourcesPolicyAssignment.json')]",
             "customRbacRoleDefinition": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/roleDefinitions/Custom-RBACDefinitions.json')]",
-            
             "dataPolicyDefinitions": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyDefinitions/dataPolicies.json')]",
             "vnetConnectivityHub": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/hubspoke-connectivity.json')]",
             "vwanConnectivityHub": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/vwan-connectivity.json')]",
@@ -133,8 +148,7 @@
             "budgetPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/policyAssignments/DINE-BudgetPolicyAssignment.json')]",
             "erHaPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'telco/managementGroupTemplates/policyAssignments/DENY-non-ha-expressRoutes-policyAssignment.json')]",
             "pipHaPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'telco/managementGroupTemplates/policyAssignments/DENY-non-ha-publicIps-policyAssignment.json')]",
-
-            "hubNetwork":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/hubNetwork.json')]"
+            "hubNetwork": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/hubNetwork.json')]"
         },
         "deploymentSuffix": "[concat('-', deployment().location, guid(parameters('industryPrefix')))]",
         "industry": "[parameters('industry')]",
@@ -458,6 +472,15 @@
                     },
                     "hubAddrPrefix": {
                         "value": "[parameters('hubAddrPrefix')]"
+                    },
+                    "hubSubnetName":{
+                        "value": "[parameters('hubSubnetName')]"
+                    },
+                    "hubSubnetAddrPrefix":{
+                        "value": "[parameters('hubSubnetAddrPrefix')]"
+                    },
+                    "vpnGWSubnet":{
+                        "value": "[parameters('vpnGWSubnet')]"
                     }
                 }
             }
