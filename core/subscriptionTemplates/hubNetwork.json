@@ -92,6 +92,34 @@
                                     }
                                 ]
                             }
+                        },
+                        {
+                            "type": "Microsoft.Network/virtualNetworkGateways",
+                            "apiVersion": "2021-02-01",
+                            "name": "imc-VpnGateway-01",
+                            "location": "[parameters('hubRegion')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Network/virtualNetworks', parameters('hubName'))]"
+                            ],
+                            "properties": {
+                                "gatewayType": "Vpn",
+                                "vpnType": "RouteBased",
+                                "sku": {
+                                    "name": "VpnGw1",
+                                    "tier": "VpnGw1"
+                                },
+                                "ipConfigurations": [
+                                    {
+                                        "name": "vnetGatewayConfig",
+                                        "properties": {
+                                            "privateIPAllocationMethod": "Dynamic",
+                                            "subnet": {
+                                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), 'GatewaySubnet')]"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
                         }
                     ],
                     "outputs": {}
