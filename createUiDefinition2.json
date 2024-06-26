@@ -328,7 +328,7 @@
                     ]
                 },
                 {
-                    "name": "esConnectivityGoalState",
+                    "name": "esLZGoalState",
                     "label": "Landing Zone Subscription Deployment",
                     "subLabel": {
                         "preValidation": "",
@@ -348,7 +348,26 @@
                                 }
                             ],
                             "visible": true
+                        },
+                        {
+                            "name": "keyVaultConfiguration",
+                            "type": "Microsoft.Common.Section",
+                            "label": "Secrets and Keys Management",
+                            "elements": [
+                                {
+                                    "name": "keyVaultName",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Key Vault Name",
+                                    "toolTip": "Enter the name for the Azure Key Vault",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^[a-zA-Z][a-zA-Z0-9-]{2,23}[a-zA-Z0-9]$",
+                                        "validationMessage": "The Key Vault name must be 3-24 characters long, begin with a letter, end with an alphanumeric character and can contain hyphens."
+                                    }
+                                }
+                            ]
                         }
+                        
                     ]
                 }
             ]
@@ -356,7 +375,7 @@
         "outputs": {
             "parameters": {
                 "industry": "fsi",
-                "connectivitySubscriptionId": "[steps('esConnectivityGoalState').esNwSubSection.esNwSub.subscriptionId]",
+                "connectivitySubscriptionId": "[steps('esLZGoalState').esNwSubSection.esNwSub.subscriptionId]",
                 "managementSubscriptionId": "[steps('esGoalState').esMgmtSubSection.esMgmtSub.subscriptionId]",
                 "enableLogAnalytics": "[steps('esGoalState').azMonSection.esLogAnalytics]",
                 "industryPrefix": "[steps('lzSettings').mgSection.esMgmtGroup]",
@@ -366,7 +385,8 @@
                 "hubSubnetName": "[steps('esGoalState').hubNetworkConfigurations.subnetName]",
                 "hubSubnetAddrPrefix": "[steps('esGoalState').hubNetworkConfigurations.subnetPrefix]",
                 "vpnGWSubnet": "[steps('esGoalState').hubNetworkConfigurations.vpnGatewaySubnet]",
-                "recoveryName":"[steps('esGoalState').backupAndRecovery.recoveryServicesVaultName]"
+                "recoveryName":"[steps('esGoalState').backupAndRecovery.recoveryServicesVaultName]",
+                "keyVaultName":"[steps('esLZGoalState').keyVaultConfiguration.keyVaultName]"
             },
             "kind": "Tenant",
             "location": "[steps('basics').resourceScope.location.name]"
