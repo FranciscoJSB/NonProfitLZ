@@ -31,7 +31,10 @@
             "defaultValue": ""
         }
     },
-    "variables": {},
+    "variables": {
+        "azVpnGwSubnetId": "[concat('/subscriptions/', parameters('subscriptionId'), '/resourceGroups/', variables('rgName'),'/providers/Microsoft.Network/virtualNetworks/', variables('hubName'), '/subnets/GatewaySubnet')]",
+        "azVpnGwPipId": "[concat('/subscriptions/', parameters('subscriptionId'), '/resourceGroups/', variables('rgName'), '/providers/Microsoft.Network/publicIPAddresses/', variables('newPublicIpAddressName'))]"
+    },
     "resources": [
         {
             "type": "Microsoft.Resources/resourceGroups",
@@ -65,17 +68,17 @@
                                     "name": "VpnGw1",
                                     "tier": "VpnGw1"
                                 },
+                                "vpnGatewayGeneration": "Generation1",
                                 "ipConfigurations": [
                                     {
                                         "name": "default",
-                                        "id":"[concat(resourceId('Microsoft.Network/virtualNetworkGateways', 'vpn-gw-imc-001'), '/ipConfigurations/default')]",
                                         "properties": {
                                             "privateIPAllocationMethod": "Dynamic",
                                             "subnet": {
-                                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), 'GatewaySubnet')]"
+                                                "id": "[variables('azVpnGwSubnetId')]"
                                             },
                                             "publicIpAddress": {
-                                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('newPublicIpAddressName'))]"
+                                                "id": "[variables('azVpnGwPipId')]"
                                             }
                                         }
                                     }
