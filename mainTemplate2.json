@@ -206,8 +206,6 @@
             "erHaPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'telco/managementGroupTemplates/policyAssignments/DENY-non-ha-expressRoutes-policyAssignment.json')]",
             "pipHaPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'telco/managementGroupTemplates/policyAssignments/DENY-non-ha-publicIps-policyAssignment.json')]",
 
-            
-
 
 
             "managementGroups": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/mgmtGroupStructure/mgmtGroups.json')]",
@@ -219,7 +217,9 @@
             "vpnGateway":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/vpnGateway.json')]",
             "enableDDoS":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/enableDDoS.json')]",
             "enableDefender":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/defenderCloud.json')]",
-            "spokeNetwork": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/spokeNetwork.json')]"
+            "spokeNetwork": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/spokeNetwork.json')]",
+            "peeringHubSpoke": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/peeringHubSpoke.json')]",
+            "peeringSpokeHub": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/peeringSpokeHub.json')]"
         },
         "deploymentSuffix": "[concat('-', deployment().location, guid(parameters('industryPrefix')))]",
         "industry": "[parameters('industry')]",
@@ -230,7 +230,6 @@
             "enableDDoS":"[take(concat(variables('industry'), '-ddos-plan', variables('deploymentSuffix')), 64)]",
             "vnetConnectivityHubDeploymentName": "[take(concat(variables('industry'), '-Hub', variables('deploymentSuffix')), 64)]",
             "vnetConnectivitySpokeDeploymentName": "[take(concat(variables('industry'), '-Spoke', variables('deploymentSuffix')), 64)]",
-
 
             "recoveryVaultName":"[take(concat(variables('industry'), '-rsv', variables('deploymentSuffix')), 64)]",
             "policyRpRegDeploymentName": "[take(concat(variables('industry'), '-PolicyInsights', variables('deploymentSuffix')), 64)]",
@@ -743,6 +742,86 @@
                     },
                     "spokeSubnetAddrPrefix": {
                         "value": "[parameters('spokeSubnetAddrPrefix')]"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[not(empty(parameters('connectivitySubscriptionId')))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-10-01",
+            "name": "[variables('deploymentNames').identityPeeringDeploymentName]",
+            "location": "[deployment().location]",
+            "subscriptionId": "[parameters('connectivitySubscriptionId')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').connectivitySubscriptionPlacement)]",
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').mgmtSubscriptionPlacement)]",
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').vnetConnectivityHubDeploymentName)]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[variables('deploymentUris').peeringSpokeHub]"
+                },
+                "parameters": {
+                    "rgName": {
+                        "value": "[variables('platformRgNames').landingZoneRg]"
+                    },
+                    "hubVnetName": {
+                        "type": "string",
+                        "metadata": {
+                            "description": "Name of the Hub VNet"
+                        }
+                    },
+                    "spokeVnetName": {
+                        "type": "string",
+                        "metadata": {
+                            "description": "Name of the Spoke VNet"
+                        }
+                    },
+                    "peeringRegion": {
+                        "value": "[deployment().location]"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[not(empty(parameters('managementSubscriptionId')))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-10-01",
+            "name": "[variables('deploymentNames').identityPeeringDeploymentName]",
+            "location": "[deployment().location]",
+            "subscriptionId": "[parameters('connectivitySubscriptionId')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').managementSubscriptionId)]",
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').connectivitySubscriptionPlacement)]",
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').vnetConnectivitySpokeDeploymentName)]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[variables('deploymentUris').peeringHubSpoke]"
+                },
+                "parameters": {
+                    "rgName": {
+                        "value": "[variables('platformRgNames').mgmtRg]"
+                    },
+                    "hubVnetName": {
+                        "type": "string",
+                        "metadata": {
+                            "description": "Name of the Hub VNet"
+                        }
+                    },
+                    "spokeVnetName": {
+                        "type": "string",
+                        "metadata": {
+                            "description": "Name of the Spoke VNet"
+                        }
+                    },
+                    "peeringRegion": {
+                        "value": "[deployment().location]"
                     }
                 }
             }
