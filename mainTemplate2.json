@@ -162,7 +162,9 @@
             "enableDefender":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/defenderCloud.json')]",
             "spokeNetwork": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/spokeNetwork.json')]",
             "peeringHubSpoke": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/peeringHubSpoke.json')]",
-            "peeringSpokeHub": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/peeringSpokeHub.json')]"
+            "peeringSpokeHub": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/peeringSpokeHub.json')]",
+            "customRbacRoleDefinition": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/roleDefinitions/Custom-RBACDefinitions.json')]",
+            "subscriptionPlacement": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/subscriptionOrganization/subscriptionOrganization.json')]"
         },
         "deploymentSuffix": "[concat('-', deployment().location, guid(parameters('industryPrefix')))]",
         "industry": "[parameters('industry')]",
