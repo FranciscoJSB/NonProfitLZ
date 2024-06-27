@@ -467,8 +467,8 @@
                 "hubSubnetAddrPrefix": "[steps('esGoalState').hubNetworkConfigurations.subnetPrefix]",
                 "vpnGWSubnet": "[steps('esGoalState').hubNetworkConfigurations.vpnGatewaySubnet]",
                 "recoveryName": "[steps('esGoalState').backupAndRecovery.recoveryServicesVaultName]",
-                "enableDefender": "[steps('esGoalState').networkSettings.enableDefender]",
-                "enableDDoS": "[steps('esGoalState').security.enableDDoS]",
+                "enableDefender": "[steps('esGoalState').security.enableDefender]",
+                "enableDDoS": "[steps('esGoalState').networkSettings.enableDDoS]",
                 "enableDefenderLZ": "[steps('esLZGoalState').security.enableDefender]",
                 "keyVaultName": "[steps('esLZGoalState').keyVaultConfiguration.keyVaultName]"
             },
