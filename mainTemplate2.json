@@ -101,7 +101,7 @@
                 "No"
             ]
         },
-        "enableDDoS": {
+        "enableDefender": {
             "type": "string",
             "defaultValue": "No",
             "allowedValues": [
