@@ -8,28 +8,22 @@
                 "description": "Provide name for resource group"
             }
         },
-        "ddosRegion": {
+        "defenderRegion": {
             "type": "string",
             "metadata": {
                 "description": "Provide location for the resource group"
             }
-        },
-        "ddosName": {
-            "type": "string",
-            "metadata": {
-                "description": "Provide a name for the DDoS protection plan"
-            }
         }
     },
     "variables": {
-        "ddosDeploymentName": "[take(concat(deployment().name, '-ddos', parameters('ddosRegion')), 60)]"
+        "ddosDeploymentName": "[take(concat(deployment().name, '-ddos', parameters('defenderRegion')), 60)]"
     },
     "resources": [
         {
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "2020-10-01",
             "name": "[parameters('rgName')]",
-            "location": "[parameters('ddosRegion')]"
+            "location": "[parameters('defenderRegion')]"
         },
         {
             "type": "Microsoft.Resources/deployments",
@@ -103,4 +97,4 @@
         }
     ],
     "outputs": {}
-}.
+}
