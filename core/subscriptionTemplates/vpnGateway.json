@@ -71,11 +71,11 @@
                                         "properties": {
                                             "privateIPAllocationMethod": "Dynamic",
                                             "subnet": {
-                                                "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), parameters('gatewaySubnetName'))]"
+                                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), 'GatewaySubnet')]"
 
                                             },
                                             "publicIpAddress": {
-                                                "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/publicIPAddresses', parameters('newPublicIpAddressName'))]"
+                                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('newPublicIpAddressName'))]"
                                             }
                                         }
                                     },
@@ -84,10 +84,10 @@
                                         "properties": {
                                             "privateIPAllocationMethod": "Dynamic",
                                             "publicIpAddress": {
-                                                "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/publicIPAddresses', parameters('activeActiveGatewayNewPublicIpAddressName'))]"
+                                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('activeActiveGatewayNewPublicIpAddressName'))]"
                                             },
                                             "subnet": {
-                                                "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), parameters('gatewaySubnetName'))]"
+                                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), 'GatewaySubnet')]"
 
                                             }
                                         }
