@@ -45,9 +45,6 @@
             "apiVersion": "2018-05-01",
             "name": "hub-network",
             "resourceGroup": "[parameters('rgName')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('rgName'))]"
-            ],
             "properties": {
                 "mode": "Incremental",
                 "template": {
@@ -74,7 +71,8 @@
                                         "properties": {
                                             "privateIPAllocationMethod": "Dynamic",
                                             "subnet": {
-                                                "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/virtualNetworks', parameters('hubName'), 'subnets',parameters('gatewaySubnetName'))]"
+                                                "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), parameters('gatewaySubnetName'))]"
+
                                             },
                                             "publicIpAddress": {
                                                 "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/publicIPAddresses', parameters('newPublicIpAddressName'))]"
@@ -89,7 +87,8 @@
                                                 "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/publicIPAddresses', parameters('activeActiveGatewayNewPublicIpAddressName'))]"
                                             },
                                             "subnet": {
-                                                "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/virtualNetworks', parameters('hubName'), 'subnets',parameters('gatewaySubnetName'))]"
+                                                "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), parameters('gatewaySubnetName'))]"
+
                                             }
                                         }
                                     }
