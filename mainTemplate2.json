@@ -569,16 +569,10 @@
                         "value": "[variables('platformRgNames').landingZoneRg]"
                     },
                     "hubVnetName": {
-                        "type": "string",
-                        "metadata": {
-                            "description": "Name of the Hub VNet"
-                        }
+                        "value":"[parameters('hubName')]"
                     },
                     "spokeVnetName": {
-                        "type": "string",
-                        "metadata": {
-                            "description": "Name of the Spoke VNet"
-                        }
+                        "value":"[parameters('spokeName')]"
                     },
                     "peeringRegion": {
                         "value": "[deployment().location]"
@@ -609,16 +603,10 @@
                         "value": "[variables('platformRgNames').mgmtRg]"
                     },
                     "hubVnetName": {
-                        "type": "string",
-                        "metadata": {
-                            "description": "Name of the Hub VNet"
-                        }
+                        "value":"[parameters('hubName')]"
                     },
                     "spokeVnetName": {
-                        "type": "string",
-                        "metadata": {
-                            "description": "Name of the Spoke VNet"
-                        }
+                        "value":"[parameters('spokeName')]"
                     },
                     "peeringRegion": {
                         "value": "[deployment().location]"
