@@ -499,7 +499,7 @@
                 },
                 "parameters": {
                     "rgName": {
-                        "value": "[concat(parameters('industryPrefix'), '-lz')]"
+                        "value": "[variables('platformRgNames').mgmtRg]"
                     },
                     "keyVaultName": {
                         "value": "[parameters('keyVaultName')]"
@@ -528,7 +528,7 @@
                 },
                 "parameters": {
                     "rgName": {
-                        "value": "[concat(parameters('industryPrefix'), '-lz')]"
+                        "value": "[variables('platformRgNames').mgmtRg]"
                     },
                     "spokeName": {
                         "value": "[parameters('spokeName')]"
@@ -568,7 +568,7 @@
                 },
                 "parameters": {
                     "rgName": {
-                        "value": "[concat(parameters('industryPrefix'), '-lz')]"
+                        "value": "[variables('platformRgNames').mgmtRg]" 
                     },
                     "hubVnetName": {
                         "value":"[parameters('hubName')]"
