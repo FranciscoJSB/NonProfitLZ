@@ -99,7 +99,7 @@
                         {
                             "apiVersion": "2020-08-01",
                             "type": "Microsoft.Network/publicIPAddresses",
-                            "name": "vpn-gw-imc-001-PIP-01",
+                            "name": "[parameters('activeActiveGatewayNewPublicIpAddressName')]",
                             "location": "[deployment().location]",
                             "properties": {
                                 "publicIPAllocationMethod": "Static"
@@ -113,7 +113,7 @@
                         {
                             "apiVersion": "2020-08-01",
                             "type": "Microsoft.Network/publicIPAddresses",
-                            "name": "vpn-gw-imc-001-PIP-02",
+                            "name": "[parameters('newPublicIpAddressName')]",
                             "location": "[deployment().location]",
                             "properties": {
                                 "publicIPAllocationMethod": "Static"
