@@ -641,7 +641,7 @@
                 "mode": "Incremental",
                 "templateLink": {
                     "contentVersion": "1.0.0.0",
-                    "uri": "[variables('deploymentUris').defenderCloud]"
+                    "uri": "[variables('deploymentUris').enableDefender]"
                 },
                 "parameters": {
                     "rgName": {
