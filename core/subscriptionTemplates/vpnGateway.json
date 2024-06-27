@@ -25,6 +25,10 @@
         "newPublicIpAddressName": {
             "type": "string",
             "defaultValue": "vpn-gw-imc-001-PIP-02"
+        },
+        "subscriptionId": {
+            "type": "string",
+            "defaultValue": ""
         }
     },
     "variables": {},
@@ -67,7 +71,7 @@
                                         "properties": {
                                             "privateIPAllocationMethod": "Dynamic",
                                             "subnet": {
-                                                "id": "[resourceId(parameters('managementSubscriptionId'), parameters('rgName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), 'GatewaySubnet')]"
+                                                "id": "[concat('/subscriptions/', parameters('subscriptionId'), '/resourceGroups/', parameters('rgName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('hubName'), '/subnets/GatewaySubnet')]"
 
 
                                             },
