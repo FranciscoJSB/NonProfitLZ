@@ -71,7 +71,8 @@
                                         "properties": {
                                             "privateIPAllocationMethod": "Dynamic",
                                             "subnet": {
-                                                "id": "[concat('/subscriptions/', parameters('subscriptionId'), '/resourceGroups/', parameters('rgName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('hubName'), '/subnets/GatewaySubnet')]"
+                                                "id": "[resourceId(parameters('subscriptionId'), parameters('rgName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), 'GatewaySubnet')]"
+
 
 
                                             },
