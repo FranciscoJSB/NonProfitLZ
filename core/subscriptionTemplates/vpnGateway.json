@@ -68,7 +68,7 @@
                                 "ipConfigurations": [
                                     {
                                         "name": "default",
-                                        "id":"[concat(resourceId('Microsoft.Network/virtualNetworkGateways', vpn-gw-imc-001), '/ipConfigurations/default')]",
+                                        "id":"[concat(resourceId('Microsoft.Network/virtualNetworkGateways', 'vpn-gw-imc-001'), '/ipConfigurations/default')]",
                                         "properties": {
                                             "privateIPAllocationMethod": "Dynamic",
                                             "subnet": {
