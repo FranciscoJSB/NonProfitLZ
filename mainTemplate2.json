@@ -647,10 +647,7 @@
                     "rgName": {
                         "value": "[variables('platformRgNames').mgmtRg]"
                     },
-                    "ddosName": {
-                        "value": "[variables('platformResourceNames').ddosName]"
-                    },
-                    "ddosRegion": {
+                    "defenderRegion": {
                         "value": "[deployment().location]"
                     }
                 }
