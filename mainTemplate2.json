@@ -170,7 +170,7 @@
         "industry": "[parameters('industry')]",
         "deploymentNames": {
             "mgmtGroupDeploymentName": "[take(concat(variables('industry'), '-Mgs', variables('deploymentSuffix')), 64)]",
-            "keyVaultName": "[take(concat(variables('industry'), '-kv', variables('deploymentSuffix')), 64)]",
+            "keyVaultName": "[take(concat(variables('industry'), 'kv', variables('deploymentSuffix')), 64)]",
             "vpnGatewayName": "[take(concat(variables('industry'), '-vpnGW', variables('deploymentSuffix')), 64)]",
             "enableDDoS":"[take(concat(variables('industry'), '-ddos-plan', variables('deploymentSuffix')), 64)]",
             "vnetConnectivityHubDeploymentName": "[take(concat(variables('industry'), '-Hub', variables('deploymentSuffix')), 64)]",
