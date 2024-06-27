@@ -71,10 +71,7 @@
                                         "properties": {
                                             "privateIPAllocationMethod": "Dynamic",
                                             "subnet": {
-                                                "id": "[resourceId(parameters('subscriptionId'), parameters('rgName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), 'GatewaySubnet')]"
-
-
-
+                                                "id": "[resourceId(parameters('subscriptionId'), 'Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), 'GatewaySubnet')]"
                                             },
                                             "publicIpAddress": {
                                                 "id": "[resourceId(parameters('rgName'),'Microsoft.Network/publicIPAddresses', parameters('newPublicIpAddressName'))]"
