@@ -32,8 +32,8 @@
         }
     },
     "variables": {
-        "azVpnGwSubnetId": "[concat('/subscriptions/', parameters('subscriptionId'), '/resourceGroups/', parameters('rgName'),'/providers/Microsoft.Network/virtualNetworks/', parameters('hubName'), '/subnets/GatewaySubnet')]",
-        "azVpnGwPipId": "[concat('/subscriptions/', parameters('subscriptionId'), '/resourceGroups/', parameters('rgName'), '/providers/Microsoft.Network/publicIPAddresses/', parameters('newPublicIpAddressName'))]"
+        "azVpnGwSubnetId": "[concat('/subscriptions/', parameters('subscriptionId'), '/resourceGroups/novo-mgmt/providers/Microsoft.Network/virtualNetworks/', parameters('hubName'), '/subnets/GatewaySubnet')]",
+        "azVpnGwPipId": "[concat('/subscriptions/', parameters('subscriptionId'), '/resourceGroups/novo-mgmt/providers/Microsoft.Network/publicIPAddresses/', parameters('newPublicIpAddressName'))]"
     },
     "resources": [
         {
