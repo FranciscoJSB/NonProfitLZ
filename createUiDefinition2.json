@@ -405,6 +405,57 @@
                             "visible": true
                         },
                         {
+                            "name": "spokeNetworkConfigurations",
+                            "type": "Microsoft.Common.Section",
+                            "label": "Spoke Network Configurations",
+                            "elements": [
+                                {
+                                    "name": "vnetName",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "VNet Name",
+                                    "toolTip": "Enter the name of the VNet",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^[a-zA-Z][a-zA-Z0-9-]*[a-zA-Z0-9]$",
+                                        "validationMessage": "The VNet name must start and end with an alphanumeric character and can contain hyphens."
+                                    }
+                                },
+                                {
+                                    "name": "vnetPrefix",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "VNet Address Prefix",
+                                    "toolTip": "Enter the CIDR address prefix for the VNet",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}$",
+                                        "validationMessage": "Enter a valid CIDR notation."
+                                    }
+                                },
+                                {
+                                    "name": "subnetName",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Subnet Name",
+                                    "toolTip": "Enter the name of the subnet",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^[a-zA-Z][a-zA-Z0-9-]*[a-zA-Z0-9]$",
+                                        "validationMessage": "The subnet name must start and end with an alphanumeric character and can contain hyphens."
+                                    }
+                                },
+                                {
+                                    "name": "subnetPrefix",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "label": "Subnet Address Prefix",
+                                    "toolTip": "Enter the CIDR address prefix for the subnet",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}$",
+                                        "validationMessage": "Enter a valid CIDR notation."
+                                    }
+                                }
+                            ]
+                        },
+                        {
                             "name": "keyVaultConfiguration",
                             "type": "Microsoft.Common.Section",
                             "label": "Secrets and Keys Management",
@@ -470,7 +521,11 @@
                 "enableDefender": "[steps('esGoalState').security.enableDefender]",
                 "enableDDoS": "[steps('esGoalState').networkSettings.enableDDoS]",
                 "enableDefenderLZ": "[steps('esLZGoalState').security.enableDefender]",
-                "keyVaultName": "[steps('esLZGoalState').keyVaultConfiguration.keyVaultName]"
+                "keyVaultName": "[steps('esLZGoalState').keyVaultConfiguration.keyVaultName]",
+                "spokeName": "[steps('esGoalState').spokeNetworkConfigurations.vnetName]",
+                "spokeAddrPrefix": "[steps('esLZGoalState').spokeNetworkConfigurations.vnetPrefix]",
+                "spokeSubnetName": "[steps('esLZGoalState').spokeNetworkConfigurations.subnetName]",
+                "spokeSubnetAddrPrefix": "[steps('esLZGoalState').spokeNetworkConfigurations.subnetPrefix]"
             },
             "kind": "Tenant",
             "location": "[steps('basics').resourceScope.location.name]"
