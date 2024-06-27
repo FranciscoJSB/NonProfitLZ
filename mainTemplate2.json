@@ -484,9 +484,6 @@
                     "uri": "[variables('deploymentUris').enableDefender]"
                 },
                 "parameters": {
-                    "rgName": {
-                        "value": "[variables('platformRgNames').mgmtRg]"
-                    },
                     "defenderRegion": {
                         "value": "[deployment().location]"
                     }
