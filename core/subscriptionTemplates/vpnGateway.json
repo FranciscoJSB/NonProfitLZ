@@ -67,14 +67,15 @@
                                 },
                                 "ipConfigurations": [
                                     {
-                                        "name": "vnetGatewayConfig",
+                                        "name": "default",
+                                        "id":"[concat(resourceId('Microsoft.Network/virtualNetworkGateways', vpn-gw-imc-001), '/ipConfigurations/default')]",
                                         "properties": {
                                             "privateIPAllocationMethod": "Dynamic",
                                             "subnet": {
-                                                "id": "[resourceId(parameters('subscriptionId'), 'Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), 'GatewaySubnet')]"
+                                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), 'GatewaySubnet')]"
                                             },
                                             "publicIpAddress": {
-                                                "id": "[resourceId(parameters('rgName'),'Microsoft.Network/publicIPAddresses', parameters('newPublicIpAddressName'))]"
+                                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('newPublicIpAddressName'))]"
                                             }
                                         }
                                     }
