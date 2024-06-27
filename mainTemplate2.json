@@ -400,11 +400,11 @@
                     "gatewaySubnetName": {
                         "value": "GatewaySubnet"
                     },
-                    "activeActiveGatewayNewPublicIpAddressName": {
-                        "value": "vpn-gw-imc-001-PIP-01"
-                    },
                     "newPublicIpAddressName": {
                         "value": "vpn-gw-imc-001-PIP-02"
+                    },
+                    "subscriptionId":{
+                        "value": "[parameters('managementSubscriptionId')]"
                     }
                 }
             }
