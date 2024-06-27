@@ -177,7 +177,8 @@
             "customRbacDeploymentName": "[take(concat(variables('industry'), '-RoleDefinitions', variables('deploymentSuffix')), 64)]",
             "mgmtSubscriptionPlacement": "[take(concat(variables('industry'), '-MgmtSub', variables('deploymentSuffix')), 64)]",
             "connectivitySubscriptionPlacement": "[take(concat(variables('industry'), '-ConnectivitySub', variables('deploymentSuffix')), 64)]",
-            "monitoringDeploymentName": "[take(concat(variables('industry'), '-Monitoring', variables('deploymentSuffix')), 64)]"
+            "monitoringDeploymentName": "[take(concat(variables('industry'), '-Monitoring', variables('deploymentSuffix')), 64)]",
+            "defenderEndpointPolicyDeploymentName": "[take(concat(variables('industry'), '-DefenderEndpoint', variables('deploymentSuffix')), 64)]"
 
         },
         "platformRgNames": {
