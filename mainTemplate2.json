@@ -179,7 +179,8 @@
             "connectivitySubscriptionPlacement": "[take(concat(variables('industry'), '-ConnectivitySub', variables('deploymentSuffix')), 64)]",
             "monitoringDeploymentName": "[take(concat(variables('industry'), '-Monitoring', variables('deploymentSuffix')), 64)]",
             "defenderEndpointPolicyDeploymentName": "[take(concat(variables('industry'), '-DefenderEndpoint', variables('deploymentSuffix')), 64)]",
-            "identityPeeringDeploymentName": "[take(concat(variables('industry'), '-IDPeering', variables('deploymentSuffix')), 64)]"
+            "identityPeeringDeploymentName": "[take(concat(variables('industry'), '-IDPeeringHub', variables('deploymentSuffix')), 64)]",
+            "identityPeeringDeploymentName2": "[take(concat(variables('industry'), '-IDPeeringSpoke', variables('deploymentSuffix')), 64)]"
 
         },
         "platformRgNames": {
@@ -589,7 +590,7 @@
             "condition": "[not(empty(parameters('managementSubscriptionId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
-            "name": "[variables('deploymentNames').identityPeeringDeploymentName]",
+            "name": "[variables('deploymentNames').identityPeeringDeploymentName2]",
             "location": "[deployment().location]",
             "subscriptionId": "[parameters('connectivitySubscriptionId')]",
             "dependsOn": [
