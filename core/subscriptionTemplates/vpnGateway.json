@@ -1,4 +1,3 @@
-
 {
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
@@ -22,6 +21,14 @@
             "metadata": {
                 "description": "Name of the Gateway Subnet within the Virtual Network"
             }
+        },
+        "activeActiveGatewayNewPublicIpAddressName": {
+            "type": "string",
+            "defaultValue": "vpn-gw-imc-001-PIP-01"
+        },
+        "newPublicIpAddressName": {
+            "type": "string",
+            "defaultValue": "vpn-gw-imc-001-PIP-02"
         }
     },
     "variables": {},
@@ -67,12 +74,55 @@
                                         "properties": {
                                             "privateIPAllocationMethod": "Dynamic",
                                             "subnet": {
-                                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), parameters('gatewaySubnetName'))]"
+                                                "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), parameters('gatewaySubnetName'))]"
+                                            },
+                                            "publicIpAddress": {
+                                                "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/publicIPAddresses', parameters('newPublicIpAddressName'))]"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "activeActive",
+                                        "properties": {
+                                            "privateIPAllocationMethod": "Dynamic",
+                                            "publicIpAddress": {
+                                                "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/publicIPAddresses', parameters('activeActiveGatewayNewPublicIpAddressName'))]"
+                                            },
+                                            "subnet": {
+                                                "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), parameters('gatewaySubnetName'))]"
                                             }
                                         }
                                     }
                                 ]
                             }
+                        },
+                        {
+                            "apiVersion": "2020-08-01",
+                            "type": "Microsoft.Network/publicIPAddresses",
+                            "name": "vpn-gw-imc-001-PIP-01",
+                            "location": "[deployment().location]",
+                            "properties": {
+                                "publicIPAllocationMethod": "Static"
+                            },
+                            "sku": {
+                                "name": "Standard",
+                                "tier": "Regional"
+                            },
+                            "zones": []
+                        },
+                        {
+                            "apiVersion": "2020-08-01",
+                            "type": "Microsoft.Network/publicIPAddresses",
+                            "name": "vpn-gw-imc-001-PIP-02",
+                            "location": "[deployment().location]",
+                            "properties": {
+                                "publicIPAllocationMethod": "Static"
+                            },
+                            "sku": {
+                                "name": "Standard",
+                                "tier": "Regional"
+                            },
+                            "zones": []
                         }
                     ],
                     "outputs": {}
