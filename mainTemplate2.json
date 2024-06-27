@@ -193,8 +193,8 @@
             "recoveryVault": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/recoveryServicesVault.json')]",
             "keyVault":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/keyVault.json')]",
             "vpnGateway":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/vpnGateway.json')]",
-            "enableDDoS":"uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/enableDDoS.json')]",
-            "enableDefender":"uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/defenderCloud.json')]"
+            "enableDDoS":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/enableDDoS.json')]",
+            "enableDefender":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/defenderCloud.json')]"
         },
         "deploymentSuffix": "[concat('-', deployment().location, guid(parameters('industryPrefix')))]",
         "industry": "[parameters('industry')]",
