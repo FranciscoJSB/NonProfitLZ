@@ -336,6 +336,33 @@
                             ]
                         },
                         {
+                            "name": "security",
+                            "type": "Microsoft.Common.Section",
+                            "label": "Cloud Security Settings",
+                            "elements": [
+                                {
+                                    "name": "enableDefender",
+                                    "type": "Microsoft.Common.OptionsGroup",
+                                    "label": "Enable Microsoft Defender for Cloud ",
+                                    "toolTip": "Select whether to enable Microsoft Defender for Cloud",
+                                    "defaultValue": "Yes, enable Defender for Cloud (recommended)",
+                                    "constraints": {
+                                        "allowedValues": [
+                                            {
+                                                "label": "Yes, enable Defender for Cloud (recommended)",
+                                                "value": "Yes"
+                                            },
+                                            {
+                                                "label": "No",
+                                                "value": "No"
+                                            }
+                                        ]
+                                    },
+                                    "visible": true
+                                }
+                            ]
+                        },
+                        {
                             "name": "backupAndRecovery",
                             "type": "Microsoft.Common.Section",
                             "label": "Backup and Recovery",
@@ -394,6 +421,33 @@
                                     }
                                 }
                             ]
+                        },
+                        {
+                            "name": "security",
+                            "type": "Microsoft.Common.Section",
+                            "label": "Cloud Security Settings",
+                            "elements": [
+                                {
+                                    "name": "enableDefender",
+                                    "type": "Microsoft.Common.OptionsGroup",
+                                    "label": "Enable Microsoft Defender for Cloud ",
+                                    "toolTip": "Select whether to enable Microsoft Defender for Cloud",
+                                    "defaultValue": "Yes, enable Defender for Cloud (recommended)",
+                                    "constraints": {
+                                        "allowedValues": [
+                                            {
+                                                "label": "Yes, enable Defender for Cloud (recommended)",
+                                                "value": "Yes"
+                                            },
+                                            {
+                                                "label": "No",
+                                                "value": "No"
+                                            }
+                                        ]
+                                    },
+                                    "visible": true
+                                }
+                            ]
                         }
                     ]
                 }
@@ -402,10 +456,10 @@
         "outputs": {
             "parameters": {
                 "industry": "fsi",
+                "industryPrefix": "[steps('lzSettings').mgSection.esMgmtGroup]",
                 "connectivitySubscriptionId": "[steps('esLZGoalState').esNwSubSection.esNwSub.subscriptionId]",
                 "managementSubscriptionId": "[steps('esGoalState').esMgmtSubSection.esMgmtSub.subscriptionId]",
                 "enableLogAnalytics": "[steps('esGoalState').azMonSection.esLogAnalytics]",
-                "industryPrefix": "[steps('lzSettings').mgSection.esMgmtGroup]",
                 "retentionInDays": "[string(steps('esGoalState').azMonSection.esLogRetention)]",
                 "hubName": "[steps('esGoalState').hubNetworkConfigurations.vnetName]",
                 "hubAddrPrefix": "[steps('esGoalState').hubNetworkConfigurations.vnetPrefix]",
@@ -413,8 +467,10 @@
                 "hubSubnetAddrPrefix": "[steps('esGoalState').hubNetworkConfigurations.subnetPrefix]",
                 "vpnGWSubnet": "[steps('esGoalState').hubNetworkConfigurations.vpnGatewaySubnet]",
                 "recoveryName": "[steps('esGoalState').backupAndRecovery.recoveryServicesVaultName]",
-                "keyVaultName": "[steps('esLZGoalState').keyVaultConfiguration.keyVaultName]",
-                "enableDDoS": "[steps('esGoalState').networkSettings.enableDDoS]"
+                "enableDefender": "[steps('esGoalState').networkSettings.enableDefender]",
+                "enableDDoS": "[steps('esGoalState').security.enableDDoS]",
+                "enableDefenderLZ": "[steps('esLZGoalState').security.enableDefender]",
+                "keyVaultName": "[steps('esLZGoalState').keyVaultConfiguration.keyVaultName]"
             },
             "kind": "Tenant",
             "location": "[steps('basics').resourceScope.location.name]"
