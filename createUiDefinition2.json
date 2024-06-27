@@ -522,7 +522,7 @@
                 "enableDDoS": "[steps('esGoalState').networkSettings.enableDDoS]",
                 "enableDefenderLZ": "[steps('esLZGoalState').security.enableDefender]",
                 "keyVaultName": "[steps('esLZGoalState').keyVaultConfiguration.keyVaultName]",
-                "spokeName": "[steps('esGoalState').spokeNetworkConfigurations.vnetName]",
+                "spokeName": "[steps('esLZGoalState').spokeNetworkConfigurations.vnetName]",
                 "spokeAddrPrefix": "[steps('esLZGoalState').spokeNetworkConfigurations.vnetPrefix]",
                 "spokeSubnetName": "[steps('esLZGoalState').spokeNetworkConfigurations.subnetName]",
                 "spokeSubnetAddrPrefix": "[steps('esLZGoalState').spokeNetworkConfigurations.subnetPrefix]"
