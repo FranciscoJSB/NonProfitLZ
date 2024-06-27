@@ -23,9 +23,7 @@
         },
         "peeringRegion": {
             "type": "string",
-            "metadata": {
-                "description": "Provide location for the resource group"
-            }
+            "defaultValue":"[deployment().location]"
         }
     },
     "variables": {},
@@ -34,7 +32,7 @@
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "2018-05-01",
             "name": "[parameters('rgName')]",
-            "location": "[parameters('peeringRegion')]",
+            "location": "[deployment().location]",
             "properties": {}
         },
         {
@@ -57,7 +55,7 @@
                             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
                             "apiVersion": "2020-06-01",
                             "name": "[concat(parameters('hubVnetName'), '/hub-to-spoke')]",
-                            "location": "[parameters('rgName')]",
+                            "location": "[deployment().location]",
                             "properties": {
                                 "allowVirtualNetworkAccess": true,
                                 "allowForwardedTraffic": false,
