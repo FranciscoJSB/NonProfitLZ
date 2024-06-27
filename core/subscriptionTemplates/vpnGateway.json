@@ -22,10 +22,6 @@
                 "description": "Name of the Gateway Subnet within the Virtual Network"
             }
         },
-        "activeActiveGatewayNewPublicIpAddressName": {
-            "type": "string",
-            "defaultValue": "vpn-gw-imc-001-PIP-01"
-        },
         "newPublicIpAddressName": {
             "type": "string",
             "defaultValue": "vpn-gw-imc-001-PIP-02"
@@ -71,43 +67,17 @@
                                         "properties": {
                                             "privateIPAllocationMethod": "Dynamic",
                                             "subnet": {
-                                                "id": "[resourceId(parameters('rgName'),'Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), 'GatewaySubnet')]"
+                                                "id": "[resourceId(parameters('managementSubscriptionId'), parameters('rgName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), 'GatewaySubnet')]"
+
 
                                             },
                                             "publicIpAddress": {
                                                 "id": "[resourceId(parameters('rgName'),'Microsoft.Network/publicIPAddresses', parameters('newPublicIpAddressName'))]"
                                             }
                                         }
-                                    },
-                                    {
-                                        "name": "activeActive",
-                                        "properties": {
-                                            "privateIPAllocationMethod": "Dynamic",
-                                            "publicIpAddress": {
-                                                "id": "[resourceId(parameters('rgName'),'Microsoft.Network/publicIPAddresses', parameters('activeActiveGatewayNewPublicIpAddressName'))]"
-                                            },
-                                            "subnet": {
-                                                "id": "[resourceId(parameters('rgName'),'Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), 'GatewaySubnet')]"
-
-                                            }
-                                        }
                                     }
                                 ]
                             }
-                        },
-                        {
-                            "apiVersion": "2020-08-01",
-                            "type": "Microsoft.Network/publicIPAddresses",
-                            "name": "[parameters('activeActiveGatewayNewPublicIpAddressName')]",
-                            "location": "[deployment().location]",
-                            "properties": {
-                                "publicIPAllocationMethod": "Static"
-                            },
-                            "sku": {
-                                "name": "Standard",
-                                "tier": "Regional"
-                            },
-                            "zones": []
                         },
                         {
                             "apiVersion": "2020-08-01",
