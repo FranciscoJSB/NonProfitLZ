@@ -100,6 +100,22 @@
                 "Yes",
                 "No"
             ]
+        },
+        "enableDDoS": {
+            "type": "string",
+            "defaultValue": "No",
+            "allowedValues": [
+                "Yes",
+                "No"
+            ]
+        },
+        "enableDefenderLZ": {
+            "type": "string",
+            "defaultValue": "No",
+            "allowedValues": [
+                "Yes",
+                "No"
+            ]
         }
     },
     "variables": {
@@ -166,6 +182,8 @@
             "erHaPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'telco/managementGroupTemplates/policyAssignments/DENY-non-ha-expressRoutes-policyAssignment.json')]",
             "pipHaPolicyAssignment": "[uri(deployment().properties.templateLink.uri, 'telco/managementGroupTemplates/policyAssignments/DENY-non-ha-publicIps-policyAssignment.json')]",
 
+            
+
 
 
             "managementGroups": "[uri(deployment().properties.templateLink.uri, 'core/managementGroupTemplates/mgmtGroupStructure/mgmtGroups.json')]",
@@ -175,7 +193,8 @@
             "recoveryVault": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/recoveryServicesVault.json')]",
             "keyVault":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/keyVault.json')]",
             "vpnGateway":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/vpnGateway.json')]",
-            "enableDDoS":"uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/enableDDoS.json')]"
+            "enableDDoS":"uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/enableDDoS.json')]",
+            "enableDefender":"uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/defenderCloud.json')]"
         },
         "deploymentSuffix": "[concat('-', deployment().location, guid(parameters('industryPrefix')))]",
         "industry": "[parameters('industry')]",
@@ -594,6 +613,35 @@
                 "templateLink": {
                     "contentVersion": "1.0.0.0",
                     "uri": "[variables('deploymentUris').enableDDoS]"
+                },
+                "parameters": {
+                    "rgName": {
+                        "value": "[variables('platformRgNames').mgmtRg]"
+                    },
+                    "ddosName": {
+                        "value": "[variables('platformResourceNames').ddosName]"
+                    },
+                    "ddosRegion": {
+                        "value": "[deployment().location]"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('enableDefender'), 'Yes'), not(empty(parameters('managementSubscriptionId'))))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-10-01",
+            "name": "[variables('deploymentNames').defenderEndpointPolicyDeploymentName]",
+            "location": "[deployment().location]",
+            "subscriptionId": "[parameters('managementSubscriptionId')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').vnetConnectivityHubDeploymentName)]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[variables('deploymentUris').defenderCloud]"
                 },
                 "parameters": {
                     "rgName": {
