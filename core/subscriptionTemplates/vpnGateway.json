@@ -74,7 +74,7 @@
                                         "properties": {
                                             "privateIPAllocationMethod": "Dynamic",
                                             "subnet": {
-                                                "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), parameters('gatewaySubnetName'))]"
+                                                "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/virtualNetworks', parameters('hubName'), 'subnets',parameters('gatewaySubnetName'))]"
                                             },
                                             "publicIpAddress": {
                                                 "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/publicIPAddresses', parameters('newPublicIpAddressName'))]"
@@ -89,7 +89,7 @@
                                                 "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/publicIPAddresses', parameters('activeActiveGatewayNewPublicIpAddressName'))]"
                                             },
                                             "subnet": {
-                                                "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('hubName'), parameters('gatewaySubnetName'))]"
+                                                "id": "[resourceId(parameters('rgName'), 'Microsoft.Network/virtualNetworks', parameters('hubName'), 'subnets',parameters('gatewaySubnetName'))]"
                                             }
                                         }
                                     }
