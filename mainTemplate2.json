@@ -116,6 +116,30 @@
                 "Yes",
                 "No"
             ]
+        },
+        "spokeName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Virtual Network"
+            }
+        },
+        "spokeAddrPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "CIDR prefix for the Virtual Network"
+            }
+        },
+        "spokeSubnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Subnet"
+            }
+        },
+        "spokeSubnetAddrPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "CIDR prefix for the Subnet"
+            }
         }
     },
     "variables": {
@@ -194,7 +218,8 @@
             "keyVault":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/keyVault.json')]",
             "vpnGateway":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/vpnGateway.json')]",
             "enableDDoS":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/enableDDoS.json')]",
-            "enableDefender":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/defenderCloud.json')]"
+            "enableDefender":"[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/defenderCloud.json')]",
+            "spokeNetwork": "[uri(deployment().properties.templateLink.uri, 'core/subscriptionTemplates/spokeNetwork.json')]"
         },
         "deploymentSuffix": "[concat('-', deployment().location, guid(parameters('industryPrefix')))]",
         "industry": "[parameters('industry')]",
@@ -203,6 +228,8 @@
             "keyVaultName": "[take(concat(variables('industry'), '-kv', variables('deploymentSuffix')), 64)]",
             "vpnGatewayName": "[take(concat(variables('industry'), '-vpnGW', variables('deploymentSuffix')), 64)]",
             "enableDDoS":"[take(concat(variables('industry'), '-ddos-plan', variables('deploymentSuffix')), 64)]",
+            "vnetConnectivityHubDeploymentName": "[take(concat(variables('industry'), '-Hub', variables('deploymentSuffix')), 64)]",
+            "vnetConnectivitySpokeDeploymentName": "[take(concat(variables('industry'), '-Spoke', variables('deploymentSuffix')), 64)]",
 
 
             "recoveryVaultName":"[take(concat(variables('industry'), '-rsv', variables('deploymentSuffix')), 64)]",
@@ -259,7 +286,7 @@
             "activityDiagnosticsPolicyDeploymentName": "[take(concat(variables('industry'), '-ActivityDiagnostics', variables('deploymentSuffix')), 64)]",
             "ascPolicyDeploymentName": "[take(concat(variables('industry'), '-ASC', variables('deploymentSuffix')), 64)]",
             "ascGovPolicyDeploymentName": "[take(concat(variables('industry'), '-Gov-ASC', variables('deploymentSuffix')), 64)]",
-            "vnetConnectivityHubDeploymentName": "[take(concat(variables('industry'), '-HubSpoke', variables('deploymentSuffix')), 64)]",
+            
             "ingressDeploymentName": "[take(concat(variables('industry'), '-Ingress', variables('deploymentSuffix')), 64)]",
             "egressDeploymentName": "[take(concat(variables('industry'), '-Egress', variables('deploymentSuffix')), 64)]",
             "vwanConnectivityHubDeploymentName": "[take(concat(variables('industry'), '-VWanHub', variables('deploymentSuffix')), 64)]",
@@ -678,6 +705,44 @@
                     },
                     "kvRegion": {
                         "value": "[deployment().location]"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[not(empty(parameters('connectivitySubscriptionId')))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-10-01",
+            "name": "[variables('deploymentNames').vnetConnectivitySpokeDeploymentName]",
+            "location": "[deployment().location]",
+            "subscriptionId": "[parameters('connectivitySubscriptionId')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').connectivitySubscriptionPlacement)]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[variables('deploymentUris').spokeNetwork]"
+                },
+                "parameters": {
+                    "rgName": {
+                        "value": "[variables('platformRgNames').landingZoneRg]"
+                    },
+                    "spokeName": {
+                        "value": "[parameters('spokeName')]"
+                    },
+                    "spokeRegion": {
+                        "value": "[deployment().location]"
+                    },
+                    "spokeAddrPrefix": {
+                        "value": "[parameters('spokeAddrPrefix')]"
+                    },
+                    "spokeSubnetName": {
+                        "value": "[parameters('spokeSubnetName')]"
+                    },
+                    "spokeSubnetAddrPrefix": {
+                        "value": "[parameters('spokeSubnetAddrPrefix')]"
                     }
                 }
             }
