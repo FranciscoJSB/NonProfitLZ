@@ -186,8 +186,7 @@
 
         },
         "platformRgNames": {
-            "mgmtRg": "[concat(parameters('industryPrefix'), '-mgmt')]",
-            "landingZoneRg": "[concat(parameters('industryPrefix'), '-lz')]"
+            "mgmtRg": "[concat(parameters('industryPrefix'), '-mgmt')]"
         },
         "platformResourceNames": {
             "logAnalyticsWorkspace": "[concat(parameters('industryPrefix'), '-law')]",
@@ -500,7 +499,7 @@
                 },
                 "parameters": {
                     "rgName": {
-                        "value": "[variables('platformRgNames').landingZoneRg]"
+                        "value": "[concat(parameters('industryPrefix'), '-lz')]"
                     },
                     "keyVaultName": {
                         "value": "[parameters('keyVaultName')]"
@@ -529,7 +528,7 @@
                 },
                 "parameters": {
                     "rgName": {
-                        "value": "[variables('platformRgNames').landingZoneRg]"
+                        "value": "[concat(parameters('industryPrefix'), '-lz')]"
                     },
                     "spokeName": {
                         "value": "[parameters('spokeName')]"
@@ -569,7 +568,7 @@
                 },
                 "parameters": {
                     "rgName": {
-                        "value": "[variables('platformRgNames').landingZoneRg]"
+                        "value": "[concat(parameters('industryPrefix'), '-lz')]"
                     },
                     "hubVnetName": {
                         "value":"[parameters('hubName')]"
