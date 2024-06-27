@@ -186,7 +186,14 @@
 
         },
         "platformRgNames": {
-            "mgmtRg": "[concat(parameters('industryPrefix'), '-mgmt')]"
+            "mgmtRg": "[concat(parameters('industryPrefix'), '-mgmt')]",
+            "userAssignedIdentity": "[concat(parameters('industryPrefix'), '-policy-identity')]",
+            "connectivityRg": "[concat(parameters('industryPrefix'), '-vnethub-', parameters('location'))]",
+            "ddosRg": "[concat(parameters('industryPrefix'), '-ddos')]",
+            "privateDnsRg": "[concat(parameters('industryPrefix'), '-privatedns')]",
+            "identityVnetRg": "[concat(parameters('industryPrefix'), '-vnet-', parameters('location'))]",
+            "lzVnetRg": "[concat(parameters('industryPrefix'), '-vnet-', parameters('location'))]",
+            "logNwRg": "[concat(parameters('industryPrefix'), '-nwlog-', parameters('location'))]"
         },
         "platformResourceNames": {
             "logAnalyticsWorkspace": "[concat(parameters('industryPrefix'), '-law')]",
@@ -499,7 +506,7 @@
                 },
                 "parameters": {
                     "rgName": {
-                        "value": "[variables('platformRgNames').mgmtRg]"
+                        "value": "[variables('platformRgNames').logNwRg]"
                     },
                     "keyVaultName": {
                         "value": "[parameters('keyVaultName')]"
@@ -528,7 +535,7 @@
                 },
                 "parameters": {
                     "rgName": {
-                        "value": "[variables('platformRgNames').mgmtRg]"
+                        "value": "[variables('platformRgNames').logNwRg]"
                     },
                     "spokeName": {
                         "value": "[parameters('spokeName')]"
@@ -568,7 +575,7 @@
                 },
                 "parameters": {
                     "rgName": {
-                        "value": "[variables('platformRgNames').mgmtRg]" 
+                        "value": "[variables('platformRgNames').logNwRg]"
                     },
                     "hubVnetName": {
                         "value":"[parameters('hubName')]"
