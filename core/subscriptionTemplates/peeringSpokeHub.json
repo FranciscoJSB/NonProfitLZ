@@ -3,48 +3,34 @@
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "rgName": {
-            "type": "string",
-            "metadata": {
-                "description": "Provide name for resource group"
-            }
-        },
-        "hubVnetName": {
-            "type": "string",
-            "metadata": {
-                "description": "Name of the Hub VNet"
-            }
-        },
         "spokeVnetName": {
             "type": "string",
             "metadata": {
-                "description": "Name of the Spoke VNet"
+                "description": "Name of the Spoke Virtual Network."
             }
+        },
+        "hubVnetResourceId": {
+            "type": "string",
+            "metadata": {
+                "description": "Resource ID of the Hub Virtual Network."
+            }
+        },
+        "spokeVnetResourceGroup":{
+            "type": "string"
         },
         "peeringRegion": {
             "type": "string",
-            "metadata": {
-                "description": "Provide location for the resource group"
-            }
+            "defaultValue":"[deployment().location]"
         }
     },
     "variables": {},
     "resources": [
         {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2018-05-01",
-            "name": "[parameters('rgName')]",
-            "location": "[deployment().location]",
-            "properties": {}
-        },
-        {
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2018-05-01",
-            "name": "hub-network",
-            "resourceGroup": "[parameters('rgName')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('rgName'))]"
-            ],
+            "apiVersion": "2019-10-01",
+            "name": "spokeToHubPeering",
+            "resourceGroup": "[parameters('spokeVnetResourceGroup')]",
+
             "properties": {
                 "mode": "Incremental",
                 "template": {
@@ -56,15 +42,14 @@
                         {
                             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
                             "apiVersion": "2020-06-01",
-                            "name": "[concat(parameters('spokeVnetName'), '/spoke-to-hub')]",
-                            "location": "[parameters('peeringRegion')]",
+                            "name": "[concat(parameters('spokeVnetName'), '/AddPeeringToHub')]",
                             "properties": {
                                 "allowVirtualNetworkAccess": true,
                                 "allowForwardedTraffic": false,
                                 "allowGatewayTransit": false,
                                 "useRemoteGateways": false,
                                 "remoteVirtualNetwork": {
-                                    "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('hubVnetName'))]"
+                                    "id": "[parameters('hubVnetResourceId')]"
                                 }
                             }
                         }
