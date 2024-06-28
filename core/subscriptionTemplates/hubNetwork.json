@@ -98,7 +98,6 @@
                             "name": "[concat(parameters('hubName'),'-nsg')]",
                             "location": "[parameters('hubRegion')]",
                             "dependsOn": [
-                                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('rgName'))]",
                                 "[resourceId('Microsoft.Network/virtualNetworks/', parameters('hubName'))]"
                             ],
                             "properties": {
