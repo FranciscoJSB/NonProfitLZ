@@ -153,7 +153,13 @@
                             "type": "Microsoft.Common.Section",
                             "name": "imcSection",
                             "label": "IMC - Identity, Management, and Connectivity",
-                            "text": "IMC refers to the core Azure components that manage and secure the communication and operations between different resources. 'Identity' relates to authentication and authorization services ensuring secure access to resources. 'Management' pertains to overseeing the lifecycle of resources, including monitoring and maintenance through tools like Azure Monitor and Log Analytics. 'Connectivity' involves networking aspects that ensure reliable and secure connections between Azure resources, including virtual networks, subnets, and VPNs as configured in Hub Network Configurations."
+                            "elements": [
+                                {
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "text": "IMC refers to the core Azure components that manage and secure the communication and operations between different resources. 'Identity' relates to authentication and authorization services ensuring secure access to resources. 'Management' pertains to overseeing the lifecycle of resources, including monitoring and maintenance through tools like Azure Monitor and Log Analytics. 'Connectivity' involves networking aspects that ensure reliable and secure connections between Azure resources, including virtual networks, subnets, and VPNs as configured in Hub Network Configurations."
+                                }
+                            ],
+                            "visible": true
                         },
                         {
                             "name": "multiPlatformMgmtSub",
@@ -543,7 +549,9 @@
                                     "type": "Microsoft.Common.TextBlock",
                                     "name": "defenderForCloudDescription",
                                     "visible": true,
-                                    "text": "Microsoft Defender for Cloud Standard offers integrated security management and threat protection for your Azure services and hybrid environments. It automatically applies security policies to help secure your services against threats and provides continuous security assessment and actionable recommendations. This standard deployment enhances your security posture by integrating intelligent threat detection and response capabilities, helping you to prevent, detect, and respond to security threats in real time."
+                                    "options": {
+                                        "text": "Microsoft Defender for Cloud Standard offers integrated security management and threat protection for your Azure services and hybrid environments. It automatically applies security policies to help secure your services against threats and provides continuous security assessment and actionable recommendations. This standard deployment enhances your security posture by integrating intelligent threat detection and response capabilities, helping you to prevent, detect, and respond to security threats in real time."
+                                    }
                                 },
                                 {
                                     "name": "enableDefender",
