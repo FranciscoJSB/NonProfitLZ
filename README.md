@@ -1,4 +1,4 @@
-# NFP - Azure Landing Zone Deployment & UI 
+# Azure Landing Zone for Small Nonprofits Deployment & UI 
 
 This project allows you to deploy resources into two separate Azure subscriptions. Many of the resources have fixed sku values in order to prevent high cost ratings.
 
