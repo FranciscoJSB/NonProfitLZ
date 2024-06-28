@@ -405,6 +405,9 @@
                     },
                     "subscriptionId":{
                         "value": "[parameters('managementSubscriptionId')]"
+                    },
+                    "resourceGroupName":{
+                        "value": "[concat(parameters('industryPrefix')-mgmt)]"
                     }
                 }
             }
@@ -558,40 +561,6 @@
             }
         },
         {
-            "condition": "[not(empty(parameters('connectivitySubscriptionId')))]",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-10-01",
-            "name": "[variables('deploymentNames').identityPeeringDeploymentName]",
-            "location": "[deployment().location]",
-            "subscriptionId": "[parameters('connectivitySubscriptionId')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').connectivitySubscriptionPlacement)]",
-                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').mgmtSubscriptionPlacement)]",
-                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').vnetConnectivityHubDeploymentName)]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "contentVersion": "1.0.0.0",
-                    "uri": "[variables('deploymentUris').peeringSpokeHub]"
-                },
-                "parameters": {
-                    "rgName": {
-                        "value": "[variables('platformRgNames').logNwRg]"
-                    },
-                    "hubVnetName": {
-                        "value": "[parameters('hubName')]"
-                    },
-                    "spokeVnetName": {
-                        "value": "[parameters('spokeName')]"
-                    },
-                    "peeringRegion": {
-                        "value": "[deployment().location]"
-                    }
-                }
-            }
-        },
-        {
             "condition": "[not(empty(parameters('managementSubscriptionId')))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -610,11 +579,45 @@
                     "uri": "[variables('deploymentUris').peeringHubSpoke]"
                 },
                 "parameters": {
-                    "rgName": {
+                    "hubVnetResourceGroup": {
                         "value": "[variables('platformRgNames').mgmtRg]"
                     },
                     "hubVnetName": {
                         "value": "[parameters('hubName')]"
+                    },
+                    "spokeVnetResourceId": {
+                        "value": "[concat('/subscriptions/', parameters('managementSubscriptionId'), '/resourceGroups/', parameters('industryPrefix'), -nwlog-, parameters('location'),/providers/Microsoft.Network/virtualNetworks/', parameters('hubName'))]"
+                    },
+                    "peeringRegion": {
+                        "value": "[deployment().location]"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[not(empty(parameters('connectivitySubscriptionId')))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-10-01",
+            "name": "[variables('deploymentNames').identityPeeringDeploymentName]",
+            "location": "[deployment().location]",
+            "subscriptionId": "[parameters('connectivitySubscriptionId')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').connectivitySubscriptionPlacement)]",
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').mgmtSubscriptionPlacement)]",
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').vnetConnectivityHubDeploymentName)]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[variables('deploymentUris').peeringSpokeHub]"
+                },
+                "parameters": {
+                    "spokeVnetResourceGroup": {
+                        "value": "[variables('platformRgNames').logNwRg]" 
+                    },
+                    "hubVnetResourceId": {
+                        "value": "[concat('/subscriptions/', parameters('managementSubscriptionId'), '/resourceGroups/', parameters('industryPrefix'), -mgmt/providers/Microsoft.Network/virtualNetworks/', parameters('hubName'))]"
                     },
                     "spokeVnetName": {
                         "value": "[parameters('spokeName')]"
