@@ -1,3 +1,4 @@
+
 {
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
@@ -29,11 +30,14 @@
         "subscriptionId": {
             "type": "string",
             "defaultValue": ""
+        },
+        "resourceGroupName":{
+            "type": "string"
         }
     },
     "variables": {
-        "azVpnGwSubnetId": "[concat('/subscriptions/', parameters('subscriptionId'), '/resourceGroups/novo-mgmt/providers/Microsoft.Network/virtualNetworks/', parameters('hubName'), '/subnets/GatewaySubnet')]",
-        "azVpnGwPipId": "[concat('/subscriptions/', parameters('subscriptionId'), '/resourceGroups/novo-mgmt/providers/Microsoft.Network/publicIPAddresses/', parameters('newPublicIpAddressName'))]"
+        "azVpnGwSubnetId": "[concat('/subscriptions/', parameters('subscriptionId'), '/resourceGroups/', parameters('resourceGroupName'), /providers/Microsoft.Network/virtualNetworks/', parameters('hubName'), '/subnets/GatewaySubnet')]",
+        "azVpnGwPipId": "[concat('/subscriptions/', parameters('subscriptionId'), '/resourceGroups/', parameters('resourceGroupName'), /providers/Microsoft.Network/publicIPAddresses/', parameters('newPublicIpAddressName'))]"
     },
     "resources": [
         {
