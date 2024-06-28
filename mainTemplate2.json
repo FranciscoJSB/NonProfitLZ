@@ -407,7 +407,7 @@
                         "value": "[parameters('managementSubscriptionId')]"
                     },
                     "resourceGroupName":{
-                        "value": "[concat(parameters('industryPrefix'),-mgmt)]"
+                        "value": "[concat(parameters('industryPrefix'),'-mgmt')]"
                     }
                 }
             }
@@ -586,7 +586,7 @@
                         "value": "[parameters('hubName')]"
                     },
                     "spokeVnetResourceId": {
-                        "value": "[concat('/subscriptions/', parameters('managementSubscriptionId'), '/resourceGroups/', parameters('industryPrefix'), -nwlog-, parameters('location'),/providers/Microsoft.Network/virtualNetworks/', parameters('hubName'))]"
+                        "value": "[concat('/subscriptions/', parameters('managementSubscriptionId'), '/resourceGroups/', parameters('industryPrefix'), '-nwlog-', parameters('location'),'/providers/Microsoft.Network/virtualNetworks/', parameters('hubName'))]"
                     },
                     "peeringRegion": {
                         "value": "[deployment().location]"
@@ -617,7 +617,7 @@
                         "value": "[variables('platformRgNames').logNwRg]" 
                     },
                     "hubVnetResourceId": {
-                        "value": "[concat('/subscriptions/', parameters('managementSubscriptionId'), '/resourceGroups/', parameters('industryPrefix'), -mgmt/providers/Microsoft.Network/virtualNetworks/', parameters('hubName'))]"
+                        "value": "[concat('/subscriptions/', parameters('managementSubscriptionId'), '/resourceGroups/', parameters('industryPrefix'), '-mgmt/providers/Microsoft.Network/virtualNetworks/', parameters('hubName'))]"
                     },
                     "spokeVnetName": {
                         "value": "[parameters('spokeName')]"
