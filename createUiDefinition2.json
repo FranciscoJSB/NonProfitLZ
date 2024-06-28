@@ -285,7 +285,7 @@
                                 {
                                     "name": "vnetPrefix",
                                     "type": "Microsoft.Common.TextBox",
-                                    "label": "VNet Address Prefix",
+                                    "label": "Virtual Network Address Prefix",
                                     "toolTip": "Enter the CIDR address prefix for the VNet",
                                     "constraints": {
                                         "required": true,
@@ -627,7 +627,7 @@
         },
         "outputs": {
             "parameters": {
-                "industry": "fsi",
+                "industry": "tsi",
                 "industryPrefix": "[steps('lzSettings').mgSection.esMgmtGroup]",
                 "managementSubscriptionId": "[steps('esGoalState').esMgmtSubSection.esMgmtSub.subscriptionId]",
                 "enableLogAnalytics": "[steps('esGoalState').azMonSection.esLogAnalytics]",
