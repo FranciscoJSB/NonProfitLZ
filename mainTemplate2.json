@@ -140,7 +140,20 @@
             "metadata": {
                 "description": "CIDR prefix for the Subnet"
             }
+        },
+        "keyVaultNameHub": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Key Vault"
+            }
+        },
+        "recoveryNameSpoke": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Recovery Services Vault"
+            }
         }
+        
     },
     "variables": {
         "mgmtGroups": {
@@ -442,6 +455,35 @@
             }
         },
         {
+            "condition": "[not(empty(parameters('connectivitySubscriptionId')))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-10-01",
+            "name": "recoveryVault-spoke",
+            "location": "[deployment().location]",
+            "subscriptionId": "[parameters('connectivitySubscriptionId')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').connectivitySubscriptionPlacement)]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[variables('deploymentUris').recoveryVault]"
+                },
+                "parameters": {
+                    "rgName": {
+                        "value": "[variables('platformRgNames').logNwRg]"
+                    },
+                    "recoveryName": {
+                        "value": "[parameters('recoveryNameSpoke')]"
+                    },
+                    "rsvRegion": {
+                        "value": "[deployment().location]"
+                    }
+                }
+            }
+        },
+        {
             "condition": "[and(equals(parameters('enableDdoS'), 'Yes'), not(empty(parameters('managementSubscriptionId'))))]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
@@ -488,6 +530,35 @@
                 },
                 "parameters": {
                     "defenderRegion": {
+                        "value": "[deployment().location]"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[not(empty(parameters('managementSubscriptionId')))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-10-01",
+            "name": "keyVaultName-Hub",
+            "location": "[deployment().location]",
+            "subscriptionId": "[parameters('managementSubscriptionId')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', variables('deploymentNames').mgmtSubscriptionPlacement)]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "contentVersion": "1.0.0.0",
+                    "uri": "[variables('deploymentUris').keyVault]"
+                },
+                "parameters": {
+                    "rgName": {
+                        "value": "[variables('platformRgNames').mgmt]"
+                    },
+                    "keyVaultName": {
+                        "value": "[parameters('keyVaultNameHub')]"
+                    },
+                    "kvRegion": {
                         "value": "[deployment().location]"
                     }
                 }
