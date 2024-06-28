@@ -153,13 +153,7 @@
                             "type": "Microsoft.Common.Section",
                             "name": "imcSection",
                             "label": "IMC - Identity, Management, and Connectivity",
-                            "elements": [
-                                {
-                                    "type": "Microsoft.Common.TextBlock",
-                                    "text": "IMC refers to the core Azure components that manage and secure the communication and operations between different resources. 'Identity' relates to authentication and authorization services ensuring secure access to resources. 'Management' pertains to overseeing the lifecycle of resources, including monitoring and maintenance through tools like Azure Monitor and Log Analytics. 'Connectivity' involves networking aspects that ensure reliable and secure connections between Azure resources, including virtual networks, subnets, and VPNs as configured in Hub Network Configurations."
-                                }
-                            ],
-                            "visible": true
+                            "text": "IMC refers to the core Azure components that manage and secure the communication and operations between different resources. 'Identity' relates to authentication and authorization services ensuring secure access to resources. 'Management' pertains to overseeing the lifecycle of resources, including monitoring and maintenance through tools like Azure Monitor and Log Analytics. 'Connectivity' involves networking aspects that ensure reliable and secure connections between Azure resources, including virtual networks, subnets, and VPNs as configured in Hub Network Configurations."
                         },
                         {
                             "name": "multiPlatformMgmtSub",
