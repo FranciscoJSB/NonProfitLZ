@@ -153,12 +153,6 @@
                             "type": "Microsoft.Common.Section",
                             "name": "imcSection",
                             "label": "IMC - Identity, Management, and Connectivity",
-                            "elements": [
-                                {
-                                    "type": "Microsoft.Common.TextBlock",
-                                    "text": "IMC refers to the core Azure components that manage and secure the communication and operations between different resources. 'Identity' relates to authentication and authorization services ensuring secure access to resources. 'Management' pertains to overseeing the lifecycle of resources, including monitoring and maintenance through tools like Azure Monitor and Log Analytics. 'Connectivity' involves networking aspects that ensure reliable and secure connections between Azure resources, including virtual networks, subnets, and VPNs as configured in Hub Network Configurations."
-                                }
-                            ],
                             "visible": true
                         },
                         {
@@ -594,7 +588,9 @@
                                     "type": "Microsoft.Common.TextBlock",
                                     "name": "recoveryServicesVaultDescription",
                                     "visible": true,
-                                    "text": "Azure Recovery Services Vault is a comprehensive solution for data backup and disaster recovery. It is designed to protect your Azure and on-premises resources by enabling both backup and site recovery services. This centralized vault provides a unified approach to manage your backup policies, monitor backup health, and recover services swiftly in case of data loss or corruption. It simplifies the management of your recovery points, scales on demand to meet your data protection needs, and ensures secure and reliable data storage and recovery capabilities."
+                                    "options": {
+                                        "text": "Azure Recovery Services Vault is a comprehensive solution for data backup and disaster recovery. It is designed to protect your Azure and on-premises resources by enabling both backup and site recovery services. This centralized vault provides a unified approach to manage your backup policies, monitor backup health, and recover services swiftly in case of data loss or corruption. It simplifies the management of your recovery points, scales on demand to meet your data protection needs, and ensures secure and reliable data storage and recovery capabilities."
+                                    }
                                 },
                                 {
                                     "name": "recoveryServicesVaultName",
