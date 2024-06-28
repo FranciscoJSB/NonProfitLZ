@@ -586,7 +586,7 @@
                         "value": "[parameters('hubName')]"
                     },
                     "spokeVnetResourceId": {
-                        "value": "[concat('/subscriptions/', parameters('managementSubscriptionId'), '/resourceGroups/', parameters('industryPrefix'), '-nwlog-', parameters('location'),'/providers/Microsoft.Network/virtualNetworks/', parameters('hubName'))]"
+                        "value": "[concat('/subscriptions/', parameters('connectivitySubscriptionId'), '/resourceGroups/', parameters('industryPrefix'), '-nwlog-', parameters('location'),'/providers/Microsoft.Network/virtualNetworks/', parameters('spokeName'))]"
                     },
                     "peeringRegion": {
                         "value": "[deployment().location]"
