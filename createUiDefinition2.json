@@ -574,7 +574,9 @@
                                 {
                                     "type": "Microsoft.Common.TextBlock",
                                     "name": "recoveryServicesVaultDescription",
-                                    "text": "Azure Recovery Services Vault is a comprehensive solution for data backup and disaster recovery. It is designed to protect your Azure and on-premises resources by enabling both backup and site recovery services. This centralized vault provides a unified approach to manage your backup policies, monitor backup health, and recover services swiftly in case of data loss or corruption. It simplifies the management of your recovery points, scales on demand to meet your data protection needs, and ensures secure and reliable data storage and recovery capabilities."
+                                    "options":{
+                                        "text": "Azure Recovery Services Vault is a comprehensive solution for data backup and disaster recovery. It is designed to protect your Azure and on-premises resources by enabling both backup and site recovery services. This centralized vault provides a unified approach to manage your backup policies, monitor backup health, and recover services swiftly in case of data loss or corruption. It simplifies the management of your recovery points, scales on demand to meet your data protection needs, and ensures secure and reliable data storage and recovery capabilities."
+                                    }
                                 },
                                 {
                                     "name": "recoveryServicesVaultName",
