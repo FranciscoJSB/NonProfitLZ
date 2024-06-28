@@ -3,23 +3,20 @@
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "rgName": {
-            "type": "string",
-            "metadata": {
-                "description": "Provide name for resource group"
-            }
-        },
         "hubVnetName": {
             "type": "string",
             "metadata": {
-                "description": "Name of the Hub VNet"
+                "description": "The name of the Hub Virtual Network."
             }
         },
-        "spokeVnetName": {
+        "spokeVnetResourceId": {
             "type": "string",
             "metadata": {
-                "description": "Name of the Spoke VNet"
+                "description": "Resource ID of the Spoke Virtual Network."
             }
+        },
+        "hubVnetResourceGroup":{
+            "type": "string"
         },
         "peeringRegion": {
             "type": "string",
@@ -29,20 +26,11 @@
     "variables": {},
     "resources": [
         {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2018-05-01",
-            "name": "[parameters('rgName')]",
-            "location": "[deployment().location]",
-            "properties": {}
-        },
-        {
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2018-05-01",
-            "name": "hub-network",
-            "resourceGroup": "[parameters('rgName')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('rgName'))]"
-            ],
+            "apiVersion": "2019-10-01",
+            "name": "hubToSpokePeering",
+            "resourceGroup": "[parameters('hubVnetResourceGroup')]",
+
             "properties": {
                 "mode": "Incremental",
                 "template": {
@@ -54,15 +42,14 @@
                         {
                             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
                             "apiVersion": "2020-06-01",
-                            "name": "[concat(parameters('hubVnetName'), '/hub-to-spoke')]",
-                            "location": "[deployment().location]",
+                            "name": "[concat(parameters('hubVnetName'), '/AddPeeringToSpoke')]",
                             "properties": {
                                 "allowVirtualNetworkAccess": true,
                                 "allowForwardedTraffic": false,
                                 "allowGatewayTransit": false,
                                 "useRemoteGateways": false,
                                 "remoteVirtualNetwork": {
-                                    "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('spokeVnetName'))]"
+                                    "id": "[parameters('spokeVnetResourceId')]"
                                 }
                             }
                         }
