@@ -1,22 +1,25 @@
 # NFP - Azure Landing Zone Deployment & UI 
 
-This project allows you to deploy resources into two separate Azure subscriptions.
+This project allows you to deploy resources into two separate Azure subscriptions. Many of the resources have fixed sku values in order to prevent high cost ratings.
 
 ## Overview
+
+### Management View
+
+Before adding the resources to each subscription the system will take the Management prefix to create a Management group and the region.
 
 ### First Subscription: Identity, Management, and Connectivity
 
 This subscription is dedicated to deploying resources related to identity management, monitoring, and connectivity. The following resources are implemented in this subscription:
 
 - Key Vault
-- Virtual Network (VNet)
+- Virtual Network (VNet) with Gateway subnet and additional Subnet
 - Network Security Group (NSG)
-- Additional Subnet
-- VPN Gateway
+- VPN Gateway - vpnGW1
 - Log Analytics Workspace
-- Storage Account
-- DNS Resolver
+- Automation Account
 - Defender for Cloud
+- Recovery Services Vault
 
 ### Second Subscription: Landing Zone Deployment
 
@@ -28,6 +31,8 @@ The following resources are deployed in this subscription:
 - Recovery Services Vault
 - Virtual Network (VNet) with a Subnet
 - Network Security Group (NSG)
+- Defender for Cloud
+- Recovery Services Vault
 
 ## How it Works
 
