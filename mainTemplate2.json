@@ -553,7 +553,7 @@
                 },
                 "parameters": {
                     "rgName": {
-                        "value": "[variables('platformRgNames').mgmt]"
+                        "value": "[variables('platformRgNames').mgmtRg]"
                     },
                     "keyVaultName": {
                         "value": "[parameters('keyVaultNameHub')]"

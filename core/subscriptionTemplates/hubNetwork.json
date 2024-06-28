@@ -99,7 +99,7 @@
                             "location": "[parameters('hubRegion')]",
                             "dependsOn": [
                                 "[resourceId('Microsoft.Resources/resourceGroups/', parameters('rgName'))]",
-                                "[resourceId('Microsoft.Network/virtualNetworks/', parameter('hubName'))]"
+                                "[resourceId('Microsoft.Network/virtualNetworks/', parameters('hubName'))]"
                             ],
                             "properties": {
                                 "securityRules": [
