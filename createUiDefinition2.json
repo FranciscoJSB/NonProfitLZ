@@ -158,7 +158,8 @@
                                     "type": "Microsoft.Common.TextBlock",
                                     "text": "IMC refers to the core Azure components that manage and secure the communication and operations between different resources. 'Identity' relates to authentication and authorization services ensuring secure access to resources. 'Management' pertains to overseeing the lifecycle of resources, including monitoring and maintenance through tools like Azure Monitor and Log Analytics. 'Connectivity' involves networking aspects that ensure reliable and secure connections between Azure resources, including virtual networks, subnets, and VPNs as configured in Hub Network Configurations."
                                 }
-                            ]
+                            ],
+                            "visible": true
                         },
                         {
                             "name": "multiPlatformMgmtSub",
@@ -260,6 +261,7 @@
                                 {
                                     "type": "Microsoft.Common.TextBlock",
                                     "name": "hubTopologyDescription",
+                                    "visible": true,
                                     "text": "A Hub networking topology in Azure serves as a central point of connectivity to many spoke networks. The hub acts as a central network that contains shared services accessible across different workloads in the spokes. Common services deployed in the hub include network virtual appliances, firewalls, and gateways. This central structure simplifies network management, improves security, and enhances data flow efficiency across networks. As the deployment progresses, this hub will be integrated with spoke networks to create a comprehensive network topology, facilitating efficient data transfer and centralized security management."
                                 },
                                 {
@@ -333,6 +335,7 @@
                                 {
                                     "type": "Microsoft.Common.TextBlock",
                                     "name": "ddosProtectionDescription",
+                                    "visible": true,
                                     "text": "Azure DDoS Protection Standard provides enhanced DDoS mitigation capabilities to defend your Azure resources from DDoS attacks. DDoS Protection Standard offers cost protection by preventing scaling of resources during an attack, thus mitigating potential financial impacts. This layer of security is crucial for maintaining availability and operational resilience against widespread network threats."
                                 },
                                 {
@@ -365,6 +368,7 @@
                                 {
                                     "type": "Microsoft.Common.TextBlock",
                                     "name": "defenderForCloudDescription",
+                                    "visible": true,
                                     "text": "Microsoft Defender for Cloud Standard offers integrated security management and threat protection for your Azure services and hybrid environments. It automatically applies security policies to help secure your services against threats and provides continuous security assessment and actionable recommendations. This standard deployment enhances your security posture by integrating intelligent threat detection and response capabilities, helping you to prevent, detect, and respond to security threats in real time."
                                 },
                                 {
@@ -397,6 +401,7 @@
                                 {
                                     "type": "Microsoft.Common.TextBlock",
                                     "name": "recoveryServicesVaultDescription",
+                                    "visible": true,
                                     "text": "Azure Recovery Services Vault is a comprehensive solution for data backup and disaster recovery. It is designed to protect your Azure and on-premises resources by enabling both backup and site recovery services. This centralized vault provides a unified approach to manage your backup policies, monitor backup health, and recover services swiftly in case of data loss or corruption. It simplifies the management of your recovery points, scales on demand to meet your data protection needs, and ensures secure and reliable data storage and recovery capabilities."
                                 },
                                 {
@@ -420,6 +425,7 @@
                                 {
                                     "type": "Microsoft.Common.TextBlock",
                                     "name": "keyVaultDescription",
+                                    "visible": true,
                                     "text": "Azure Key Vault is a secure and scalable service that helps safeguard cryptographic keys and secrets used by cloud applications and services. By centralizing the storage of these sensitive assets, Key Vault enables you to control their distribution, manage access with fine-grained permissions, and monitor their usage through auditable logs. It supports automatic key rotation, integration with Azure Active Directory, and compliance with stringent industry standards, ensuring that your encryption keys and other secrets are managed securely and efficiently."
                                 },
                                 {
@@ -454,6 +460,7 @@
                                 {
                                     "type": "Microsoft.Common.TextBlock",
                                     "name": "subscriptionWarning",
+                                    "visible": true,
                                     "text": "Please ensure that the subscription selected here is different from the one used for the IMC (Identity, Management, and Connectivity) configurations. This separation ensures optimal resource management and security compliance across different operational environments."
                                 },
                                 {
@@ -541,6 +548,7 @@
                                 {
                                     "type": "Microsoft.Common.TextBlock",
                                     "name": "defenderForCloudDescription",
+                                    "visible": true,
                                     "text": "Microsoft Defender for Cloud Standard offers integrated security management and threat protection for your Azure services and hybrid environments. It automatically applies security policies to help secure your services against threats and provides continuous security assessment and actionable recommendations. This standard deployment enhances your security posture by integrating intelligent threat detection and response capabilities, helping you to prevent, detect, and respond to security threats in real time."
                                 },
                                 {
@@ -573,6 +581,7 @@
                                 {
                                     "type": "Microsoft.Common.TextBlock",
                                     "name": "recoveryServicesVaultDescription",
+                                    "visible": true,
                                     "text": "Azure Recovery Services Vault is a comprehensive solution for data backup and disaster recovery. It is designed to protect your Azure and on-premises resources by enabling both backup and site recovery services. This centralized vault provides a unified approach to manage your backup policies, monitor backup health, and recover services swiftly in case of data loss or corruption. It simplifies the management of your recovery points, scales on demand to meet your data protection needs, and ensures secure and reliable data storage and recovery capabilities."
                                 },
                                 {
