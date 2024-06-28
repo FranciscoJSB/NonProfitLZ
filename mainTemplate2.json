@@ -407,7 +407,7 @@
                         "value": "[parameters('managementSubscriptionId')]"
                     },
                     "resourceGroupName":{
-                        "value": "[concat(parameters('industryPrefix')-mgmt)]"
+                        "value": "[concat(parameters('industryPrefix'),-mgmt)]"
                     }
                 }
             }
