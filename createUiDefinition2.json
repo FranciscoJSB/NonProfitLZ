@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "NFP Landing Zone configurations on Microsoft Azure",
+            "title": "Azure Landing Zone for Small Nonprofits",
             "isWizard": false,
             "steps": [
                 {

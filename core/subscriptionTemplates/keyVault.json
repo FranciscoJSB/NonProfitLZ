@@ -32,7 +32,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
-            "name": "keyVault",
+            "name": "[parameters('KeyVaultName')]",
             "resourceGroup": "[parameters('rgName')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups/', parameters('rgName'))]"

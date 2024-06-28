@@ -25,7 +25,7 @@
         },
         "newPublicIpAddressName": {
             "type": "string",
-            "defaultValue": "vpn-gw-imc-001-PIP-02"
+            "defaultValue": "vpn-gw-imc-pip-01"
         },
         "subscriptionId": {
             "type": "string",
@@ -63,7 +63,7 @@
                         {
                             "type": "Microsoft.Network/virtualNetworkGateways",
                             "apiVersion": "2021-02-01",
-                            "name": "vpn-gw-imc-001",
+                            "name": "vpn-gw-imc",
                             "location": "[parameters('vpnGWRegion')]",
                             "properties": {
                                 "gatewayType": "Vpn",

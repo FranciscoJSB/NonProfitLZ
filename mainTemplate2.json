@@ -209,10 +209,9 @@
             "logNwRg": "[concat(parameters('industryPrefix'), '-rglz')]"
         },
         "platformResourceNames": {
-            "logAnalyticsWorkspace": "[concat(parameters('industryPrefix'), '-law')]",
-            "vpnGwName": "[concat(parameters('industryPrefix'), '-vpngw-', parameters('location'))]",
-            "ddosName": "[concat(parameters('industryPrefix'), '-ddos-', parameters('location'))]",
-            "hubName": "[concat(parameters('industryPrefix'), '-hub-', parameters('location'))]"
+            "logAnalyticsWorkspace": "[concat(parameters('industryPrefix'), '-law-001')]",
+            "ddosName": "[concat(parameters('industryPrefix'), '-ddos-', parameters('location'))]"
+
         },
         "roleDefinitions": {
             "networkContributor": "4d97b98b-1d4f-4787-a291-c67834d212e7",

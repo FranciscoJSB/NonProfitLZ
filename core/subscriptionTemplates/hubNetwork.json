@@ -1,4 +1,3 @@
-
 {
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
@@ -88,6 +87,48 @@
                                         "name": "GatewaySubnet",
                                         "properties": {
                                             "addressPrefix": "[parameters('vpnGWSubnet')]"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Network/networkSecurityGroups",
+                            "apiVersion": "2020-06-01",
+                            "name": "[concat(parameters('hubName'),'-nsg')]",
+                            "location": "[parameters('hubRegion')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('rgName'))]",
+                                "[resourceId('Microsoft.Network/virtualNetworks/, parameter('hubName'))]"
+                            ],
+                            "properties": {
+                                "securityRules": [
+                                    {
+                                        "name": "AllowHTTP",
+                                        "properties": {
+                                            "priority": 1000,
+                                            "access": "Allow",
+                                            "direction": "Inbound",
+                                            "protocol": "Tcp",
+                                            "sourceAddressPrefix": "*",
+                                            "sourcePortRange": "*",
+                                            "destinationAddressPrefix": "*",
+                                            "destinationPortRange": "80",
+                                            "description": "Allow HTTP"
+                                        }
+                                    },
+                                    {
+                                        "name": "AllowSSH",
+                                        "properties": {
+                                            "priority": 1010,
+                                            "access": "Allow",
+                                            "direction": "Inbound",
+                                            "protocol": "Tcp",
+                                            "sourceAddressPrefix": "*",
+                                            "sourcePortRange": "*",
+                                            "destinationAddressPrefix": "*",
+                                            "destinationPortRange": "22",
+                                            "description": "Allow SSH"
                                         }
                                     }
                                 ]
